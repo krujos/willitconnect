@@ -1,0 +1,7 @@
+---
+applications:
+- name: willitconnect
+  memory: 1G
+  path: build/libs/willitconnect-0.0.1-SNAPSHOT.jar
+  random-route: true
+
