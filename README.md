@@ -7,17 +7,17 @@ Sometimes, you just want to know if you can reach your thing (service really) fr
 #For Example: 
 
 ```
-➜ curl "http://localhost:8080/willitconnect" -d host=amazon.com -d port=80 
+➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=amazon.com -d port=80 
 I can connect to amazon.com on 80
-➜ curl "http://localhost:8080/willitconnect" -d host=twitter.com -d port=8080 
+➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=twitter.com -d port=8080 
 I cannot connect to twitter.com on 8080
-➜ curl "http://localhost:8080/willitconnect" -d host=twitter.com -d port=443
+➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=twitter.com -d port=443
 I can connect to twitter.com on 443
-➜ curl "http://localhost:8080/willitconnect" -d host=google.com -d port=443 
+➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=google.com -d port=443 
 I can connect to google.com on 443 
-➜ curl "http://localhost:8080/willitconnect" -d host=pivotal.io -d port=443 
+➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=pivotal.io -d port=443 
 I can connect to pivotal.io on 443 
-➜ curl "http://localhost:8080/willitconnect" -d host=nowaynohow.io -d port=443
+➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=nowaynohow.io -d port=443
 I cannot connect to nowaynohow.io on 443 
 ```
 
