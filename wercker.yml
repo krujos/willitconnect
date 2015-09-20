@@ -1,0 +1,24 @@
+box: java
+# Build definition
+build:
+  # The steps that will be executed on build
+  steps:
+    - script:
+        name: show base information
+        code: |
+          ./gradlew -v
+          javac -version
+    - script:
+            name: run tests
+            code: |
+              echo `pwd`
+              ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR test
+    - script:
+            name: run build
+            code: |
+              ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build
+    - script:
+            name: upload artifacts
+            code: |
+                #gradle --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR uploadArtifacts
+                echo 'step not implemented'

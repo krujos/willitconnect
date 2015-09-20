@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class VcapServicesChecker {
     private Logger log = Logger.getLogger(VcapServicesChecker.class);
+
     public List<CheckedEntry> check(JSONObject vcapServices) {
         java.util.Objects.requireNonNull(vcapServices);
 
