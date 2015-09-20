@@ -5,21 +5,18 @@ import org.json.JSONObject;
 import willitconnect.controller.model.CheckedEntry;
 import willitconnect.controller.service.util.EntryConsumer;
 
-import java.sql.Date;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-
-import static willitconnect.controller.service.HostMatcher.isHost;
 
 /**
  * Checks VCAP_SERVICES for keys named host and values that look like URI's
  */
 public class VcapServicesChecker {
-
+    private Logger log = Logger.getLogger(VcapServicesChecker.class);
     public List<CheckedEntry> check(JSONObject vcapServices) {
         java.util.Objects.requireNonNull(vcapServices);
+
+        log.info(vcapServices);
         if ( 0 == vcapServices.length())
             throw new IllegalArgumentException("VCAP_SERVICES has no entries");
 

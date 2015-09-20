@@ -6,7 +6,9 @@ import willitconnect.controller.model.CheckedEntry;
 
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 public class VcapServicesCheckerTest {
@@ -36,14 +38,40 @@ public class VcapServicesCheckerTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void itShouldComplainAboutEmptyVcapServices() {
-        JSONObject vcapServices = new JSONObject();
-        checker.check(vcapServices);
+        JSONObject services = new JSONObject();
+        checker.check(services);
     }
 
     @Test
-    public void itShouldFindOnehostnameToCheck() {
+    public void itShouldFindOneHostnameToCheckInASimpleObject() {
+        JSONObject services = new JSONObject("{ 'hostname': 'example.com' }");
+
+        List<CheckedEntry> shouldBeAHostName =
+                checker.check(services);
+
+        assertThat(shouldBeAHostName, hasSize(1));
+        assertThat(shouldBeAHostName.get(0).getEntry(),
+                is(equalTo("example.com")));
+    }
+
+    @Test
+    public void itFindsAnObjectWithAHostnameInAnArray() {
+        JSONObject services = new JSONObject(
+            "{a:[{'hostname':'example.com'},'foo',{'hostname':'example.com'}]}");
+
+        List<CheckedEntry> shouldBeAHostName =
+                checker.check(services);
+
+        assertThat(shouldBeAHostName, hasSize(2));
+        assertThat(shouldBeAHostName.get(0).getEntry(),
+                is(equalTo("example.com")));
+    }
+    @Test
+    public void itShouldFindOneHostnameToCheck() {
         List<CheckedEntry> shouldBeAHostName = checker.check(new JSONObject(vcapServices));
         assertThat(shouldBeAHostName, hasSize(1));
+        assertThat(shouldBeAHostName.get(0).getEntry(),
+                is(equalTo("us-cdbr-iron-east-02.cleardb.net")));
     }
 
 }

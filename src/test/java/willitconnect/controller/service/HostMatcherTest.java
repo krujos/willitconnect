@@ -37,4 +37,9 @@ public class HostMatcherTest {
     public void itDoesNOtMatchFoo() {
         assertFalse(isHost("foo"));
     }
+
+    @Test
+    public void itDoesNotMatchEmptyString() {
+        assertFalse(isHost(""));
+    }
 }
