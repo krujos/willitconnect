@@ -1,6 +1,5 @@
 package willitconnect.controller.service.util;
 
-import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import willitconnect.controller.model.CheckedEntry;
 
@@ -13,8 +12,6 @@ import static willitconnect.controller.service.HostMatcher.isHost;
 
 
 public class EntryConsumer implements Consumer<String> {
-    private Logger log = Logger.getLogger(EntryConsumer.class);
-
     private final JSONObject vcapServices;
     private final List<CheckedEntry> entries;
 
@@ -25,7 +22,6 @@ public class EntryConsumer implements Consumer<String> {
 
     @Override
     public void accept(String key) {
-        log.info("Cheking " + key);
         if (!isHost(key)) {
             //Check over any sub json objects.
             JSONObject possibleObject = vcapServices.optJSONObject(key);
