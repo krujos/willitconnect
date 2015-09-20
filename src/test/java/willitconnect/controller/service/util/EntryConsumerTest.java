@@ -37,6 +37,7 @@ public class EntryConsumerTest {
         assertThat(entries, hasSize(2));
         assertThat(shouldBeAHostName, is(equalTo("example.com")));
     }
+    
     @Test
     public void itShouldFindOneHostnameToCheck() {
         EntryConsumer consumer =

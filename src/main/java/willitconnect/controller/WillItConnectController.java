@@ -33,10 +33,11 @@ public class WillItConnectController {
             SocketAddress addr = new InetSocketAddress(
                     Inet4Address.getByName(host), port);
             socket.connect(addr, 3000);
-            if (socket.isConnected()) {
+            boolean connected = socket.isConnected();
+            socket.close();
+            if (connected) {
                 return "I can connect to " + host + " on " + port;
             }
-            socket.close();
         } catch (IOException e) { }
         return "I cannot connect to " + host + " on " + port;
     }
