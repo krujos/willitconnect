@@ -5,38 +5,36 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static willitconnect.controller.service.HostMatcher.isHost;
 
 public class HostMatcherTest {
-
-    HostMatcher matcher = new HostMatcher();
-
     @Test
     public void itMatchesHost() {
-        assertTrue(matcher.isHost("host"));
+        assertTrue(isHost("host"));
     }
 
     @Test
     public void itMatchesUpperCaseHost() {
-        assertTrue(matcher.isHost("HOST"));
+        assertTrue(isHost("HOST"));
     }
 
     @Test
     public void itMatchesMixedCaseHost() {
-        assertTrue(matcher.isHost("HosT"));
+        assertTrue(isHost("HosT"));
     }
 
     @Test
     public void itMatchesHostname() {
-        assertTrue(matcher.isHost("hostname"));
+        assertTrue(isHost("hostname"));
     }
 
     @Test
     public void itMatchesMixedCaseHostname() {
-        assertTrue(matcher.isHost("HostName"));
+        assertTrue(isHost("HostName"));
     }
 
     @Test
     public void itDoesNOtMatchFoo() {
-        assertFalse(matcher.isHost("foo"));
+        assertFalse(isHost("foo"));
     }
 }
