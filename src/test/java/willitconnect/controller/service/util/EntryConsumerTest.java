@@ -42,9 +42,10 @@ public class EntryConsumerTest {
         EntryConsumer consumer =
                 new EntryConsumer(
                         entries, new JSONObject(VcapServicesStrings.cleardb));
+        consumer.accept("cleardb");
+
         String shouldBeAHostName = entries.get(0).getEntry();
 
-        consumer.accept("cleardb");
         assertThat(entries, hasSize(1));
         assertThat(shouldBeAHostName, is(equalTo("us-cdbr-iron-east-02.cleardb.net")));
     }
