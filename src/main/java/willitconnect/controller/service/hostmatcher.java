@@ -7,6 +7,6 @@ package willitconnect.controller.service;
 public class HostMatcher {
 
     public boolean isHost(String toBeChecked) {
-        return false;
+        return toBeChecked.contains("host");
     }
 }
