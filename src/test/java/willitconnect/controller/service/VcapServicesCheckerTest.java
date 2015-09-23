@@ -27,8 +27,7 @@ public class VcapServicesCheckerTest {
         checker.check(null);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void itShouldComplainAboutEmptyVcapServices() {
+    public void itShouldNotComplainAboutEmptyVcapServices() {
         JSONObject services = new JSONObject();
         checker.check(services);
     }

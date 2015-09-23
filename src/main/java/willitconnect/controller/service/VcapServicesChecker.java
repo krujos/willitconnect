@@ -11,6 +11,7 @@ import java.util.ArrayList;
  * Checks VCAP_SERVICES for keys named host and values that look like URI's
  */
 public class VcapServicesChecker {
+
     public static volatile ArrayList<CheckedEntry> results;
 
     private static Logger log = Logger.getLogger(VcapServicesChecker.class);
@@ -20,7 +21,7 @@ public class VcapServicesChecker {
 
         log.info(vcapServices);
         if ( 0 == vcapServices.length())
-            throw new IllegalArgumentException("VCAP_SERVICES has no entries");
+            return;
 
         ArrayList<CheckedEntry> entries = new ArrayList<CheckedEntry>();
 

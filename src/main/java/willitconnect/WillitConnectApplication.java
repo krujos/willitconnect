@@ -11,8 +11,9 @@ import willitconnect.controller.service.VcapServicesChecker;
 public class WillItConnectApplication {
     private Logger log = Logger.getLogger(WillItConnectApplication.class);
 
-    @Value("${VCAP_SERVICES}")
-    private String vcapServices;
+    //Wherein we break encapsulation rules to make testing eaiser
+    @Value("#{environment.VCAP_SERVICES}")
+    public static String vcapServices;
 
     public WillItConnectApplication() {
         log.info("VCAP_SERVICES = " + vcapServices);
