@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static willitconnect.controller.service.util.HostMatcher.hasPort;
 import static willitconnect.controller.service.util.HostMatcher.isHost;
 
 public class HostMatcherTest {
@@ -41,5 +42,15 @@ public class HostMatcherTest {
     @Test
     public void itDoesNotMatchEmptyString() {
         assertFalse(isHost(""));
+    }
+
+    @Test
+    public void itShouldNotHaveAPort() {
+        assertFalse(hasPort("amazon.com"));
+    }
+
+    @Test
+    public void itHasAPort() {
+        assertTrue(hasPort("amazon.com:1025"));
     }
 }

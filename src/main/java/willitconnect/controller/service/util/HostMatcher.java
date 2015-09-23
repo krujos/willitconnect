@@ -9,4 +9,8 @@ public class HostMatcher {
     public static boolean isHost(String toBeChecked) {
         return toBeChecked.toLowerCase().contains("host");
     }
+
+    public static boolean hasPort(String toBeChecked) {
+        return false;
+    }
 }
