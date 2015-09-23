@@ -8,6 +8,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import willitconnect.controller.service.VcapServicesChecker;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -30,5 +31,13 @@ public class WillItConnectApplicationTest {
                 new WillItConnectApplication();
 
         PowerMockito.verifyStatic(times(1));
+    }
+
+    @Test
+    public void itDosentFreakOutWithNull() {
+        WillItConnectApplication.vcapServices = null;
+        WillItConnectApplication shouldHaveCalledCheckServices =
+                new WillItConnectApplication();
+        assertTrue(true);
     }
 }

@@ -17,7 +17,8 @@ public class WillItConnectApplication {
 
     public WillItConnectApplication() {
         log.info("VCAP_SERVICES = " + vcapServices);
-        VcapServicesChecker.check(new JSONObject(vcapServices));
+        if (null != vcapServices)
+            VcapServicesChecker.check(new JSONObject(vcapServices));
     }
 
     public static void main(String[] args) {
