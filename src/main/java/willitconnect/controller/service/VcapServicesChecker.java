@@ -13,9 +13,9 @@ import java.util.ArrayList;
 public class VcapServicesChecker {
     public static volatile ArrayList<CheckedEntry> results;
 
-    private Logger log = Logger.getLogger(VcapServicesChecker.class);
+    private static Logger log = Logger.getLogger(VcapServicesChecker.class);
 
-    public void check(JSONObject vcapServices) {
+    public static void check(JSONObject vcapServices) {
         java.util.Objects.requireNonNull(vcapServices);
 
         log.info(vcapServices);
