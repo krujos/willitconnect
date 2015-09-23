@@ -10,7 +10,16 @@ public class HostMatcher {
         return toBeChecked.toLowerCase().contains("host");
     }
 
-    public static boolean hasPort(String toBeChecked) {
+    //TODO This should go somewhere else.
+    public static boolean hasPort(String host) {
+        if (!host.contains(":")) return false;
+
+        String port = host.substring(host.indexOf(":") + 1);
+        try {
+            Integer.parseInt(port);
+            return true;
+        } catch(Exception e) {}
+
         return false;
     }
 }

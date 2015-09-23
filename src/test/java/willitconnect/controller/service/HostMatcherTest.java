@@ -53,4 +53,9 @@ public class HostMatcherTest {
     public void itHasAPort() {
         assertTrue(hasPort("amazon.com:1025"));
     }
+
+    @Test
+    public void itHasAHighRangePort() {
+        assertTrue(hasPort("example.com:65342"));
+    }
 }
