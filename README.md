@@ -1,7 +1,16 @@
 Will It Connect?
 ================
 
-Sometimes, you just want to know if you can reach your thing (service really) from Cloud Foundry. Is there a proxy in the way, is there an app security group, the dreaded firewall of doom or is it your code? Will It Connect takes a hostname (or ip) and a port and tries to make a connection from inside Cloud Foundry. If your destination allows us to open a socket, we report success, if not, we fail. Deploy it to the same space you intend to run your app and you can test the exact environment! 
+Sometimes, you just want to know if you can reach your thing (service really)
+ from Cloud Foundry. Is there a proxy in the way, is there an app security
+ group, the dreaded firewall of doom or is it your code? Will It Connect
+ takes a hostname (or ip) and a port and tries to make a socket connection from
+ inside Cloud Foundry. If your destination allows us to open a socket, we
+ report success, if not, we fail. Deploy it to the same space you intend to
+ run your app and you can test the exact environment! The original usecase
+ was designed with non http connections in mind, so we don't make any
+ assumptions about protocol. We simply open a socket connection to the host
+ and port.
 
 
 #For Example: 

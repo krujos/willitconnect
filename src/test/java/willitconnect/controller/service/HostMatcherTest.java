@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static willitconnect.controller.service.HostMatcher.isHost;
+import static willitconnect.controller.service.util.HostMatcher.isHost;
 
 public class HostMatcherTest {
     @Test

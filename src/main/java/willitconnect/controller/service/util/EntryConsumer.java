@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import static java.time.Instant.now;
-import static willitconnect.controller.service.HostMatcher.isHost;
+import static willitconnect.controller.service.util.HostMatcher.isHost;
 
 public class EntryConsumer implements Consumer<String> {
     private Logger log = Logger.getLogger(EntryConsumer.class);
