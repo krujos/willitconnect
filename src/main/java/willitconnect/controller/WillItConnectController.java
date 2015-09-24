@@ -11,7 +11,7 @@ import java.net.*;
 @RestController
 public class WillItConnectController {
 
-    @RequestMapping( value = "/", method = RequestMethod.GET)
+    @RequestMapping( value = "/guide", method = RequestMethod.GET)
     public String root() {
         return new StringBuilder()
                 .append("<h3>Use me like this:<h3> ")
