@@ -26,9 +26,9 @@ var Entry = React.createClass({
     {
         return (
           <div style={redStyle} className="">
-            <h2 className="entry">
+            <h3 className="entry">
                 {this.props.host} : {this.props.port}
-            </h2>
+            </h3>
           </div>
         );
     }
