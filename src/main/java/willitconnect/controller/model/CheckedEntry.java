@@ -40,4 +40,7 @@ public class CheckedEntry {
         this.canConnect = canConnect;
     }
 
+    public boolean isValid() {
+        return entry.matches("[\\w\\.]+:\\d+");
+    }
 }

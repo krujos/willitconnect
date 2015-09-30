@@ -11,6 +11,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class EntryConsumerTest {
     ArrayList<CheckedEntry> entries = new ArrayList<CheckedEntry>();
@@ -50,4 +52,50 @@ public class EntryConsumerTest {
         assertThat(entries, hasSize(1));
         assertThat(shouldBeAHostName, is(equalTo("us-cdbr-iron-east-02.cleardb.net")));
     }
+
+    @Test
+    public void itShouldBeInvalidIfAHostnameDoesNotHaveAPort() {
+        EntryConsumer consumer  = new EntryConsumer(entries,
+                new JSONObject("{a:[{'hostname':'example.com'}]}"));
+
+        consumer.accept("a");
+
+        CheckedEntry shouldNotBeChecked = entries.get(0);
+        assertFalse(shouldNotBeChecked.isValid());
+    }
+
+    @Test
+    public void itShouldBeValidIfTheHostnameHasAPort() {
+        EntryConsumer consumer  = new EntryConsumer(entries,
+                new JSONObject("{a:[{'hostname':'example:8212'}]}"));
+
+        consumer.accept("a");
+
+        CheckedEntry shouldNotBeChecked = entries.get(0);
+        assertTrue(shouldNotBeChecked.isValid());
+    }
+
+    @Test
+    public void itShouldBeValidIfTheFQDNHasAPot() {
+        EntryConsumer consumer  = new EntryConsumer(entries,
+                new JSONObject("{a:[{'hostname':'foolexample.com:8212'}]}"));
+
+        consumer.accept("a");
+
+        CheckedEntry shouldNotBeChecked = entries.get(0);
+        assertTrue(shouldNotBeChecked.isValid());
+
+    }
+
+
+
+//    @Test
+//    public void itShouldProduceAHostWithAPortWhenItIsPartOfTheKey() {
+//        fail("nyi");
+//    }
+//
+//    @Test
+//    public void itShouldProduceAHostWIthAPortWhenThePortIsAPeerToTheHostname() {
+//        fail("nyi")
+//    }
 }
