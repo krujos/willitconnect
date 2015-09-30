@@ -40,7 +40,7 @@ I cannot connect to nowaynohow.io on 443
 ➜ cf push
 ```
 
-To modify the webform portion in src/main/resources/static, change either index.html or scripts/index.js
+If you modify the webform in src/main/resources/static, after changing index you need to use babel before deploying your changes
 
 ```
 npm install -g babel
