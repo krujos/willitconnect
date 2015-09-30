@@ -81,7 +81,6 @@ public class EntryConsumerTest {
                 new JSONObject("{a:[{'hostname':'foo.example.com:8212'}]}"));
 
         consumer.accept("a");
-
         CheckedEntry shouldBeValid = entries.get(0);
         assertTrue(shouldBeValid.isValid());
 
@@ -93,7 +92,6 @@ public class EntryConsumerTest {
                 new JSONObject("{a:[{'hostname':'foo.example.com:8212'}]}"));
 
         consumer.accept("a");
-
         CheckedEntry shouldHavePort = entries.get(0);
         assertTrue(shouldHavePort.getEntry().matches(".*:\\d+"));
     }
