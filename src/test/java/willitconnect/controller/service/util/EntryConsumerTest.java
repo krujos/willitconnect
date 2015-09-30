@@ -60,8 +60,8 @@ public class EntryConsumerTest {
 
         consumer.accept("a");
 
-        CheckedEntry shouldNotBeChecked = entries.get(0);
-        assertFalse(shouldNotBeChecked.isValid());
+        CheckedEntry shouldNotBeValid = entries.get(0);
+        assertFalse(shouldNotBeValid.isValid());
     }
 
     @Test
@@ -71,28 +71,32 @@ public class EntryConsumerTest {
 
         consumer.accept("a");
 
-        CheckedEntry shouldNotBeChecked = entries.get(0);
-        assertTrue(shouldNotBeChecked.isValid());
+        CheckedEntry shouldBeValid = entries.get(0);
+        assertTrue(shouldBeValid.isValid());
     }
 
     @Test
     public void itShouldBeValidIfTheFQDNHasAPot() {
         EntryConsumer consumer  = new EntryConsumer(entries,
-                new JSONObject("{a:[{'hostname':'foolexample.com:8212'}]}"));
+                new JSONObject("{a:[{'hostname':'foo.example.com:8212'}]}"));
 
         consumer.accept("a");
 
-        CheckedEntry shouldNotBeChecked = entries.get(0);
-        assertTrue(shouldNotBeChecked.isValid());
+        CheckedEntry shouldBeValid = entries.get(0);
+        assertTrue(shouldBeValid.isValid());
 
     }
 
+    @Test
+    public void itShouldProduceAHostWithAPortWhenItIsPartOfTheKey() {
+        EntryConsumer consumer  = new EntryConsumer(entries,
+                new JSONObject("{a:[{'hostname':'foo.example.com:8212'}]}"));
 
+        consumer.accept("a");
 
-//    @Test
-//    public void itShouldProduceAHostWithAPortWhenItIsPartOfTheKey() {
-//        fail("nyi");
-//    }
+        CheckedEntry shouldHavePort = entries.get(0);
+        assertTrue(shouldHavePort.getEntry().matches(".*:\\d+"));
+    }
 //
 //    @Test
 //    public void itShouldProduceAHostWIthAPortWhenThePortIsAPeerToTheHostname() {

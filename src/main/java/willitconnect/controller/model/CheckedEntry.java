@@ -1,6 +1,7 @@
 package willitconnect.controller.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Holds a hostname or url that is checked to see if we can connect to it.
@@ -35,6 +36,7 @@ public class CheckedEntry {
     }
 
     public CheckedEntry(Date lastChecked, String entry, boolean canConnect) {
+        Objects.requireNonNull(entry);
         this.lastChecked = lastChecked;
         this.entry = entry;
         this.canConnect = canConnect;
