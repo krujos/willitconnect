@@ -40,8 +40,13 @@ I cannot connect to nowaynohow.io on 443
 ➜ cf push
 ```
 
+To modify the webform portion, /src/main/resources/static/, change either index.html or scripts/index.js
+
+```
+npm install -g babel
+babel index.js --compact --no-comments > index-babel.js
+```
+
 #TODO
 * Consume a bound service
-* Add a web form
-* Report the real app URI in the use me
 * proxy servers
