@@ -40,8 +40,23 @@ I cannot connect to nowaynohow.io on 443
 ➜ cf push
 ```
 
+#Development
+The project uses the standard spring boot directory structure, with web content located 
+in src/main/resources/static.
+
+You can run it locally by using 
+```
+➜ ./gradlew bootRun
+```
+
+If you are making changes to index.js, afterwards you'll need to use babel to transform 
+the jsx before testing or deploying your changes
+
+```
+➜ npm install -g babel
+➜ babel index.js --compact --no-comments > index-babel.js
+```
+
 #TODO
 * Consume a bound service
-* Add a web form
-* Report the real app URI in the use me
 * proxy servers
