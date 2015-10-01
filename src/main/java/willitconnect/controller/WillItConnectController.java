@@ -28,6 +28,12 @@ public class WillItConnectController {
     @RequestMapping( value = "/willitconnect")
     public String root(@RequestParam("host") String host,
                        @RequestParam ("port") int port)  {
+        if (checkConnection(host, port))
+            return "I can connect to " + host + " on " + port;
+        return "I cannot connect to " + host + " on " + port;
+    }
+
+    private boolean checkConnection(@RequestParam("host") String host, @RequestParam("port") int port) {
         Socket socket = new Socket();
         try {
             SocketAddress addr = new InetSocketAddress(
@@ -36,9 +42,9 @@ public class WillItConnectController {
             boolean connected = socket.isConnected();
             socket.close();
             if (connected) {
-                return "I can connect to " + host + " on " + port;
+                return true;
             }
         } catch (IOException e) { }
-        return "I cannot connect to " + host + " on " + port;
+        return false;
     }
 }
