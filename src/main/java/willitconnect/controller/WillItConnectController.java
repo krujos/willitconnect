@@ -4,9 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
-import java.net.*;
+import willitconnect.service.util.Connection;
 
 @RestController
 public class WillItConnectController {
@@ -28,23 +26,9 @@ public class WillItConnectController {
     @RequestMapping( value = "/willitconnect")
     public String root(@RequestParam("host") String host,
                        @RequestParam ("port") int port)  {
-        if (checkConnection(host, port))
+        if (Connection.checkConnection(host, port))
             return "I can connect to " + host + " on " + port;
         return "I cannot connect to " + host + " on " + port;
     }
 
-    private boolean checkConnection(@RequestParam("host") String host, @RequestParam("port") int port) {
-        Socket socket = new Socket();
-        try {
-            SocketAddress addr = new InetSocketAddress(
-                    Inet4Address.getByName(host), port);
-            socket.connect(addr, 3000);
-            boolean connected = socket.isConnected();
-            socket.close();
-            if (connected) {
-                return true;
-            }
-        } catch (IOException e) { }
-        return false;
-    }
 }
