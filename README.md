@@ -46,15 +46,15 @@ in src/main/resources/static.
 
 You can run it locally by using 
 ```
-➜./gradlew bootRun
+➜ ./gradlew bootRun
 ```
 
-If you are making changes to index.js, afterwards you'll need to use babel to transpile 
+If you are making changes to index.js, afterwards you'll need to use babel to transform 
 the jsx before testing or deploying your changes
 
 ```
-npm install -g babel
-babel index.js --compact --no-comments > index-babel.js
+➜ npm install -g babel
+➜ babel index.js --compact --no-comments > index-babel.js
 ```
 
 #TODO
