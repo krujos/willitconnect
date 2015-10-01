@@ -40,7 +40,17 @@ I cannot connect to nowaynohow.io on 443
 ➜ cf push
 ```
 
-If you modify the webform in src/main/resources/static, after changing index you need to use babel before deploying your changes
+#Development
+The project uses the standard spring boot directory structure, with web content located 
+in src/main/resources/static.
+
+You can run it locally by using 
+```
+➜./gradlew bootRun
+```
+
+If you are making changes to index.js, afterwards you'll need to use babel to transpile 
+the jsx before testing or deploying your changes
 
 ```
 npm install -g babel
