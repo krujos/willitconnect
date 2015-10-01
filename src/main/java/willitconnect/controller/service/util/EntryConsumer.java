@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import static java.time.Instant.now;
+import static willitconnect.controller.service.util.HostMatcher.hasPort;
 import static willitconnect.controller.service.util.HostMatcher.isHost;
 
 public class EntryConsumer implements Consumer<String> {
@@ -27,12 +28,28 @@ public class EntryConsumer implements Consumer<String> {
     public void accept(String key) {
         if (isHost(key)) {
             String host = vcapServices.optString(key);
-            addNewEntry(host);
+            if (hasPort(host))
+                addNewEntry(host);
+            else
+                addNewEntry(host + ":" + getPort());
         } else {
             //Check over any sub json objects.
             if (handleJSONObject(key)) return;
             if (handleJSONArray(key)) return;
         }
+    }
+
+    private int getPort() {
+        int port = -1;
+        if ( vcapServices.has("port") ) {
+            String sPort = vcapServices.optString("port");
+            if ( null != sPort ) {
+                port = Integer.parseInt(sPort);
+            } else {
+                vcapServices.optInt("port", -1);
+            }
+        }
+        return port;
     }
 
     private boolean handleJSONArray(String key) {

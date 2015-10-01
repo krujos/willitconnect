@@ -27,6 +27,7 @@ public class VcapServicesCheckerTest {
         checker.check(null);
     }
 
+    @Test
     public void itShouldNotComplainAboutEmptyVcapServices() {
         JSONObject services = new JSONObject();
         checker.check(services);
@@ -40,7 +41,7 @@ public class VcapServicesCheckerTest {
         List<CheckedEntry> shouldBeASingleHostName = VcapServicesChecker.results;
         assertThat(shouldBeASingleHostName, hasSize(1));
         assertThat(shouldBeASingleHostName.get(0).getEntry(),
-                is(equalTo("us-cdbr-iron-east-02.cleardb.net")));
+                is(equalTo("us-cdbr-iron-east-02.cleardb.net:3306")));
     }
 
 }
