@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import willitconnect.controller.service.VcapServicesChecker;
+import willitconnect.service.VcapServicesChecker;
 
 @SpringBootApplication
 public class WillItConnectApplication {
@@ -18,7 +18,7 @@ public class WillItConnectApplication {
     public WillItConnectApplication() {
         log.info("VCAP_SERVICES = " + vcapServices);
         if (null != vcapServices)
-            VcapServicesChecker.check(new JSONObject(vcapServices));
+            VcapServicesChecker.parse(new JSONObject(vcapServices));
     }
 
     public static void main(String[] args) {

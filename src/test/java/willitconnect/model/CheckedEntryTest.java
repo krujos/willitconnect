@@ -1,4 +1,4 @@
-package willitconnect.controller.model;
+package willitconnect.model;
 
 import org.junit.Test;
 

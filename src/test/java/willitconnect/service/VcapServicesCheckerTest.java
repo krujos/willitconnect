@@ -1,14 +1,17 @@
-package willitconnect.controller.service;
+package willitconnect.service;
 
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
-import willitconnect.controller.model.CheckedEntry;
+import willitconnect.model.CheckedEntry;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -24,24 +27,39 @@ public class VcapServicesCheckerTest {
 
     @Test(expected = NullPointerException.class)
     public void itShouldComplainAboutNullVcapServices() {
-        checker.check(null);
+        checker.parse(null);
     }
 
     @Test
     public void itShouldNotComplainAboutEmptyVcapServices() {
         JSONObject services = new JSONObject();
-        checker.check(services);
+        checker.parse(services);
     }
 
     @Test
     public void itShouldFindOneHostnameToCheck() {
-        checker.check(
+        checker.parse(
                 new JSONObject(VcapServicesStrings.cleardb));
 
         List<CheckedEntry> shouldBeASingleHostName = VcapServicesChecker.results;
         assertThat(shouldBeASingleHostName, hasSize(1));
         assertThat(shouldBeASingleHostName.get(0).getEntry(),
                 is(equalTo("us-cdbr-iron-east-02.cleardb.net:3306")));
+    }
+
+    @Test
+    public void itShodlCheckOnlyValidHostnames() {
+        //todo get rid of dependency on network connection
+        VcapServicesChecker.results.add(new CheckedEntry(Date.from(Instant.EPOCH),
+                "amazon.com:80", false));
+        VcapServicesChecker.results.add(new CheckedEntry(Date.from(Instant.EPOCH),
+                "example.com", false));
+
+        VcapServicesChecker.check();
+        assertThat(VcapServicesChecker.results.get(0).getLastChecked(),
+                is(not(equalTo(Date.from(Instant.EPOCH)))));
+        assertThat(VcapServicesChecker.results.get(1).getLastChecked(),
+                is(equalTo(Date.from(Instant.EPOCH))));
     }
 
 }

@@ -1,4 +1,4 @@
-package willitconnect.controller.service.util;
+package willitconnect.service.util;
 
 /**
  * Matches the word host in a string, attended to be used against the keys in

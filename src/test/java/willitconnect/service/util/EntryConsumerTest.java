@@ -1,9 +1,9 @@
-package willitconnect.controller.service.util;
+package willitconnect.service.util;
 
 import org.json.JSONObject;
 import org.junit.Test;
-import willitconnect.controller.model.CheckedEntry;
-import willitconnect.controller.service.VcapServicesStrings;
+import willitconnect.model.CheckedEntry;
+import willitconnect.service.VcapServicesStrings;
 
 import java.util.ArrayList;
 
@@ -32,13 +32,13 @@ public class EntryConsumerTest {
     public void itFindsAnObjectWithAHostnameInAnArray() {
         JSONObject services = new JSONObject(
                 "{a:[{'hostname':'example.com:1000'},'foo'," +
-                        "{'hostname':'example.com:1000'}]}");
+                        "{'hostname':'example2.com:1000'}]}");
         EntryConsumer consumer = new EntryConsumer(entries, services);
         consumer.accept("a");
 
-        String shouldBeAHostName = entries.get(0).getEntry();
+        String shoudlBeExampleDotCom = entries.get(0).getEntry();
         assertThat(entries, hasSize(2));
-        assertThat(shouldBeAHostName, is(equalTo("example.com:1000")));
+        assertThat(shoudlBeExampleDotCom, is(equalTo("example.com:1000")));
     }
     
     @Test
@@ -51,7 +51,8 @@ public class EntryConsumerTest {
         String shouldBeAHostName = entries.get(0).getEntry();
 
         assertThat(entries, hasSize(1));
-        assertThat(shouldBeAHostName, is(equalTo("us-cdbr-iron-east-02.cleardb.net:3306")));
+        assertThat(shouldBeAHostName,
+                is(equalTo("us-cdbr-iron-east-02.cleardb.net:3306")));
     }
 
     @Test

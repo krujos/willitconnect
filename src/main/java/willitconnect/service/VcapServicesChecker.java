@@ -1,9 +1,9 @@
-package willitconnect.controller.service;
+package willitconnect.service;
 
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
-import willitconnect.controller.model.CheckedEntry;
-import willitconnect.controller.service.util.EntryConsumer;
+import willitconnect.model.CheckedEntry;
+import willitconnect.service.util.EntryConsumer;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,7 @@ public class VcapServicesChecker {
 
     private static Logger log = Logger.getLogger(VcapServicesChecker.class);
 
-    public static void check(JSONObject vcapServices) {
+    public static void parse(JSONObject vcapServices) {
         java.util.Objects.requireNonNull(vcapServices);
 
         log.info(vcapServices);
@@ -27,5 +27,10 @@ public class VcapServicesChecker {
 
         vcapServices.keys().forEachRemaining(new EntryConsumer(entries, vcapServices));
         results = entries;
+    }
+
+    public static void check() {
+
+
     }
 }

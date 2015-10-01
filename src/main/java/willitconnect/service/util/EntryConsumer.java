@@ -1,9 +1,9 @@
-package willitconnect.controller.service.util;
+package willitconnect.service.util;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import willitconnect.controller.model.CheckedEntry;
+import willitconnect.model.CheckedEntry;
 
 import java.sql.Date;
 import java.util.List;
@@ -11,8 +11,8 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import static java.time.Instant.now;
-import static willitconnect.controller.service.util.HostMatcher.hasPort;
-import static willitconnect.controller.service.util.HostMatcher.isHost;
+import static willitconnect.service.util.HostMatcher.hasPort;
+import static willitconnect.service.util.HostMatcher.isHost;
 
 public class EntryConsumer implements Consumer<String> {
     private Logger log = Logger.getLogger(EntryConsumer.class);

@@ -1,4 +1,4 @@
-package willitconnect.controller.service;
+package willitconnect.service;
 
 /**
  * Created by jkruck on 9/20/15.
