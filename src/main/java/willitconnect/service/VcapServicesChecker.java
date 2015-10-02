@@ -34,7 +34,7 @@ public class VcapServicesChecker {
 
     public static void check() {
         results.forEach(e -> {
-            if (e.isValid()) {
+            if (e.isValidHostname()) {
                 String hostname = getHostname(e);
                 int port = getPort(e, hostname);
 

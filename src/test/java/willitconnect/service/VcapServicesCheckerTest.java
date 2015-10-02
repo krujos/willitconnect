@@ -83,7 +83,6 @@ public class VcapServicesCheckerTest {
 
         verifyStatic(times(1));
         Connection.checkConnection("amazon.com", 80);
-
     }
 
 }

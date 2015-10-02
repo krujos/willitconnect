@@ -63,7 +63,7 @@ public class EntryConsumerTest {
         consumer.accept("a");
 
         CheckedEntry shouldNotBeValid = entries.get(0);
-        assertFalse(shouldNotBeValid.isValid());
+        assertFalse(shouldNotBeValid.isValidHostname());
     }
 
     @Test
@@ -74,7 +74,7 @@ public class EntryConsumerTest {
         consumer.accept("a");
 
         CheckedEntry shouldBeValid = entries.get(0);
-        assertTrue(shouldBeValid.isValid());
+        assertTrue(shouldBeValid.isValidHostname());
     }
 
     @Test
@@ -84,7 +84,7 @@ public class EntryConsumerTest {
 
         consumer.accept("a");
         CheckedEntry shouldBeValid = entries.get(0);
-        assertTrue(shouldBeValid.isValid());
+        assertTrue(shouldBeValid.isValidHostname());
 
     }
 
@@ -107,7 +107,7 @@ public class EntryConsumerTest {
         consumer.accept("a");
         CheckedEntry shouldHavePort = entries.get(0);
         assertTrue(shouldHavePort.getEntry().matches(".*:\\d+"));
-        assertTrue(shouldHavePort.isValid());
+        assertTrue(shouldHavePort.isValidHostname());
 
     }
 
@@ -120,7 +120,7 @@ public class EntryConsumerTest {
         consumer.accept("a");
         CheckedEntry shouldHavePort = entries.get(0);
         assertTrue(shouldHavePort.getEntry().matches(".*:\\d+"));
-        assertTrue(shouldHavePort.isValid());
+        assertTrue(shouldHavePort.isValidHostname());
 
     }
 }

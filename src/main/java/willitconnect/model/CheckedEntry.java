@@ -42,7 +42,7 @@ public class CheckedEntry {
         this.canConnect = canConnect;
     }
 
-    public boolean isValid() {
+    public boolean isValidHostname() {
         return entry.matches("[\\w\\.]+:\\d+");
     }
 }
