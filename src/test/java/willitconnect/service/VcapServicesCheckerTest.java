@@ -57,10 +57,10 @@ public class VcapServicesCheckerTest {
 
     @Test
     public void itShodlCheckOnlyValidHostnames() {
-        VcapServicesChecker.results.add(new CheckedEntry(Date.from(Instant.EPOCH),
-                "amazon.com:80", false));
-        VcapServicesChecker.results.add(new CheckedEntry(Date.from(Instant.EPOCH),
-                "example.com", false));
+        VcapServicesChecker.results.add(new CheckedEntry(
+                "amazon.com:80"));
+        VcapServicesChecker.results.add(new CheckedEntry(
+                "example.com"));
 
         VcapServicesChecker.check();
         assertThat(VcapServicesChecker.results.get(0).getLastChecked(),
@@ -74,10 +74,10 @@ public class VcapServicesCheckerTest {
         mockStatic(Connection.class);
 
         when(Connection.checkConnection("amazon.com", 80)).thenReturn(true);
-        VcapServicesChecker.results.add(new CheckedEntry(Date.from(Instant.EPOCH),
-                "amazon.com:80", false));
-        VcapServicesChecker.results.add(new CheckedEntry(Date.from(Instant.EPOCH),
-                "example.com", false));
+        VcapServicesChecker.results.add(new CheckedEntry(
+                "amazon.com:80"));
+        VcapServicesChecker.results.add(new CheckedEntry(
+                "example.com"));
 
         VcapServicesChecker.check();
 
@@ -87,7 +87,7 @@ public class VcapServicesCheckerTest {
 
     @Test
     public void successfulConnectionsAreReflectedInTheResultsSet() {
-        
+
     }
 
 }

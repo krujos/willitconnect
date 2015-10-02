@@ -1,5 +1,6 @@
 package willitconnect.model;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
 
@@ -35,11 +36,11 @@ public class CheckedEntry {
         this.canConnect = canConnect;
     }
 
-    public CheckedEntry(Date lastChecked, String entry, boolean canConnect) {
+    public CheckedEntry(String entry) {
         Objects.requireNonNull(entry);
-        this.lastChecked = lastChecked;
+        this.lastChecked = Date.from(Instant.EPOCH);
         this.entry = entry;
-        this.canConnect = canConnect;
+        this.canConnect = false;
     }
 
     public boolean isValidHostname() {

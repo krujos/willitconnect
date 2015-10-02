@@ -5,7 +5,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import willitconnect.model.CheckedEntry;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -76,7 +75,7 @@ public class EntryConsumer implements Consumer<String> {
     private void addNewEntry(String host) {
         CheckedEntry entry;
         log.info("Entry To Add == " + host);
-        entry = new CheckedEntry(Date.from(now()), host, false);
+        entry = new CheckedEntry(host);
         entries.add(entry);
     }
 }
