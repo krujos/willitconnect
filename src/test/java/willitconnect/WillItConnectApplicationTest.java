@@ -1,16 +1,20 @@
 package willitconnect;
 
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
+import org.mockito.Matchers;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import willitconnect.service.VcapServicesChecker;
+import willitconnect.service.VcapServicesStrings;
 
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(VcapServicesChecker.class)
@@ -20,17 +24,33 @@ public class WillItConnectApplicationTest {
     @Before
     public void before() {
         initMocks(this);
+        mockStatic(VcapServicesChecker.class);
+    }
+
+    @Test
+    public void itShouldParseServicesOnStartup() {
+        WillItConnectApplication.vcapServices = "{}";
+        WillItConnectApplication shouldHaveCalledParseServices =
+                new WillItConnectApplication();
+
+        verifyStatic(times(1));
+        VcapServicesChecker.parse(Matchers.any(JSONObject.class));
+
     }
 
     @Test
     public void itShouldCheckServicesOnStartup() {
-        PowerMockito.mockStatic(VcapServicesChecker.class);
-
-        WillItConnectApplication.vcapServices = "{}";
-        WillItConnectApplication shouldHaveCalledCheckServices =
+        WillItConnectApplication.vcapServices =
+                "{ VCAP_SERVICES: " + VcapServicesStrings.cleardb + "}";
+        WillItConnectApplication shouldHaveCalledParseServices =
                 new WillItConnectApplication();
 
-        PowerMockito.verifyStatic(times(1));
+        verifyStatic();
+        VcapServicesChecker.parse(Matchers.any(JSONObject.class));
+        verifyStatic();
+        VcapServicesChecker.check();
+
+
     }
 
     @Test
@@ -38,6 +58,7 @@ public class WillItConnectApplicationTest {
         WillItConnectApplication.vcapServices = null;
         WillItConnectApplication shouldHaveCalledCheckServices =
                 new WillItConnectApplication();
-        assertTrue(true);
+        verifyStatic(never());
+        VcapServicesChecker.check();
     }
 }

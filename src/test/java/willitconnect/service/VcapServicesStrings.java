@@ -1,8 +1,5 @@
 package willitconnect.service;
 
-/**
- * Created by jkruck on 9/20/15.
- */
 public class VcapServicesStrings {
     public static String cleardb="{'cleardb': [{'credentials': " +
             "{" +

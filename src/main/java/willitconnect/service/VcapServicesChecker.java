@@ -15,6 +15,7 @@ import java.util.ArrayList;
  */
 public class VcapServicesChecker {
 
+    //TODO stop using this as a big global....
     public static volatile ArrayList<CheckedEntry> results;
 
     private static Logger log = Logger.getLogger(VcapServicesChecker.class);

@@ -2,9 +2,9 @@ package willitconnect.controller;
 
 import org.springframework.web.bind.annotation.*;
 import willitconnect.model.CheckedEntry;
+import willitconnect.service.VcapServicesChecker;
 import willitconnect.service.util.Connection;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -34,7 +34,7 @@ public class WillItConnectController {
 
     @RequestMapping(value = "/serviceresults")
     public @ResponseBody List<CheckedEntry> getServiceResults() {
-        return new ArrayList<CheckedEntry>();
+        return new VcapServicesChecker().results;
     }
 
 }
