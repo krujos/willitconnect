@@ -85,4 +85,9 @@ public class VcapServicesCheckerTest {
         Connection.checkConnection("amazon.com", 80);
     }
 
+    @Test
+    public void successfulConnectionsAreReflectedInTheResultsSet() {
+        
+    }
+
 }

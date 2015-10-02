@@ -9,7 +9,7 @@ import java.util.Objects;
 public class CheckedEntry {
     private Date lastChecked;
     private String entry;
-    boolean canConnect;
+    private boolean canConnect;
 
     public Date getLastChecked() {
         return lastChecked;
@@ -27,7 +27,7 @@ public class CheckedEntry {
         this.entry = entry;
     }
 
-    public boolean isCanConnect() {
+    public boolean canConnect() {
         return canConnect;
     }
 
