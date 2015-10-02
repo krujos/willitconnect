@@ -38,7 +38,7 @@ public class VcapServicesChecker {
                 String hostname = getHostname(e);
                 int port = getPort(e, hostname);
 
-                Connection.checkConnection(hostname, port);
+                e.setCanConnect(Connection.checkConnection(hostname, port));
                 e.setLastChecked(Date.from(Instant.now()));
             }
         });

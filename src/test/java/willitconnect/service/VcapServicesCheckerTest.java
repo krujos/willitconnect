@@ -19,6 +19,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.powermock.api.mockito.PowerMockito.*;
 
@@ -57,10 +59,7 @@ public class VcapServicesCheckerTest {
 
     @Test
     public void itShodlCheckOnlyValidHostnames() {
-        VcapServicesChecker.results.add(new CheckedEntry(
-                "amazon.com:80"));
-        VcapServicesChecker.results.add(new CheckedEntry(
-                "example.com"));
+        addValidAndInvalidResults();
 
         VcapServicesChecker.check();
         assertThat(VcapServicesChecker.results.get(0).getLastChecked(),
@@ -69,15 +68,19 @@ public class VcapServicesCheckerTest {
                 is(equalTo(Date.from(Instant.EPOCH))));
     }
 
+    private void addValidAndInvalidResults() {
+        VcapServicesChecker.results.add(new CheckedEntry(
+                "amazon.com:80"));
+        VcapServicesChecker.results.add(new CheckedEntry(
+                "example.com"));
+    }
+
     @Test
     public void validHostsReceiveAConnectionCheck() {
         mockStatic(Connection.class);
 
         when(Connection.checkConnection("amazon.com", 80)).thenReturn(true);
-        VcapServicesChecker.results.add(new CheckedEntry(
-                "amazon.com:80"));
-        VcapServicesChecker.results.add(new CheckedEntry(
-                "example.com"));
+        addValidAndInvalidResults();
 
         VcapServicesChecker.check();
 
@@ -87,7 +90,13 @@ public class VcapServicesCheckerTest {
 
     @Test
     public void successfulConnectionsAreReflectedInTheResultsSet() {
+        mockStatic(Connection.class);
+        when(Connection.checkConnection("amazon.com", 80)).thenReturn(true);
+        addValidAndInvalidResults();
 
+        VcapServicesChecker.check();
+        assertTrue(VcapServicesChecker.results.get(0).canConnect());
+        assertFalse(VcapServicesChecker.results.get(1).canConnect());
     }
 
 }
