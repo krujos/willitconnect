@@ -3,7 +3,11 @@ package willitconnect.service;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import willitconnect.model.CheckedEntry;
+import willitconnect.service.util.Connection;
 
 import java.sql.Date;
 import java.time.Instant;
@@ -15,7 +19,11 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.Mockito.times;
+import static org.powermock.api.mockito.PowerMockito.*;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Connection.class)
 public class VcapServicesCheckerTest {
 
     VcapServicesChecker checker = new VcapServicesChecker();
@@ -49,7 +57,6 @@ public class VcapServicesCheckerTest {
 
     @Test
     public void itShodlCheckOnlyValidHostnames() {
-        //todo get rid of dependency on network connection
         VcapServicesChecker.results.add(new CheckedEntry(Date.from(Instant.EPOCH),
                 "amazon.com:80", false));
         VcapServicesChecker.results.add(new CheckedEntry(Date.from(Instant.EPOCH),
@@ -60,6 +67,23 @@ public class VcapServicesCheckerTest {
                 is(not(equalTo(Date.from(Instant.EPOCH)))));
         assertThat(VcapServicesChecker.results.get(1).getLastChecked(),
                 is(equalTo(Date.from(Instant.EPOCH))));
+    }
+
+    @Test
+    public void validHostsReceiveAConnectionCheck() {
+        mockStatic(Connection.class);
+
+        when(Connection.checkConnection("amazon.com", 80)).thenReturn(true);
+        VcapServicesChecker.results.add(new CheckedEntry(Date.from(Instant.EPOCH),
+                "amazon.com:80", false));
+        VcapServicesChecker.results.add(new CheckedEntry(Date.from(Instant.EPOCH),
+                "example.com", false));
+
+        VcapServicesChecker.check();
+
+        verifyStatic(times(1));
+        Connection.checkConnection("amazon.com", 80);
+
     }
 
 }

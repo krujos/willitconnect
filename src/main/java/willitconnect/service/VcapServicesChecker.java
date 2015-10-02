@@ -3,6 +3,7 @@ package willitconnect.service;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import willitconnect.model.CheckedEntry;
+import willitconnect.service.util.Connection;
 import willitconnect.service.util.EntryConsumer;
 
 import java.sql.Date;
@@ -34,8 +35,22 @@ public class VcapServicesChecker {
     public static void check() {
         results.forEach(e -> {
             if (e.isValid()) {
+                String hostname = getHostname(e);
+                int port = getPort(e, hostname);
+
+                Connection.checkConnection(hostname, port);
                 e.setLastChecked(Date.from(Instant.now()));
             }
         });
+    }
+
+    private static int getPort(CheckedEntry e, String hostname) {
+        return Integer.parseInt(e.getEntry().substring(
+                hostname.length() + 1,
+                e.getEntry().length()));
+    }
+
+    private static String getHostname(CheckedEntry e) {
+        return e.getEntry().substring(0, e.getEntry().indexOf(':'));
     }
 }
