@@ -83,5 +83,9 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.testng:testng:6.8.21" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.beanshell:bsh:2.0b4" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.beust:jcommander:1.27" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.jayway.jsonpath:json-path:2.0.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: net.minidev:json-smart:2.1.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: net.minidev:asm:1.0.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: asm:asm:3.3.1" level="project" />
   </component>
 </module>

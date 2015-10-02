@@ -37,6 +37,7 @@ dependencies {
     compile("org.json:json:20141113")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.powermock:powermock-mockito-release-full:1.6.2")
+    testCompile("com.jayway.jsonpath:json-path:2.0.0")
 }
 
 

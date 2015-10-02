@@ -1,15 +1,16 @@
 package willitconnect.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import willitconnect.model.CheckedEntry;
 import willitconnect.service.util.Connection;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class WillItConnectController {
 
-    @RequestMapping( value = "/guide", method = RequestMethod.GET)
+    @RequestMapping(value = "/guide", method = RequestMethod.GET)
     public String root() {
         return new StringBuilder()
                 .append("<h3>Use me like this:<h3> ")
@@ -23,12 +24,17 @@ public class WillItConnectController {
                 .toString();
     }
 
-    @RequestMapping( value = "/willitconnect")
+    @RequestMapping(value = "/willitconnect")
     public String root(@RequestParam("host") String host,
                        @RequestParam ("port") int port)  {
         if (Connection.checkConnection(host, port))
             return "I can connect to " + host + " on " + port;
         return "I cannot connect to " + host + " on " + port;
+    }
+
+    @RequestMapping(value = "/serviceresults")
+    public @ResponseBody List<CheckedEntry> getServiceResults() {
+        return new ArrayList<CheckedEntry>();
     }
 
 }
