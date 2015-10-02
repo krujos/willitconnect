@@ -5,6 +5,8 @@ import org.json.JSONObject;
 import willitconnect.model.CheckedEntry;
 import willitconnect.service.util.EntryConsumer;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.util.ArrayList;
 
 /**
@@ -20,7 +22,7 @@ public class VcapServicesChecker {
         java.util.Objects.requireNonNull(vcapServices);
 
         log.info(vcapServices);
-        if ( 0 == vcapServices.length())
+        if (0 == vcapServices.length())
             return;
 
         ArrayList<CheckedEntry> entries = new ArrayList<CheckedEntry>();
@@ -30,7 +32,10 @@ public class VcapServicesChecker {
     }
 
     public static void check() {
-
-
+        results.forEach(e -> {
+            if (e.isValid()) {
+                e.setLastChecked(Date.from(Instant.now()));
+            }
+        });
     }
 }
