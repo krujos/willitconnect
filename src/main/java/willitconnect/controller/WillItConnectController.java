@@ -32,6 +32,17 @@ public class WillItConnectController {
         return "I cannot connect to " + host + " on " + port;
     }
 
+    //TODO: refactor to remove code duplication 
+    @RequestMapping(value = "/willitconnectproxy")
+    public String root(@RequestParam("host") String host,
+                       @RequestParam ("port") int port,
+                       @RequestParam("proxyHost") String proxyHost,
+                       @RequestParam ("proxyPort") int proxyPort)  {
+        if (Connection.checkProxyConnection(host, port, proxyHost, proxyPort))
+            return "I can connect to " + host + " on " + port;
+        return "I cannot connect to " + host + " on " + port;
+    }
+
     @RequestMapping(value = "/serviceresults")
     public @ResponseBody List<CheckedEntry> getServiceResults() {
         return new VcapServicesChecker().results;
