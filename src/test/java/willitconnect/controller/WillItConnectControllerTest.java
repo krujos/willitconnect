@@ -2,7 +2,6 @@ package willitconnect.controller;
 
 import org.json.JSONObject;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,22 +18,21 @@ public class WillItConnectControllerTest {
 
     private MockMvc mockMvc;
 
-    @Before
-    public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(
-                    new WillItConnectController()).build();
-    }
+    VcapServicesChecker checker;
 
     @After
     public void tearDown() {
-
+        //TODO stop exposing the implementation of services checker.
+        checker.getResults().clear();
     }
-
     @Test
     public void resultsShouldReturnEmptyJsonWithNoServices() throws Exception {
-        //TODO Temporary until we inject checkers
-        VcapServicesChecker.checkVcapServices(new JSONObject()).getResults().clear();
+
+        checker = VcapServicesChecker.checkVcapServices(new JSONObject());
         
+        mockMvc = MockMvcBuilders.standaloneSetup(
+                new WillItConnectController(checker)).build();
+
         mockMvc.perform(get("/serviceresults").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$", hasSize(0)));
@@ -43,8 +41,11 @@ public class WillItConnectControllerTest {
     @Test
     public void resultsShouldContainOneServiceWithVcapServices() throws Exception{
 
-        VcapServicesChecker.checkVcapServices(
+        checker = VcapServicesChecker.checkVcapServices(
                 new JSONObject(VcapServicesStrings.cleardb));
+
+        mockMvc = MockMvcBuilders.standaloneSetup(
+                new WillItConnectController(checker)).build();
 
         byte[] res = mockMvc.perform(get("/serviceresults").accept(MediaType
                 .APPLICATION_JSON))

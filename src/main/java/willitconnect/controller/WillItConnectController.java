@@ -1,5 +1,6 @@
 package willitconnect.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import willitconnect.model.CheckedEntry;
 import willitconnect.service.VcapServicesChecker;
@@ -9,6 +10,13 @@ import java.util.List;
 
 @RestController
 public class WillItConnectController {
+
+    @Autowired
+    private final VcapServicesChecker vcapServicesChecker;
+
+    public WillItConnectController(VcapServicesChecker vcapServicesChecker) {
+        this.vcapServicesChecker = vcapServicesChecker;
+    }
 
     @RequestMapping(value = "/guide", method = RequestMethod.GET)
     public String root() {
