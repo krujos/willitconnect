@@ -15,6 +15,22 @@ import java.util.ArrayList;
  */
 public class VcapServicesChecker {
 
+    public static VcapServicesChecker checkVcapServices(JSONObject vcapServices) {
+        VcapServicesChecker checker = new VcapServicesChecker();
+        checker.parse(vcapServices);
+        checker.check();
+        return checker;
+    }
+
+    public ArrayList<CheckedEntry> getResults() {
+        return results;
+    }
+
+    //TODO make private
+    public VcapServicesChecker() {
+        results = new ArrayList<>();
+    }
+
     //TODO stop using this as a big global....
     public static volatile ArrayList<CheckedEntry> results = new ArrayList<>();
 
