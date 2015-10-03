@@ -9,6 +9,7 @@ import willitconnect.service.util.EntryConsumer;
 import java.sql.Date;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Checks VCAP_SERVICES for keys named host and values that look like URI's
@@ -23,16 +24,15 @@ public class VcapServicesChecker {
         return checker;
     }
 
-    public static ArrayList<CheckedEntry> getResults() {
+    public List<CheckedEntry> getResults() {
         return results;
     }
 
-    //TODO make private
     private VcapServicesChecker() {
         results = new ArrayList<>();
     }
 
-    private static volatile ArrayList<CheckedEntry> results;
+    private volatile ArrayList<CheckedEntry> results;
 
 
     private void parse(JSONObject vcapServices) {

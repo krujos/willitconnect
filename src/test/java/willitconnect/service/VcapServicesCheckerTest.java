@@ -1,7 +1,6 @@
 package willitconnect.service;
 
 import org.json.JSONObject;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -29,11 +28,6 @@ public class VcapServicesCheckerTest {
 
     VcapServicesChecker checker;
 
-    @After
-    public void after() {
-        VcapServicesChecker.getResults().clear();
-    }
-
     @Test(expected = NullPointerException.class)
     public void itShouldComplainAboutNullVcapServices() {
         VcapServicesChecker.checkVcapServices(null);
@@ -59,12 +53,12 @@ public class VcapServicesCheckerTest {
     }
 
     @Test
-    public void itShouldCheckOnlyValidHostnamesNewIface() {
+    public void itShouldCheckOnlyValidHostnames() {
         String json = "{ a: [{'hostname':'a.com:80'},{'hostname':'e.com'}]}";
-        VcapServicesChecker.checkVcapServices(new JSONObject(json));
-        assertThat(VcapServicesChecker.getResults().get(0).getLastChecked(),
+        checker = VcapServicesChecker.checkVcapServices(new JSONObject(json));
+        assertThat(checker.getResults().get(0).getLastChecked(),
                 is(not(equalTo(Date.from(Instant.EPOCH)))));
-        assertThat(VcapServicesChecker.getResults().get(1).getLastChecked(),
+        assertThat(checker.getResults().get(1).getLastChecked(),
                 is(equalTo(Date.from(Instant.EPOCH))));
     }
 
