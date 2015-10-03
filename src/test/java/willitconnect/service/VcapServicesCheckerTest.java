@@ -1,6 +1,7 @@
 package willitconnect.service;
 
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +12,6 @@ import willitconnect.service.util.Connection;
 
 import java.sql.Date;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -32,7 +32,12 @@ public class VcapServicesCheckerTest {
 
     @Before
     public void before() {
-        VcapServicesChecker.results = new ArrayList<CheckedEntry>();
+        //VcapServicesChecker.results = new ArrayList<CheckedEntry>();
+    }
+
+    @After
+    public void after() {
+        VcapServicesChecker.results.clear();
     }
 
     @Test(expected = NullPointerException.class)
@@ -99,4 +104,16 @@ public class VcapServicesCheckerTest {
         assertFalse(VcapServicesChecker.results.get(1).canConnect());
     }
 
+    @Test
+    public void itShouldHandleAnEmptyVcapServices() {
+        VcapServicesChecker.parse(new JSONObject("{}"));
+        VcapServicesChecker.check();
+        assertThat(VcapServicesChecker.results, hasSize(0));
+    }
+
+    @Test
+    public void itShouldHandleACallToCheckBeforeParseGracefully() {
+        VcapServicesChecker.check();
+        assertThat(VcapServicesChecker.results, hasSize(0));
+    }
 }

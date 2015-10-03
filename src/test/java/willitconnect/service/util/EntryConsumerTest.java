@@ -147,4 +147,5 @@ public class EntryConsumerTest {
         String port = entry.substring(entry.length() - 2);
         assertEquals("80", port);
     }
+    
 }

@@ -16,4 +16,5 @@ public class VcapServicesStrings {
             "'plan': 'spark'," +
             "'tags': ['Data Stores','Data Store','relational','mysql']" +
             "}]}";
+    public static String empty = "{}";
 }
