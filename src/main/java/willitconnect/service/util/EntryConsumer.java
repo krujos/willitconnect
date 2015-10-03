@@ -7,6 +7,8 @@ import org.springframework.core.io.support.ResourcePatternUtils;
 import willitconnect.model.CheckedEntry;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.function.Consumer;
@@ -33,7 +35,9 @@ public class EntryConsumer implements Consumer<String> {
                 hostname += ":" + getPort();
             addNewEntry(hostname);
             return;
-        } else if (isUrl(key) || isJSONObject(key) || isJSONArray(key)) {
+        } else if (isUrl(key) || isUri(key) || isJSONObject(key)
+                || isJSONArray(key))
+        {
             return;
         }
     }
@@ -51,7 +55,19 @@ public class EntryConsumer implements Consumer<String> {
             return false;
         }
         return true;
+    }
 
+    private boolean isUri(String key) {
+        if (!key.toLowerCase().contains("uri")) return false;
+
+        try {
+            URI url = new URI(vcapServices.optString(key));
+            addNewEntry(url.getHost() + ":" + url.getPort());
+        } catch (URISyntaxException e) {
+            log.error("Mailformed URL -- How did we get here?");
+            return false;
+        }
+        return true;
     }
 
     private int getPort() {

@@ -52,13 +52,15 @@ public class VcapServicesCheckerTest {
     }
 
     @Test
-    public void itShouldFindOneHostnameToCheck() {
+    public void itShouldFindTwoHostnamesToCheck() {
         checker.parse(
                 new JSONObject(VcapServicesStrings.cleardb));
 
         List<CheckedEntry> shouldBeASingleHostName = VcapServicesChecker.results;
-        assertThat(shouldBeASingleHostName, hasSize(1));
+        assertThat(shouldBeASingleHostName, hasSize(2));
         assertThat(shouldBeASingleHostName.get(0).getEntry(),
+                is(equalTo("us-cdbr-iron-east-02.cleardb.net:3306")));
+        assertThat(shouldBeASingleHostName.get(1).getEntry(),
                 is(equalTo("us-cdbr-iron-east-02.cleardb.net:3306")));
     }
 

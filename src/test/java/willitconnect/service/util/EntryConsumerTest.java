@@ -43,7 +43,7 @@ public class EntryConsumerTest {
     }
     
     @Test
-    public void itShouldFindOneHostnameToCheck() {
+    public void itShouldFindTwoHostnamesToCheck() {
         EntryConsumer consumer =
                 new EntryConsumer(
                         entries, new JSONObject(VcapServicesStrings.cleardb));
@@ -51,7 +51,7 @@ public class EntryConsumerTest {
 
         String shouldBeAHostName = entries.get(0).getEntry();
 
-        assertThat(entries, hasSize(1));
+        assertThat(entries, hasSize(2));
         assertThat(shouldBeAHostName,
                 is(equalTo("us-cdbr-iron-east-02.cleardb.net:3306")));
     }
@@ -154,6 +154,18 @@ public class EntryConsumerTest {
         String entry = shouldBeValid.getEntry();
         String port = entry.substring(entry.length() - 2);
         assertEquals("80", port);
+    }
+
+    @Test
+    public void itHandlesAMySQLUri() {
+        EntryConsumer consumer = new EntryConsumer(
+                entries, new JSONObject(
+                "{a: [{'uri': 'mysql://bcecef672208bf:fd270135@us-cdbr-iron" +
+                        "-east-02.cleardb" +
+                        ".net:3306/ad_d0a5bca8ed4c8e2?reconnect=true'}]}"));
+
+        consumer.accept("a");
+        CheckedEntry shouldBeValid = entries.get(0);
     }
 
 }
