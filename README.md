@@ -33,6 +33,15 @@ I cannot connect to nowaynohow.io on 443
 
 #Get Some
 3 steps get you up and running!
+##From the latest release
+Download the jar file from the lasted [release](https://github.com/krujos/willitconnect/releases) 
+and push it
+
+```
+➜ cf push -p willitconnect-0.0.1.jar #Use the right version # from the release
+```
+
+##From source
 
 ```
 ➜ git clone https://github.com/krujos/willitconnect
