@@ -28,14 +28,13 @@ public class EntryConsumer implements Consumer<String> {
     @Override
     public void accept(String key) {
         if (isHost(key)) {
-            String host = vcapServices.optString(key);
-            if (!hasPort(host))
-                host += ":" + getPort();
-            addNewEntry(host);
-        } else {
-            if (isUrl(key)) return;
-            if (isJSONObject(key)) return;
-            if (isJSONArray(key)) return;
+            String hostname = vcapServices.optString(key);
+            if (!hasPort(hostname))
+                hostname += ":" + getPort();
+            addNewEntry(hostname);
+            return;
+        } else if (isUrl(key) || isJSONObject(key) || isJSONArray(key)) {
+            return;
         }
     }
 
@@ -49,6 +48,7 @@ public class EntryConsumer implements Consumer<String> {
             addNewEntry(url.getHost() + ":" + port);
         } catch (MalformedURLException e) {
             log.error("Mailformed URL -- How did we get here?");
+            return false;
         }
         return true;
 
@@ -57,11 +57,9 @@ public class EntryConsumer implements Consumer<String> {
     private int getPort() {
         int port = -1;
         if ( vcapServices.has("port") ) {
-            String sPort = vcapServices.optString("port");
-            if ( null != sPort ) {
-                port = Integer.parseInt(sPort);
-            } else {
-                vcapServices.optInt("port", -1);
+            String portAsAString = vcapServices.optString("port");
+            if ( null != portAsAString ) {
+                port = Integer.parseInt(portAsAString);
             }
         }
         return port;

@@ -79,7 +79,7 @@ public class EntryConsumerTest {
     }
 
     @Test
-    public void itShouldBeValidIfTheFQDNHasAPot() {
+    public void itShouldBeValidIfTheFQDNHasAPort() {
         EntryConsumer consumer  = new EntryConsumer(entries,
                 new JSONObject("{a:[{'hostname':'foo.example.com:8212'}]}"));
 
@@ -107,9 +107,15 @@ public class EntryConsumerTest {
 
         consumer.accept("a");
         CheckedEntry shouldHavePort = entries.get(0);
+        String port = getPort(shouldHavePort);
+        assertEquals(port, "3210");
         assertTrue(shouldHavePort.getEntry().matches(".*:\\d+"));
         assertTrue(shouldHavePort.isValidHostname());
+    }
 
+    private String getPort(CheckedEntry shouldHavePort) {
+        return shouldHavePort.getEntry().substring(shouldHavePort.getEntry()
+                .length() - 4);
     }
 
     @Test
@@ -120,6 +126,8 @@ public class EntryConsumerTest {
 
         consumer.accept("a");
         CheckedEntry shouldHavePort = entries.get(0);
+        String port = getPort(shouldHavePort);
+        assertEquals(port, "3210");
         assertTrue(shouldHavePort.getEntry().matches(".*:\\d+"));
         assertTrue(shouldHavePort.isValidHostname());
     }
@@ -147,5 +155,5 @@ public class EntryConsumerTest {
         String port = entry.substring(entry.length() - 2);
         assertEquals("80", port);
     }
-    
+
 }
