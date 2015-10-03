@@ -58,7 +58,10 @@ public class EntryConsumer implements Consumer<String> {
     }
 
     private boolean isUri(String key) {
-        if (!key.toLowerCase().contains("uri")) return false;
+        if (!key.toLowerCase().contains("uri")
+                && !key.toLowerCase().contains("syslog_drain_url")) {
+            return false;
+        }
 
         try {
             URI url = new URI(vcapServices.optString(key));

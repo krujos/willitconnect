@@ -168,4 +168,15 @@ public class EntryConsumerTest {
         CheckedEntry shouldBeValid = entries.get(0);
     }
 
+    @Test
+    public void itHandlesASyslogUrl() {
+        EntryConsumer consumer = new EntryConsumer(
+                entries, new JSONObject(
+                "{a: [{'syslog_drain_url': 'syslog://papertrailapp.com:12434'}]}"));
+
+        consumer.accept("a");
+        CheckedEntry shouldBeValid = entries.get(0);
+
+    }
+
 }
