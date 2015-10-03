@@ -29,10 +29,9 @@ public class EntryConsumer implements Consumer<String> {
     public void accept(String key) {
         if (isHost(key)) {
             String host = vcapServices.optString(key);
-            if (hasPort(host))
-                addNewEntry(host);
-            else
-                addNewEntry(host + ":" + getPort());
+            if (!hasPort(host))
+                host += ":" + getPort();
+            addNewEntry(host);
         } else {
             if (isUrl(key)) return;
             if (isJSONObject(key)) return;
