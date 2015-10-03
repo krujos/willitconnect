@@ -5,11 +5,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import willitconnect.model.CheckedEntry;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import static java.time.Instant.now;
+import static org.springframework.core.io.support.ResourcePatternUtils.isUrl;
 import static willitconnect.service.util.HostMatcher.hasPort;
 import static willitconnect.service.util.HostMatcher.isHost;
 
@@ -32,6 +34,14 @@ public class EntryConsumer implements Consumer<String> {
             else
                 addNewEntry(host + ":" + getPort());
         } else {
+            if (isUrl(vcapServices.optString(key))) {
+                try {
+                    URL url = new URL(vcapServices.getString(key));
+                    addNewEntry(url.getHost() + ":" + url.getPort());
+                } catch (MalformedURLException e) {
+                    log.error("Mailformed URL -- How did we get here?");
+                }
+            };
             //Check over any sub json objects.
             if (handleJSONObject(key)) return;
             if (handleJSONArray(key)) return;

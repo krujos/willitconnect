@@ -121,6 +121,14 @@ public class EntryConsumerTest {
         CheckedEntry shouldHavePort = entries.get(0);
         assertTrue(shouldHavePort.getEntry().matches(".*:\\d+"));
         assertTrue(shouldHavePort.isValidHostname());
+    }
 
+    @Test
+    public void itShouldAcceptAUrl() {
+        EntryConsumer consumer  = new EntryConsumer(entries,
+                new JSONObject("{a:[{'url':'http://foo.example.com:3210'}]}"));
+        consumer.accept("a");
+        CheckedEntry shouldBeValid = entries.get(0);
+        assertTrue(shouldBeValid.isValidHostname());
     }
 }
