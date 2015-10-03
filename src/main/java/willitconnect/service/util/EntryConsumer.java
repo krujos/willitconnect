@@ -3,6 +3,7 @@ package willitconnect.service.util;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.core.io.support.ResourcePatternUtils;
 import willitconnect.model.CheckedEntry;
 
 import java.net.MalformedURLException;
@@ -11,7 +12,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import static org.springframework.core.io.support.ResourcePatternUtils.isUrl;
 import static willitconnect.service.util.HostMatcher.hasPort;
 import static willitconnect.service.util.HostMatcher.isHost;
 
@@ -34,13 +34,14 @@ public class EntryConsumer implements Consumer<String> {
             else
                 addNewEntry(host + ":" + getPort());
         } else {
-            if (isUrl(vcapServices.optString(key))) {
+            if (ResourcePatternUtils.isUrl(vcapServices.optString(key))) {
                 try {
                     URL url = new URL(vcapServices.getString(key));
                     addNewEntry(url.getHost() + ":" + url.getPort());
                 } catch (MalformedURLException e) {
                     log.error("Mailformed URL -- How did we get here?");
                 }
+                return;
             };
             //Check over any sub json objects.
             if (handleJSONObject(key)) return;
