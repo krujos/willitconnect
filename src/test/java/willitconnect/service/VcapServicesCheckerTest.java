@@ -44,7 +44,7 @@ public class VcapServicesCheckerTest {
         checker = VcapServicesChecker.checkVcapServices(
                 new JSONObject(VcapServicesStrings.cleardb));
 
-        List<CheckedEntry> shouldBeASingleHostName = checker.getResults();
+        List<CheckedEntry> shouldBeASingleHostName = checker.getConnectionResults();
         assertThat(shouldBeASingleHostName, hasSize(2));
         assertThat(shouldBeASingleHostName.get(0).getEntry(),
                 is(equalTo("us-cdbr-iron-east-02.cleardb.net:3306")));
@@ -56,9 +56,9 @@ public class VcapServicesCheckerTest {
     public void itShouldCheckOnlyValidHostnames() {
         String json = "{ a: [{'hostname':'a.com:80'},{'hostname':'e.com'}]}";
         checker = VcapServicesChecker.checkVcapServices(new JSONObject(json));
-        assertThat(checker.getResults().get(0).getLastChecked(),
+        assertThat(checker.getConnectionResults().get(0).getLastChecked(),
                 is(not(equalTo(Date.from(Instant.EPOCH)))));
-        assertThat(checker.getResults().get(1).getLastChecked(),
+        assertThat(checker.getConnectionResults().get(1).getLastChecked(),
                 is(equalTo(Date.from(Instant.EPOCH))));
     }
 
@@ -82,21 +82,21 @@ public class VcapServicesCheckerTest {
         String json = "{ a: [{'hostname':'a.com:80'},{'hostname':'e.com'}]}";
         checker = VcapServicesChecker.checkVcapServices(new JSONObject(json));
 
-        assertTrue(checker.getResults().get(0).canConnect());
-        assertFalse(checker.getResults().get(1).canConnect());
+        assertTrue(checker.getConnectionResults().get(0).canConnect());
+        assertFalse(checker.getConnectionResults().get(1).canConnect());
     }
 
     @Test
     public void itShouldHandleAnEmptyVcapServices() {
         checker = VcapServicesChecker.checkVcapServices(new JSONObject("{}"));
-        assertThat(checker.getResults(), hasSize(0));
+        assertThat(checker.getConnectionResults(), hasSize(0));
     }
 
     @Test
     public void itShouldHandleAFullVcapServices() {
         checker = VcapServicesChecker.checkVcapServices(
                 new JSONObject("{ VCAP_SERVICES: " + VcapServicesStrings.cleardb + "}"));
-        assertThat(checker.getResults(), hasSize(2));
+        assertThat(checker.getConnectionResults(), hasSize(2));
     }
 
 }

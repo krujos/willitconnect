@@ -24,7 +24,7 @@ public class VcapServicesChecker {
         return checker;
     }
 
-    public List<CheckedEntry> getResults() {
+    public List<CheckedEntry> getConnectionResults() {
         return results;
     }
 

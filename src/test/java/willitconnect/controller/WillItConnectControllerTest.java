@@ -32,7 +32,7 @@ public class WillItConnectControllerTest {
 
     @Test
     public void resultsShouldReturnEmptyJsonWithNoServices() throws Exception {
-        when(checker.getResults()).thenReturn(new ArrayList<>());
+        when(checker.getConnectionResults()).thenReturn(new ArrayList<>());
 
         mockMvc = MockMvcBuilders.standaloneSetup(
                 new WillItConnectController(checker)).build();
@@ -48,7 +48,7 @@ public class WillItConnectControllerTest {
         entryList.add(new CheckedEntry("foo"));
         entryList.add(new CheckedEntry("bar"));
 
-        when(checker.getResults()).thenReturn(entryList);
+        when(checker.getConnectionResults()).thenReturn(entryList);
         mockMvc = MockMvcBuilders.standaloneSetup(
                 new WillItConnectController(checker)).build();
 
