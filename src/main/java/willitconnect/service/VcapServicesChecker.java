@@ -14,6 +14,7 @@ import java.util.ArrayList;
  * Checks VCAP_SERVICES for keys named host and values that look like URI's
  */
 public class VcapServicesChecker {
+    private static Logger log = Logger.getLogger(VcapServicesChecker.class);
 
     public static VcapServicesChecker checkVcapServices(JSONObject vcapServices) {
         VcapServicesChecker checker = new VcapServicesChecker();
@@ -22,21 +23,19 @@ public class VcapServicesChecker {
         return checker;
     }
 
-    public ArrayList<CheckedEntry> getResults() {
+    public static ArrayList<CheckedEntry> getResults() {
         return results;
     }
 
     //TODO make private
-    public VcapServicesChecker() {
+    private VcapServicesChecker() {
         results = new ArrayList<>();
     }
 
-    //TODO stop using this as a big global....
-    public static volatile ArrayList<CheckedEntry> results = new ArrayList<>();
+    private static volatile ArrayList<CheckedEntry> results;
 
-    private static Logger log = Logger.getLogger(VcapServicesChecker.class);
 
-    public static void parse(JSONObject vcapServices) {
+    private void parse(JSONObject vcapServices) {
         java.util.Objects.requireNonNull(vcapServices);
 
         log.info(vcapServices);
@@ -47,7 +46,7 @@ public class VcapServicesChecker {
                 vcapServices));
     }
 
-    public static void check() {
+    private void check() {
         results.forEach(e -> {
             if (e.isValidHostname()) {
                 String hostname = getHostname(e);
@@ -58,13 +57,13 @@ public class VcapServicesChecker {
         });
     }
 
-    private static int getPort(CheckedEntry e, String hostname) {
+    private int getPort(CheckedEntry e, String hostname) {
         return Integer.parseInt(e.getEntry().substring(
                 hostname.length() + 1,
                 e.getEntry().length()));
     }
 
-    private static String getHostname(CheckedEntry e) {
+    private String getHostname(CheckedEntry e) {
         return e.getEntry().substring(0, e.getEntry().indexOf(':'));
     }
 }

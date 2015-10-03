@@ -27,11 +27,11 @@ import static org.powermock.api.mockito.PowerMockito.*;
 @PrepareForTest(Connection.class)
 public class VcapServicesCheckerTest {
 
-    VcapServicesChecker checker = new VcapServicesChecker();
+    VcapServicesChecker checker;
 
     @After
     public void after() {
-        VcapServicesChecker.results.clear();
+        VcapServicesChecker.getResults().clear();
     }
 
     @Test(expected = NullPointerException.class)
@@ -62,9 +62,9 @@ public class VcapServicesCheckerTest {
     public void itShouldCheckOnlyValidHostnamesNewIface() {
         String json = "{ a: [{'hostname':'a.com:80'},{'hostname':'e.com'}]}";
         VcapServicesChecker.checkVcapServices(new JSONObject(json));
-        assertThat(VcapServicesChecker.results.get(0).getLastChecked(),
+        assertThat(VcapServicesChecker.getResults().get(0).getLastChecked(),
                 is(not(equalTo(Date.from(Instant.EPOCH)))));
-        assertThat(VcapServicesChecker.results.get(1).getLastChecked(),
+        assertThat(VcapServicesChecker.getResults().get(1).getLastChecked(),
                 is(equalTo(Date.from(Instant.EPOCH))));
     }
 
@@ -88,7 +88,6 @@ public class VcapServicesCheckerTest {
         String json = "{ a: [{'hostname':'a.com:80'},{'hostname':'e.com'}]}";
         checker = VcapServicesChecker.checkVcapServices(new JSONObject(json));
 
-        VcapServicesChecker.check();
         assertTrue(checker.getResults().get(0).canConnect());
         assertFalse(checker.getResults().get(1).canConnect());
     }
@@ -99,9 +98,4 @@ public class VcapServicesCheckerTest {
         assertThat(checker.getResults(), hasSize(0));
     }
 
-    @Test
-    public void itShouldHandleACallToCheckBeforeParseGracefully() {
-        VcapServicesChecker.check();
-        assertThat(VcapServicesChecker.results, hasSize(0));
-    }
 }

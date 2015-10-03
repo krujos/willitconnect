@@ -1,6 +1,7 @@
 package willitconnect.controller;
 
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
@@ -8,8 +9,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import willitconnect.service.VcapServicesChecker;
 import willitconnect.service.VcapServicesStrings;
-
-import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -22,15 +21,20 @@ public class WillItConnectControllerTest {
 
     @Before
     public void setUp() {
-        VcapServicesChecker.results = new ArrayList<>();
-
         mockMvc = MockMvcBuilders.standaloneSetup(
-                    new WillItConnectController())
-                .build();
+                    new WillItConnectController()).build();
+    }
+
+    @After
+    public void tearDown() {
+
     }
 
     @Test
     public void resultsShouldReturnEmptyJsonWithNoServices() throws Exception {
+        //TODO Temporary until we inject checkers
+        VcapServicesChecker.checkVcapServices(new JSONObject()).getResults().clear();
+        
         mockMvc.perform(get("/serviceresults").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$", hasSize(0)));
@@ -39,7 +43,7 @@ public class WillItConnectControllerTest {
     @Test
     public void resultsShouldContainOneServiceWithVcapServices() throws Exception{
 
-        VcapServicesChecker.parse(
+        VcapServicesChecker.checkVcapServices(
                 new JSONObject(VcapServicesStrings.cleardb));
 
         byte[] res = mockMvc.perform(get("/serviceresults").accept(MediaType
@@ -50,7 +54,5 @@ public class WillItConnectControllerTest {
                 // parsing
                 .andExpect(jsonPath("$[0].canConnect", is(false)))
                 .andReturn().getResponse().getContentAsByteArray();
-
-        System.out.println("RES ++++ " + new String(res));
     }
 }

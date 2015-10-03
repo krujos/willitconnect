@@ -16,8 +16,7 @@ public class WillItConnectApplication {
     public WillItConnectApplication() {
         log.info("VCAP_SERVICES = " + vcapServices);
         if (null != vcapServices) {
-            VcapServicesChecker.parse(new JSONObject(vcapServices));
-            VcapServicesChecker.check();
+            VcapServicesChecker.checkVcapServices(new JSONObject(vcapServices));
             log.info("Finished checking VCAP_SERVICES");
         }
     }
@@ -26,4 +25,3 @@ public class WillItConnectApplication {
         SpringApplication.run(WillItConnectApplication.class, args);
     }
 }
-

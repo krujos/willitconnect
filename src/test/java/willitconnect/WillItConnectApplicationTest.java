@@ -34,7 +34,7 @@ public class WillItConnectApplicationTest {
                 new WillItConnectApplication();
 
         verifyStatic(times(1));
-        VcapServicesChecker.parse(Matchers.any(JSONObject.class));
+        VcapServicesChecker.checkVcapServices(Matchers.any(JSONObject.class));
 
     }
 
@@ -46,11 +46,7 @@ public class WillItConnectApplicationTest {
                 new WillItConnectApplication();
 
         verifyStatic();
-        VcapServicesChecker.parse(Matchers.any(JSONObject.class));
-        verifyStatic();
-        VcapServicesChecker.check();
-
-
+        VcapServicesChecker.checkVcapServices(Matchers.any(JSONObject.class));
     }
 
     @Test
@@ -59,6 +55,6 @@ public class WillItConnectApplicationTest {
         WillItConnectApplication shouldHaveCalledCheckServices =
                 new WillItConnectApplication();
         verifyStatic(never());
-        VcapServicesChecker.check();
+        VcapServicesChecker.checkVcapServices(Matchers.any(JSONObject.class));
     }
 }
