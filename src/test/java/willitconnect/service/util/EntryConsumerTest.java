@@ -11,6 +11,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -130,5 +131,20 @@ public class EntryConsumerTest {
         consumer.accept("a");
         CheckedEntry shouldBeValid = entries.get(0);
         assertTrue(shouldBeValid.isValidHostname());
+        String entry = shouldBeValid.getEntry();
+        String port = entry.substring(entry.length() - 4);
+        assertEquals("3210", port);
+    }
+
+    @Test
+    public void itShouldAcceptAUrlWithoutAPort() {
+        EntryConsumer consumer  = new EntryConsumer(entries,
+                new JSONObject("{a:[{'url':'http://foo.example.com'}]}"));
+        consumer.accept("a");
+        CheckedEntry shouldBeValid = entries.get(0);
+        assertTrue(shouldBeValid.isValidHostname());
+        String entry = shouldBeValid.getEntry();
+        String port = entry.substring(entry.length() - 2);
+        assertEquals("80", port);
     }
 }

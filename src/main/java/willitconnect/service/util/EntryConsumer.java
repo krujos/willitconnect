@@ -46,7 +46,8 @@ public class EntryConsumer implements Consumer<String> {
         }
         try {
             URL url = new URL(vcapServices.getString(key));
-            addNewEntry(url.getHost() + ":" + url.getPort());
+            int port = url.getPort() == -1 ? url.getDefaultPort() : url.getPort();
+            addNewEntry(url.getHost() + ":" + port);
         } catch (MalformedURLException e) {
             log.error("Mailformed URL -- How did we get here?");
         }
