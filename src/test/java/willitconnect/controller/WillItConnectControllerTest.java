@@ -12,6 +12,7 @@ import willitconnect.service.VcapServicesStrings;
 import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -41,8 +42,15 @@ public class WillItConnectControllerTest {
         VcapServicesChecker.parse(
                 new JSONObject(VcapServicesStrings.cleardb));
 
-        mockMvc.perform(get("/serviceresults").accept(MediaType.APPLICATION_JSON))
+        byte[] res = mockMvc.perform(get("/serviceresults").accept(MediaType
+                .APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$", hasSize(1)));
+                .andExpect(jsonPath("$", hasSize(1)))
+                // It's false because we default everything to false before
+                // parsing
+                .andExpect(jsonPath("$[0].canConnect", is(false)))
+                .andReturn().getResponse().getContentAsByteArray();
+
+        System.out.println("RES ++++ " + new String(res));
     }
 }

@@ -12,6 +12,10 @@ public class CheckedEntry {
     private String entry;
     private boolean canConnect;
 
+    public boolean isCanConnect() {
+        return canConnect();
+    }
+
     public Date getLastChecked() {
         return lastChecked;
     }
