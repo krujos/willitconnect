@@ -45,7 +45,7 @@ public class WillItConnectController {
 
     @RequestMapping(value = "/serviceresults")
     public @ResponseBody List<CheckedEntry> getServiceResults() {
-        return new VcapServicesChecker().results;
+        return VcapServicesChecker.results;
     }
 
 }
