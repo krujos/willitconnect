@@ -34,19 +34,24 @@ public class EntryConsumer implements Consumer<String> {
             else
                 addNewEntry(host + ":" + getPort());
         } else {
-            if (ResourcePatternUtils.isUrl(vcapServices.optString(key))) {
-                try {
-                    URL url = new URL(vcapServices.getString(key));
-                    addNewEntry(url.getHost() + ":" + url.getPort());
-                } catch (MalformedURLException e) {
-                    log.error("Mailformed URL -- How did we get here?");
-                }
-                return;
-            };
-            //Check over any sub json objects.
-            if (handleJSONObject(key)) return;
-            if (handleJSONArray(key)) return;
+            if (isUrl(key)) return;
+            if (isJSONObject(key)) return;
+            if (isJSONArray(key)) return;
         }
+    }
+
+    private boolean isUrl(String key) {
+        if (!ResourcePatternUtils.isUrl(vcapServices.optString(key))) {
+            return false;
+        }
+        try {
+            URL url = new URL(vcapServices.getString(key));
+            addNewEntry(url.getHost() + ":" + url.getPort());
+        } catch (MalformedURLException e) {
+            log.error("Mailformed URL -- How did we get here?");
+        }
+        return true;
+
     }
 
     private int getPort() {
@@ -62,7 +67,7 @@ public class EntryConsumer implements Consumer<String> {
         return port;
     }
 
-    private boolean handleJSONArray(String key) {
+    private boolean isJSONArray(String key) {
         JSONArray array = vcapServices.optJSONArray(key);
         if (null == array) return false;
 
@@ -73,7 +78,7 @@ public class EntryConsumer implements Consumer<String> {
         return true;
     }
 
-    private boolean handleJSONObject(String key) {
+    private boolean isJSONObject(String key) {
         JSONObject possibleObject = vcapServices.optJSONObject(key);
         if ( null != possibleObject ) {
             possibleObject.keys().forEachRemaining(
