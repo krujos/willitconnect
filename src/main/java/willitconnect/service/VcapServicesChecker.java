@@ -30,11 +30,13 @@ public class VcapServicesChecker {
         ArrayList<CheckedEntry> entries = new ArrayList<CheckedEntry>();
 
         vcapServices.keys().forEachRemaining(new EntryConsumer(entries, vcapServices));
-        results = entries;
+        if(entries.size()>0)
+    	   results = entries;
     }
 
     public static void check() {
-        results.forEach(e -> {
+         if(results!=null) {
+    	    results.forEach(e -> {
             if (e.isValidHostname()) {
                 String hostname = getHostname(e);
                 int port = getPort(e, hostname);
@@ -43,6 +45,7 @@ public class VcapServicesChecker {
                 e.setLastChecked(Date.from(Instant.now()));
             }
         });
+      }
     }
 
     private static int getPort(CheckedEntry e, String hostname) {
