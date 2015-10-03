@@ -98,4 +98,11 @@ public class VcapServicesCheckerTest {
         assertThat(checker.getResults(), hasSize(0));
     }
 
+    @Test
+    public void itShouldHandleAFullVcapServices() {
+        checker = VcapServicesChecker.checkVcapServices(
+                new JSONObject("{ VCAP_SERVICES: " + VcapServicesStrings.cleardb + "}"));
+        assertThat(checker.getResults(), hasSize(2));
+    }
+
 }
