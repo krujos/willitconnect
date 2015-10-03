@@ -1,0 +1,17 @@
+package willitconnect.config;
+
+import org.json.JSONObject;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import willitconnect.service.VcapServicesChecker;
+
+@Configuration
+public class VcapServicesCheckerConfig {
+
+    @Bean
+    VcapServicesChecker newVcapServicesChecker() {
+        String vcapServices = System.getenv("VCAP_SERVICES");
+        return VcapServicesChecker.checkVcapServices(
+                new JSONObject(vcapServices));
+    }
+}

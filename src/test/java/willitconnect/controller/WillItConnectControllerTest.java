@@ -29,7 +29,7 @@ public class WillItConnectControllerTest {
     public void resultsShouldReturnEmptyJsonWithNoServices() throws Exception {
 
         checker = VcapServicesChecker.checkVcapServices(new JSONObject());
-        
+
         mockMvc = MockMvcBuilders.standaloneSetup(
                 new WillItConnectController(checker)).build();
 
