@@ -2,6 +2,7 @@ package willitconnect.service;
 
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
+import org.springframework.stereotype.Service;
 import willitconnect.model.CheckedEntry;
 import willitconnect.service.util.Connection;
 import willitconnect.service.util.EntryConsumer;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * Checks VCAP_SERVICES for keys named host and values that look like URI's
  */
+@Service
 public class VcapServicesChecker {
     private static Logger log = Logger.getLogger(VcapServicesChecker.class);
 

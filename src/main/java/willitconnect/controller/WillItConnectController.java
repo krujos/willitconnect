@@ -11,9 +11,9 @@ import java.util.List;
 @RestController
 public class WillItConnectController {
 
-    @Autowired
     private final VcapServicesChecker vcapServicesChecker;
 
+    @Autowired
     public WillItConnectController(VcapServicesChecker vcapServicesChecker) {
         this.vcapServicesChecker = vcapServicesChecker;
     }
