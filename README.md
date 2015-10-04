@@ -14,27 +14,36 @@ Sometimes, you just want to know if you can reach your thing (service really)
  and port.
 
 
-#For Example: 
+#For Example:
 
 ```
-➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=amazon.com -d port=80 
+➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=amazon.com -d port=80
 I can connect to amazon.com on 80
-➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=twitter.com -d port=8080 
+➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=twitter.com -d port=8080
 I cannot connect to twitter.com on 8080
 ➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=twitter.com -d port=443
 I can connect to twitter.com on 443
-➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=google.com -d port=443 
-I can connect to google.com on 443 
-➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=pivotal.io -d port=443 
-I can connect to pivotal.io on 443 
+➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=google.com -d port=443
+I can connect to google.com on 443
+➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=pivotal.io -d port=443
+I can connect to pivotal.io on 443
 ➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=nowaynohow.io -d port=443
-I cannot connect to nowaynohow.io on 443 
+I cannot connect to nowaynohow.io on 443
 ```
+
+## Will It Connect also consumes bound services!
+If you bind a service to willitconnect we'll do our best to connect to them. We
+for fields with the substring `host` and `port` to try to make reasonable guesses
+about what your service needs. We also connect to keys named 'URI' and anything
+that looks like a URL. See [EntryConsumer.java](src/main/java/willitconnect/service/util/EntryConsumer.java)
+for the algorithm used. You can see the results of this scan by calling the
+`/serviceresults` endpoint.
+
 
 #Get Some
 3 steps get you up and running!
 ##From the latest release
-Download the jar file from the latest [release](https://github.com/krujos/willitconnect/releases) 
+Download the jar file from the latest [release](https://github.com/krujos/willitconnect/releases)
 and push it
 
 ```
@@ -50,15 +59,15 @@ and push it
 ```
 
 #Development
-The project uses the standard spring boot directory structure, with web content located 
+The project uses the standard spring boot directory structure, with web content located
 in src/main/resources/static.
 
-You can run it locally by using 
+You can run it locally by using
 ```
 ➜ ./gradlew bootRun
 ```
 
-If you are making changes to index.js, afterwards you'll need to use babel to transform 
+If you are making changes to index.js, afterwards you'll need to use babel to transform
 the jsx before testing or deploying your changes
 
 ```
@@ -67,5 +76,5 @@ the jsx before testing or deploying your changes
 ```
 
 #TODO
-* Consume a bound service
+* UI Support for `/serviceresults`
 * proxy servers
