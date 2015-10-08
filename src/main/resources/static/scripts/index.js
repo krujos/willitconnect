@@ -57,6 +57,7 @@ var EntryBox = React.createClass({
         <h1>willitconnect</h1>
         <EntryList data={this.state.data} />
         <EntryForm onEntrySubmit={this.handleEntrySubmit} />
+        <VCapServicesList services={this.state.services} />
       </div>
     );
   }
@@ -96,6 +97,40 @@ var EntryForm = React.createClass({
         <input type="number" placeholder="Port" ref="port" />
         <input type="submit" value="Check" />
       </form>
+    );
+  }
+});
+
+var VCapServicesList = React.createClass({
+  loadServiceDataFromServer: function() {
+    $.ajax({
+      url: '/serviceresults',
+      dataType: 'json',
+      type: 'GET',
+      cache: false,
+      success: function(services) {
+        console.log('services are' + services);
+        this.setState({services: services});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  getInitialState: function() {
+    return {services: []};
+  },
+  componentDidMount: function() {
+    this.loadServiceDataFromServer();
+    setInterval(this.loadServiceDataFromServer, 2000);
+  },
+  render: function() {
+    return (
+      //TODO: loop through list
+      <div className="ServicesList">
+      <h4> Services are </h4>
+      {this.state.services}
+      </div>
     );
   }
 });

@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>willitconnect</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.5/darkly/bootstrap.min.css" >
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   </head>
   <body>
     <div class="container">
         <div id="content">
-          <script type="text/javascript" src="scripts/index-babel.js"></script>
+          <script type="text/babel" src="scripts/index.js"></script>
           <h4>or use me like this:</h4>
           <code>$ curl <span id="url">http://willitconnect.yourcfdomain.com/</span>willitconnect -d host=somehostname -d port=443</code>
 	  <script>
