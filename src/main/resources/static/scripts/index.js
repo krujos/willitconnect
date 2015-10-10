@@ -1,6 +1,10 @@
 /**
  * Extensive use was made of the fantastic tutorials at https://facebook.github.io/react/index.html
  */
+var React = require('react');
+var ReactDOM = require('react-dom');
+var Griddle = require('griddle-react');
+var $ = require('jquery');
 
 var Entry = React.createClass({
   getInitialState: function() {
@@ -122,20 +126,23 @@ var VCapServicesList = React.createClass({
   },
   componentDidMount: function() {
     this.loadServiceDataFromServer();
-    setInterval(this.loadServiceDataFromServer, 2000);
+    //setInterval(this.loadServiceDataFromServer, 2000);
   },
   render: function() {
     return (
       //TODO: loop through list
+      //  <div><pre>{JSON.stringify(this.state.services, null, 2) }</pre></div>
       <div className="ServicesList">
-      <h4> Services are </h4>
-      {this.state.services}
+      <h4> Bound services: </h4>
+        <Griddle results={this.state.services} tableClassName="table" showFilter={false} showSettings={false}
+        resultsPerPage={5} enableInfiniteScroll={true} useFixedHeader={true}
+        columns={["entry", "canConnect", "lastChecked"]} noDataMessage={"Please validate your service bindings"}/>
       </div>
     );
   }
 });
 
-React.render(
+ReactDOM.render(
   //TODO: tie this to the EntryConsumer lists
   <EntryBox />,
   document.getElementById('content')
