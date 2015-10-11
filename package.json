@@ -10,6 +10,7 @@
     "griddle-react": "^0.2.14",
     "jquery": "^2.1.4",
     "react": "^0.14.0",
+    "react-datagrid": "^1.2.15",
     "react-dom": "^0.14.0",
     "style-loader": "^0.12.4",
     "underscore": "^1.8.3"

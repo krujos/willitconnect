@@ -1,9 +1,10 @@
 /**
- * Extensive use was made of the fantastic tutorials at https://facebook.github.io/react/index.html
- */
+* Extensive use was made of the fantastic tutorials at https://facebook.github.io/react/index.html
+*/
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Griddle = require('griddle-react');
+var DataGrid = require('react-datagrid');
+require('react-datagrid/index.css');
 var $ = require('jquery');
 
 var Entry = React.createClass({
@@ -13,35 +14,35 @@ var Entry = React.createClass({
   componentWillMount: function() {
     var path = '/willitconnect?host=' + this.props.host + '&port=' + this.props.port;
     $.get(path, function(status) {
-          this.setState({status: status});
-      }.bind(this));
-   },
+      this.setState({status: status});
+    }.bind(this));
+  },
   render: function() {
 
     //TODO: clean this up
     var redStyle = {
-        color: 'red',
-        };
+      color: 'red',
+    };
     var greenStyle = {
-        color: 'green',
-      };
+      color: 'green',
+    };
 
     if(this.state.status.indexOf("cannot") > -1)
     {
-        return (
-          <div style={redStyle} className="">
-            <h3 className="entry">
-                {this.props.host} : {this.props.port}
-            </h3>
-          </div>
-        );
+      return (
+        <div style={redStyle} className="">
+        <h3 className="entry">
+        {this.props.host} : {this.props.port}
+        </h3>
+        </div>
+      );
     }
     return (
-        <div style={greenStyle} className="">
-          <h3 className="entry">
-            {this.props.host} : {this.props.port}
-            </h3>
-        </div>
+      <div style={greenStyle} className="">
+      <h3 className="entry">
+      {this.props.host} : {this.props.port}
+      </h3>
+      </div>
     );
   }
 });
@@ -58,10 +59,10 @@ var EntryBox = React.createClass({
   render: function() {
     return (
       <div className="entryBox">
-        <h1>willitconnect</h1>
-        <EntryList data={this.state.data} />
-        <EntryForm onEntrySubmit={this.handleEntrySubmit} />
-        <VCapServicesList services={this.state.services} />
+      <h1>willitconnect</h1>
+      <EntryList data={this.state.data} />
+      <EntryForm onEntrySubmit={this.handleEntrySubmit} />
+      <VCapServicesList services={this.state.services} />
       </div>
     );
   }
@@ -76,7 +77,7 @@ var EntryList = React.createClass({
     });
     return (
       <div className="entryList">
-        {entryNodes}
+      {entryNodes}
       </div>
     );
   }
@@ -85,25 +86,123 @@ var EntryList = React.createClass({
 var EntryForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
-    var host = React.findDOMNode(this.refs.host).value.trim();
-    var port = React.findDOMNode(this.refs.port).value.trim();
+    var host = ReactDOM.findDOMNode(this.refs.host).value.trim();
+    var port = ReactDOM.findDOMNode(this.refs.port).value.trim();
     if (!port || !host) {
       return;
     }
     this.props.onEntrySubmit({host: host, port: port});
-    React.findDOMNode(this.refs.host).value = '';
-    React.findDOMNode(this.refs.port).value = '';
+    ReactDOM.findDOMNode(this.refs.host).value = '';
+    ReactDOM.findDOMNode(this.refs.port).value = '';
   },
   render: function() {
     return (
       <form className="entryForm" onSubmit={this.handleSubmit}>
-        <input type="text" placeholder="Host" ref="host" />
-        <input type="number" placeholder="Port" ref="port" />
-        <input type="submit" value="Check" />
+      <input type="text" placeholder="Host" ref="host" />
+      <input type="number" placeholder="Port" ref="port" />
+      <input type="submit" value="Check" />
       </form>
     );
   }
 });
+
+var dateComponent = React.createClass({
+  convertDate: function() {
+    this.state.lastChecked = Date.parse(this.props.data).format("YYYY-MM-DD HH:m:s");
+  },
+  render: function(){
+    return (
+      <div>{this.convertDate}</div>
+    );
+  }
+});
+
+var boolComponent = React.createClass({
+  render: function(){
+    if(this.props.data){
+      return(
+        <div>Yes</div>
+      );
+    }
+    return(
+      <div>No</div>
+    );
+  }
+});
+
+var fakeData = [
+  {
+    "lastChecked":"1444491695787",
+    "entry":"172.20.247.12:34424",
+    "canConnect":true,
+    "validHostname":true
+  },
+  {
+    "lastChecked":0,
+    "entry":"null:-1",
+    "canConnect":false,
+    "validHostname":false
+  },
+  {
+    "lastChecked":0,
+    "entry":"willitconnect-com.apps-np.homedepot.com:80",
+    "canConnect":false,
+    "validHostname":false
+  },
+  {
+    "lastChecked":0,
+    "entry":"null:-1",
+    "canConnect":false,
+    "validHostname":false
+  }
+];
+
+var columnMeta = [
+  {
+    "columnName": "entry",
+    "order": 1,
+    "locked": false,
+    "visible": true,
+  },
+  {
+    "columnName": "canConnect",
+    "order": 2,
+    "locked": false,
+    "visible": true,
+    "customComponent": boolComponent
+  }
+];
+
+
+var columns = [
+  { name: 'entry' },
+  { name: 'canConnect', render: function(value) {
+    if(value)
+    {
+      return "true";
+    }
+    return "false";
+  }
+}
+//	{ name: 'withWidth', width: 200 },
+];
+
+function rowStyle(data, props){
+	var style = {}
+	if (data.canConnect == true){
+		style.color = 'green'
+	}
+  else if (data.validHostname == false)
+  {
+    style.color = 'gray'
+  }
+  else
+  {
+    style.color = 'red'
+    console.log("red style")
+  }
+	return style
+}
 
 var VCapServicesList = React.createClass({
   loadServiceDataFromServer: function() {
@@ -113,7 +212,10 @@ var VCapServicesList = React.createClass({
       type: 'GET',
       cache: false,
       success: function(services) {
-        console.log('services are' + services);
+//        if(services.canConnect == true)
+//        {
+//          services.canConnect = "true";
+//        }
         this.setState({services: services});
       }.bind(this),
       error: function(xhr, status, err) {
@@ -131,12 +233,27 @@ var VCapServicesList = React.createClass({
   render: function() {
     return (
       //TODO: loop through list
-      //  <div><pre>{JSON.stringify(this.state.services, null, 2) }</pre></div>
+      //  <div><pre>{JSON.stringify(this.state.services, null, 2) }</pre></div> useGriddleStyles={false}
+      // table class="table table-striped table-hover
+      /*      <div className="ServicesList">
+      <h4> Bound services: </h4>
+      <Griddle results={fakeData} tableClassName="table"  showFilter={false} showSettings={false}
+      resultsPerPage={5} enableInfiniteScroll={true} columnMetadata={columnMeta} useFixedHeader={true}
+      columns={["entry", "canConnect"]} noDataMessage={"Please validate your service bindings"}/>
+      </div>
+      */
+
       <div className="ServicesList">
       <h4> Bound services: </h4>
-        <Griddle results={this.state.services} tableClassName="table" showFilter={false} showSettings={false}
-        resultsPerPage={5} enableInfiniteScroll={true} useFixedHeader={true}
-        columns={["entry", "canConnect", "lastChecked"]} noDataMessage={"Please validate your service bindings"}/>
+      <DataGrid
+      idProperty='dataGrid'
+      dataSource={fakeData}
+      columns={columns}
+      style={{height: 200}}
+      withColumnMenu={false}
+      rowStyle={rowStyle}
+      emptyText={'Validate your serice bindings'}
+      />
       </div>
     );
   }
