@@ -67,12 +67,12 @@ You can run it locally by using
 ➜ ./gradlew bootRun
 ```
 
-If you are making changes to index.js, afterwards you'll need to use babel to transform
-the jsx before testing or deploying your changes
+If you are making changes to index.js, afterwards you'll need to webpack to transform the jsx before testing or deploying your changes
 
 ```
-➜ npm install -g babel
-➜ babel index.js --compact --no-comments > index-babel.js
+➜ npm install webpack -g
+➜ webpack --colors --progress (from the project root directory)
+➜ ./gradlew clean && ./gradlew build
 ```
 
 #TODO

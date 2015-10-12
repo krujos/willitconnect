@@ -157,23 +157,6 @@ var fakeData = [
   }
 ];
 
-var columnMeta = [
-  {
-    "columnName": "entry",
-    "order": 1,
-    "locked": false,
-    "visible": true,
-  },
-  {
-    "columnName": "canConnect",
-    "order": 2,
-    "locked": false,
-    "visible": true,
-    "customComponent": boolComponent
-  }
-];
-
-
 var columns = [
   { name: 'entry' },
   { name: 'canConnect', render: function(value) {
@@ -184,7 +167,6 @@ var columns = [
     return "false";
   }
 }
-//	{ name: 'withWidth', width: 200 },
 ];
 
 function rowStyle(data, props){
@@ -212,10 +194,6 @@ var VCapServicesList = React.createClass({
       type: 'GET',
       cache: false,
       success: function(services) {
-//        if(services.canConnect == true)
-//        {
-//          services.canConnect = "true";
-//        }
         this.setState({services: services});
       }.bind(this),
       error: function(xhr, status, err) {
@@ -232,17 +210,6 @@ var VCapServicesList = React.createClass({
   },
   render: function() {
     return (
-      //TODO: loop through list
-      //  <div><pre>{JSON.stringify(this.state.services, null, 2) }</pre></div> useGriddleStyles={false}
-      // table class="table table-striped table-hover
-      /*      <div className="ServicesList">
-      <h4> Bound services: </h4>
-      <Griddle results={fakeData} tableClassName="table"  showFilter={false} showSettings={false}
-      resultsPerPage={5} enableInfiniteScroll={true} columnMetadata={columnMeta} useFixedHeader={true}
-      columns={["entry", "canConnect"]} noDataMessage={"Please validate your service bindings"}/>
-      </div>
-      */
-
       <div className="ServicesList">
       <h4> Bound services: </h4>
       <DataGrid
@@ -260,7 +227,6 @@ var VCapServicesList = React.createClass({
 });
 
 ReactDOM.render(
-  //TODO: tie this to the EntryConsumer lists
   <EntryBox />,
   document.getElementById('content')
 );
