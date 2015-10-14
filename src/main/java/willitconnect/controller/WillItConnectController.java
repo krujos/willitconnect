@@ -58,9 +58,9 @@ public class WillItConnectController {
     }
 
     @RequestMapping(value = "/proxy", method = RequestMethod.PUT)
-    public String proxy(@RequestParam("proxy") String proxy,
+    public void proxy(@RequestParam("proxy") String proxy,
                       @RequestParam("proxyType") String proxyType)
     {
-        return "OK";
+        vcapServicesChecker.setProxy(proxy, proxyType);
     }
 }

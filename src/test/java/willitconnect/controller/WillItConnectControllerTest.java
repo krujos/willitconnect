@@ -4,17 +4,20 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import willitconnect.model.CheckedEntry;
 import willitconnect.service.VcapServicesChecker;
+import willitconnect.service.util.Connection;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -27,6 +30,8 @@ public class WillItConnectControllerTest {
 
     @Mock
     VcapServicesChecker checker;
+
+    @PrepareForTest(Connection.class)
 
     @Before
     public void setUp() {
@@ -62,10 +67,12 @@ public class WillItConnectControllerTest {
     }
 
     @Test
-    public void itAcceptAProxy() throws Exception {
+    public void itSavesAProxy() throws Exception {
         mockMvc.perform(put("/proxy")
-                .param("proxy", "proxy.example.com")
+                .param("proxy", "proxy.example.com:80")
                 .param("proxyType", "http")
         ).andExpect(status().isOk());
+
+        verify(checker).setProxy("proxy.example.com:80", "http");
     }
 }

@@ -18,6 +18,8 @@ import java.util.List;
 @Service
 public class VcapServicesChecker {
     private static Logger log = Logger.getLogger(VcapServicesChecker.class);
+    private String proxy;
+    private String proxyType;
 
     public static VcapServicesChecker checkVcapServices(JSONObject vcapServices) {
         VcapServicesChecker checker = new VcapServicesChecker();
@@ -67,5 +69,18 @@ public class VcapServicesChecker {
 
     private String getHostname(CheckedEntry e) {
         return e.getEntry().substring(0, e.getEntry().indexOf(':'));
+    }
+
+    public void setProxy(String proxy, String proxyType) {
+        this.proxy = proxy;
+        this.proxyType = proxyType;
+    }
+
+    public String getProxy() {
+        return proxy;
+    }
+
+    public String getProxyType() {
+        return proxyType;
     }
 }
