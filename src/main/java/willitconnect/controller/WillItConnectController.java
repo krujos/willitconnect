@@ -18,6 +18,7 @@ public class WillItConnectController {
         this.vcapServicesChecker = vcapServicesChecker;
     }
 
+    //TODO Do we still need this?
     @RequestMapping(value = "/guide", method = RequestMethod.GET)
     public String root() {
         return new StringBuilder()
@@ -33,7 +34,7 @@ public class WillItConnectController {
     }
 
     @RequestMapping(value = "/willitconnect")
-    public String root(@RequestParam("host") String host,
+    public String connect(@RequestParam("host") String host,
                        @RequestParam ("port") int port)  {
         if (Connection.checkConnection(host, port))
             return "I can connect to " + host + " on " + port;
@@ -42,7 +43,7 @@ public class WillItConnectController {
 
     //TODO: refactor to remove code duplication 
     @RequestMapping(value = "/willitconnectproxy")
-    public String root(@RequestParam("host") String host,
+    public String proxyConnect(@RequestParam("host") String host,
                        @RequestParam ("port") int port,
                        @RequestParam("proxyHost") String proxyHost,
                        @RequestParam ("proxyPort") int proxyPort)  {
@@ -51,9 +52,15 @@ public class WillItConnectController {
         return "I cannot connect to " + host + " on " + port;
     }
 
-    @RequestMapping(value = "/serviceresults")
+    @RequestMapping(value = "/serviceresults", method = RequestMethod.GET)
     public @ResponseBody List<CheckedEntry> getServiceResults() {
         return vcapServicesChecker.getConnectionResults();
     }
 
+    @RequestMapping(value = "/proxy", method = RequestMethod.PUT)
+    public String proxy(@RequestParam("proxy") String proxy,
+                      @RequestParam("proxyType") String proxyType)
+    {
+        return "OK";
+    }
 }
