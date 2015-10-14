@@ -19,6 +19,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.powermock.api.mockito.PowerMockito.*;
 
@@ -78,12 +80,16 @@ public class VcapServicesCheckerTest {
     public void successfulConnectionsAreReflectedInTheResultsSet() {
         mockStatic(Connection.class);
         when(Connection.checkConnection("a.com", 80)).thenReturn(true);
+        when(Connection.checkProxyConnection(anyString(), anyInt(),
+                anyString(), anyInt(), anyString())).thenThrow(
+                    new IllegalArgumentException());
 
         String json = "{ a: [{'hostname':'a.com:80'},{'hostname':'e.com'}]}";
         checker = VcapServicesChecker.checkVcapServices(new JSONObject(json));
 
         assertTrue(checker.getConnectionResults().get(0).canConnect());
         assertFalse(checker.getConnectionResults().get(1).canConnect());
+
     }
 
     @Test
@@ -98,5 +104,23 @@ public class VcapServicesCheckerTest {
                 new JSONObject("{ VCAP_SERVICES: " + VcapServicesStrings.cleardb + "}"));
         assertThat(checker.getConnectionResults(), hasSize(2));
     }
+
+    @Test
+    public void itUsesAHttpProxy() {
+        mockStatic(Connection.class);
+        when(Connection.checkProxyConnection("a.com", 80, "proxy.com", 80,
+                "http"))
+                .thenReturn(true);
+        when(Connection.checkConnection(anyString(), anyInt())).thenThrow(new
+                IllegalArgumentException());
+
+        String json = "{ a: [{'hostname':'a.com:80'}]}";
+        checker = VcapServicesChecker.checkVcapServicesWithProxy(
+                new JSONObject(json), "proxy.com", 80, "http");
+        assertTrue(checker.getConnectionResults().get(0).canConnect());
+    }
+
+    //itEnforcesTheProxyhasAPort
+    //itRejectsAnythingBesidesHttpProxy
 
 }

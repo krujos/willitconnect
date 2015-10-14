@@ -20,9 +20,20 @@ public class VcapServicesChecker {
     private static Logger log = Logger.getLogger(VcapServicesChecker.class);
     private String proxy;
     private String proxyType;
+    private int proxyPort;
 
     public static VcapServicesChecker checkVcapServices(JSONObject vcapServices) {
         VcapServicesChecker checker = new VcapServicesChecker();
+        checker.parse(vcapServices);
+        checker.check();
+        return checker;
+    }
+
+    public static VcapServicesChecker checkVcapServicesWithProxy(
+            JSONObject vcapServices, String proxy, int proxyPort,
+            String proxyType) {
+        VcapServicesChecker checker = new VcapServicesChecker();
+        checker.setProxy(proxy, proxyPort, proxyType);
         checker.parse(vcapServices);
         checker.check();
         return checker;
@@ -55,10 +66,21 @@ public class VcapServicesChecker {
             if (e.isValidHostname()) {
                 String hostname = getHostname(e);
                 int port = getPort(e, hostname);
-                e.setCanConnect(Connection.checkConnection(hostname, port));
+                if ( hasProxy() ) {
+                    e.setCanConnect(
+                            Connection.checkProxyConnection(
+                                    hostname, port, proxy, proxyPort,
+                                    proxyType));
+                } else {
+                    e.setCanConnect(Connection.checkConnection(hostname, port));
+                }
                 e.setLastChecked(Date.from(Instant.now()));
             }
         });
+    }
+
+    private boolean hasProxy() {
+        return null != getProxy();
     }
 
     private int getPort(CheckedEntry e, String hostname) {
@@ -71,8 +93,9 @@ public class VcapServicesChecker {
         return e.getEntry().substring(0, e.getEntry().indexOf(':'));
     }
 
-    public void setProxy(String proxy, String proxyType) {
+    public void setProxy(String proxy, int port, String proxyType) {
         this.proxy = proxy;
+        this.proxyPort = port;
         this.proxyType = proxyType;
     }
 

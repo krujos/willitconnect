@@ -47,7 +47,8 @@ public class WillItConnectController {
                        @RequestParam ("port") int port,
                        @RequestParam("proxyHost") String proxyHost,
                        @RequestParam ("proxyPort") int proxyPort)  {
-        if (Connection.checkProxyConnection(host, port, proxyHost, proxyPort))
+        if (Connection.checkProxyConnection(
+                host, port, proxyHost, proxyPort, "http"))
             return "I can connect to " + host + " on " + port;
         return "I cannot connect to " + host + " on " + port;
     }
@@ -59,8 +60,9 @@ public class WillItConnectController {
 
     @RequestMapping(value = "/proxy", method = RequestMethod.PUT)
     public void proxy(@RequestParam("proxy") String proxy,
+                      @RequestParam("proxyPort") int proxyPort,
                       @RequestParam("proxyType") String proxyType)
     {
-        vcapServicesChecker.setProxy(proxy, proxyType);
+        vcapServicesChecker.setProxy(proxy, proxyPort, proxyType);
     }
 }

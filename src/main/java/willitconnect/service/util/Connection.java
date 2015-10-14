@@ -23,7 +23,12 @@ public class Connection {
         return false;
     }
 
-    public static boolean checkProxyConnection(String host, int port, String proxyHost, int proxyPort) {
+    public static boolean checkProxyConnection(
+            String host, int port, String proxyHost, int proxyPort,
+            String proxyType) {
+        if ("http" != proxyType ) {
+            throw new IllegalArgumentException("Proxy type must be http");
+        }
         try {
             SocketAddress addr = new InetSocketAddress(
                     Inet4Address.getByName(host), port);

@@ -69,10 +69,11 @@ public class WillItConnectControllerTest {
     @Test
     public void itSavesAProxy() throws Exception {
         mockMvc.perform(put("/proxy")
-                .param("proxy", "proxy.example.com:80")
-                .param("proxyType", "http")
+                        .param("proxy", "proxy.example.com")
+                        .param("proxyPort", "80")
+                        .param("proxyType", "http")
         ).andExpect(status().isOk());
 
-        verify(checker).setProxy("proxy.example.com:80", "http");
+        verify(checker).setProxy("proxy.example.com", 80, "http");
     }
 }
