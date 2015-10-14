@@ -30,3 +30,4 @@ twelvefactorapp.iml
 _builds/
 _projects/
 _steps/
+node_modules
