@@ -71,6 +71,7 @@ If you are making changes to index.js, afterwards you'll need to webpack to tran
 
 ```
 ➜ npm install webpack -g
+➜ npm install
 ➜ webpack --colors --progress (from the project root directory)
 ➜ ./gradlew clean && ./gradlew build
 ```

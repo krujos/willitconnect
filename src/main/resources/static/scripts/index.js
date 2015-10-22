@@ -113,8 +113,8 @@ var EntryForm = React.createClass({
       <input type="number" placeholder="Port" ref="port" />
       <input type="submit" value="Check" />
       <div></div>
-      <input type="text" placeholder="ProxyHost (optional)" ref="proxyHost" />
-      <input type="number" placeholder="ProxyPort (optional)" ref="proxyPort" />
+      <input type="text" placeholder="Proxy Host (optional)" ref="proxyHost" />
+      <input type="number" placeholder="Proxy Port (optional)" ref="proxyPort" />
       </form>
     );
   }
@@ -207,6 +207,7 @@ var VCapServicesList = React.createClass({
       <DataGrid
       idProperty='dataGrid'
       dataSource={this.state.services}
+      //dataSource={fakeData}
       columns={columns}
       style={{height: 200}}
       withColumnMenu={false}
