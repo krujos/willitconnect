@@ -62,7 +62,12 @@
 	    return { status: [] };
 	  },
 	  componentWillMount: function componentWillMount() {
-	    var path = '/willitconnect?host=' + this.props.host + '&port=' + this.props.port;
+	    var path;
+	    if (this.props.proxyHost && this.props.proxyPort) {
+	      path = '/willitconnectproxy?host=' + this.props.host + '&port=' + this.props.port + '&proxyHost=' + this.props.proxyHost + '&proxyPort=' + this.props.proxyPort;
+	    } else {
+	      path = '/willitconnect?host=' + this.props.host + '&port=' + this.props.port;
+	    }
 	    $.get(path, (function (status) {
 	      this.setState({ status: status });
 	    }).bind(this));
@@ -136,7 +141,7 @@
 
 	  render: function render() {
 	    var entryNodes = this.props.data.map(function (entry, index) {
-	      return React.createElement(Entry, { host: entry.host, port: entry.port, status: entry.status, key: index });
+	      return React.createElement(Entry, { host: entry.host, port: entry.port, status: entry.status, proxyHost: entry.proxyHost, proxyPort: entry.proxyPort, key: index });
 	    });
 	    return React.createElement(
 	      'div',
@@ -153,10 +158,15 @@
 	    e.preventDefault();
 	    var host = ReactDOM.findDOMNode(this.refs.host).value.trim();
 	    var port = ReactDOM.findDOMNode(this.refs.port).value.trim();
+
 	    if (!port || !host) {
 	      return;
 	    }
-	    this.props.onEntrySubmit({ host: host, port: port });
+
+	    var proxyHost = ReactDOM.findDOMNode(this.refs.proxyHost).value.trim();
+	    var proxyPort = ReactDOM.findDOMNode(this.refs.proxyPort).value.trim();
+
+	    this.props.onEntrySubmit({ host: host, port: port, proxyHost: proxyHost, proxyPort: proxyPort });
 	    ReactDOM.findDOMNode(this.refs.host).value = '';
 	    ReactDOM.findDOMNode(this.refs.port).value = '';
 	  },
@@ -166,44 +176,15 @@
 	      { className: 'entryForm', onSubmit: this.handleSubmit },
 	      React.createElement('input', { type: 'text', placeholder: 'Host', ref: 'host' }),
 	      React.createElement('input', { type: 'number', placeholder: 'Port', ref: 'port' }),
-	      React.createElement('input', { type: 'submit', value: 'Check' })
+	      React.createElement('input', { type: 'submit', value: 'Check' }),
+	      React.createElement('div', null),
+	      React.createElement('input', { type: 'text', placeholder: 'ProxyHost (optional)', ref: 'proxyHost' }),
+	      React.createElement('input', { type: 'number', placeholder: 'ProxyPort (optional)', ref: 'proxyPort' })
 	    );
 	  }
 	});
 
-	var dateComponent = React.createClass({
-	  displayName: 'dateComponent',
-
-	  convertDate: function convertDate() {
-	    this.state.lastChecked = Date.parse(this.props.data).format("YYYY-MM-DD HH:m:s");
-	  },
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      this.convertDate
-	    );
-	  }
-	});
-
-	var boolComponent = React.createClass({
-	  displayName: 'boolComponent',
-
-	  render: function render() {
-	    if (this.props.data) {
-	      return React.createElement(
-	        'div',
-	        null,
-	        'Yes'
-	      );
-	    }
-	    return React.createElement(
-	      'div',
-	      null,
-	      'No'
-	    );
-	  }
-	});
+	//TODO: move this to a test
 
 	var fakeData = [{
 	  "lastChecked": "1444491695787",
@@ -229,9 +210,9 @@
 
 	var columns = [{ name: 'entry' }, { name: 'canConnect', render: function render(value) {
 	    if (value) {
-	      return "true";
+	      return "Yes";
 	    }
-	    return "false";
+	    return "No";
 	  }
 	}];
 
