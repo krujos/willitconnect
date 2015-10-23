@@ -111,10 +111,10 @@ var EntryForm = React.createClass({
       <form className="entryForm" onSubmit={this.handleSubmit}>
       <input type="text" placeholder="Host" ref="host" />
       <input type="number" placeholder="Port" ref="port" />
-      <input type="submit" value="Check" />
       <div></div>
       <input type="text" placeholder="Proxy Host (optional)" ref="proxyHost" />
       <input type="number" placeholder="Proxy Port (optional)" ref="proxyPort" />
+      <input type="submit" value="Check" />
       </form>
     );
   }

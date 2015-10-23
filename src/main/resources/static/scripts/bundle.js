@@ -183,10 +183,10 @@
 	      { className: 'entryForm', onSubmit: this.handleSubmit },
 	      React.createElement('input', { type: 'text', placeholder: 'Host', ref: 'host' }),
 	      React.createElement('input', { type: 'number', placeholder: 'Port', ref: 'port' }),
-	      React.createElement('input', { type: 'submit', value: 'Check' }),
 	      React.createElement('div', null),
 	      React.createElement('input', { type: 'text', placeholder: 'Proxy Host (optional)', ref: 'proxyHost' }),
-	      React.createElement('input', { type: 'number', placeholder: 'Proxy Port (optional)', ref: 'proxyPort' })
+	      React.createElement('input', { type: 'number', placeholder: 'Proxy Port (optional)', ref: 'proxyPort' }),
+	      React.createElement('input', { type: 'submit', value: 'Check' })
 	    );
 	  }
 	});
