@@ -7,10 +7,12 @@ buildscript {
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
         maven { url "https://plugins.gradle.org/m2/" }
+        flatDir { dirs 'libs' }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("com.moowork.gradle:gradle-node-plugin:0.11")
+        classpath("nebula.plugin.webpack:gradle-webpack-plugin:1.0.0")
     }
 }
 
@@ -19,6 +21,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'com.moowork.node'
+apply plugin: 'nebula.plugin.webpack'
 
 jar {
     baseName = 'willitconnect'
@@ -33,11 +36,6 @@ repositories {
     maven { url "https://repo.spring.io/milestone" }
 }
 
-task webPack(type: NodeTask, dependsOn: 'npmInstall') {
-  script = file('node_modules/webpack/bin/webpack')
-}
-
-
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-web")
@@ -48,6 +46,7 @@ dependencies {
 }
 
 
+
 eclipse {
     classpath {
          containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
@@ -56,7 +55,7 @@ eclipse {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '2.8'
 }
 
-project.tasks.jar.dependsOn('webPack')
+project.tasks.jar.dependsOn('webpack')
