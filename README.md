@@ -58,24 +58,5 @@ and push it
 ➜ cf push
 ```
 
-#Development
-The project uses the standard spring boot directory structure, with web content located
-in src/main/resources/static.
-
-You can run it locally by using
-```
-➜ ./gradlew bootRun
-```
-
-If you are making changes to index.js, afterwards you'll need to webpack to transform the jsx before testing or deploying your changes
-
-```
-➜ npm install webpack -g
-➜ npm install
-➜ webpack --colors --progress (from the project root directory)
-➜ ./gradlew clean && ./gradlew build
-```
-
 #TODO
-* UI Support for `/serviceresults`
-* proxy servers
+* testing for UI
