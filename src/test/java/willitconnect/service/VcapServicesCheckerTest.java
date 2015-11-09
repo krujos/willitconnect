@@ -1,8 +1,6 @@
 package willitconnect.service;
 
 import org.json.JSONObject;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -21,6 +19,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.powermock.api.mockito.PowerMockito.*;
 
@@ -28,35 +28,25 @@ import static org.powermock.api.mockito.PowerMockito.*;
 @PrepareForTest(Connection.class)
 public class VcapServicesCheckerTest {
 
-    VcapServicesChecker checker = new VcapServicesChecker();
-
-    @Before
-    public void before() {
-        //VcapServicesChecker.results = new ArrayList<CheckedEntry>();
-    }
-
-    @After
-    public void after() {
-        VcapServicesChecker.results.clear();
-    }
+    VcapServicesChecker checker;
 
     @Test(expected = NullPointerException.class)
     public void itShouldComplainAboutNullVcapServices() {
-        checker.parse(null);
+        VcapServicesChecker.checkVcapServices(null);
     }
 
     @Test
     public void itShouldNotComplainAboutEmptyVcapServices() {
         JSONObject services = new JSONObject();
-        checker.parse(services);
+        VcapServicesChecker.checkVcapServices(services);
     }
 
     @Test
     public void itShouldFindTwoHostnamesToCheck() {
-        checker.parse(
+        checker = VcapServicesChecker.checkVcapServices(
                 new JSONObject(VcapServicesStrings.cleardb));
 
-        List<CheckedEntry> shouldBeASingleHostName = VcapServicesChecker.results;
+        List<CheckedEntry> shouldBeASingleHostName = checker.getConnectionResults();
         assertThat(shouldBeASingleHostName, hasSize(2));
         assertThat(shouldBeASingleHostName.get(0).getEntry(),
                 is(equalTo("us-cdbr-iron-east-02.cleardb.net:3306")));
@@ -65,57 +55,72 @@ public class VcapServicesCheckerTest {
     }
 
     @Test
-    public void itShodlCheckOnlyValidHostnames() {
-        addValidAndInvalidResults();
-
-        VcapServicesChecker.check();
-        assertThat(VcapServicesChecker.results.get(0).getLastChecked(),
+    public void itShouldCheckOnlyValidHostnames() {
+        String json = "{ a: [{'hostname':'a.com:80'},{'hostname':'e.com'}]}";
+        checker = VcapServicesChecker.checkVcapServices(new JSONObject(json));
+        assertThat(checker.getConnectionResults().get(0).getLastChecked(),
                 is(not(equalTo(Date.from(Instant.EPOCH)))));
-        assertThat(VcapServicesChecker.results.get(1).getLastChecked(),
+        assertThat(checker.getConnectionResults().get(1).getLastChecked(),
                 is(equalTo(Date.from(Instant.EPOCH))));
-    }
-
-    private void addValidAndInvalidResults() {
-        VcapServicesChecker.results.add(new CheckedEntry(
-                "amazon.com:80"));
-        VcapServicesChecker.results.add(new CheckedEntry(
-                "example.com"));
     }
 
     @Test
     public void validHostsReceiveAConnectionCheck() {
         mockStatic(Connection.class);
+        when(Connection.checkConnection("a.com", 80)).thenReturn(true);
 
-        when(Connection.checkConnection("amazon.com", 80)).thenReturn(true);
-        addValidAndInvalidResults();
-
-        VcapServicesChecker.check();
+        String json = "{ a: [{'hostname':'a.com:80'},{'hostname':'e.com'}]}";
+        VcapServicesChecker.checkVcapServices(new JSONObject(json));
 
         verifyStatic(times(1));
-        Connection.checkConnection("amazon.com", 80);
+        Connection.checkConnection("a.com", 80);
     }
 
     @Test
     public void successfulConnectionsAreReflectedInTheResultsSet() {
         mockStatic(Connection.class);
-        when(Connection.checkConnection("amazon.com", 80)).thenReturn(true);
-        addValidAndInvalidResults();
+        when(Connection.checkConnection("a.com", 80)).thenReturn(true);
+        when(Connection.checkProxyConnection(anyString(), anyInt(),
+                anyString(), anyInt(), anyString())).thenThrow(
+                    new IllegalArgumentException());
 
-        VcapServicesChecker.check();
-        assertTrue(VcapServicesChecker.results.get(0).canConnect());
-        assertFalse(VcapServicesChecker.results.get(1).canConnect());
+        String json = "{ a: [{'hostname':'a.com:80'},{'hostname':'e.com'}]}";
+        checker = VcapServicesChecker.checkVcapServices(new JSONObject(json));
+
+        assertTrue(checker.getConnectionResults().get(0).canConnect());
+        assertFalse(checker.getConnectionResults().get(1).canConnect());
+
     }
 
     @Test
     public void itShouldHandleAnEmptyVcapServices() {
-        VcapServicesChecker.parse(new JSONObject("{}"));
-        VcapServicesChecker.check();
-        assertThat(VcapServicesChecker.results, hasSize(0));
+        checker = VcapServicesChecker.checkVcapServices(new JSONObject("{}"));
+        assertThat(checker.getConnectionResults(), hasSize(0));
     }
 
     @Test
-    public void itShouldHandleACallToCheckBeforeParseGracefully() {
-        VcapServicesChecker.check();
-        assertThat(VcapServicesChecker.results, hasSize(0));
+    public void itShouldHandleAFullVcapServices() {
+        checker = VcapServicesChecker.checkVcapServices(
+                new JSONObject("{ VCAP_SERVICES: " + VcapServicesStrings.cleardb + "}"));
+        assertThat(checker.getConnectionResults(), hasSize(2));
     }
+
+    @Test
+    public void itUsesAHttpProxy() {
+        mockStatic(Connection.class);
+        when(Connection.checkProxyConnection("a.com", 80, "proxy.com", 80,
+                "http"))
+                .thenReturn(true);
+        when(Connection.checkConnection(anyString(), anyInt())).thenThrow(new
+                IllegalArgumentException());
+
+        String json = "{ a: [{'hostname':'a.com:80'}]}";
+        checker = VcapServicesChecker.checkVcapServicesWithProxy(
+                new JSONObject(json), "proxy.com", 80, "http");
+        assertTrue(checker.getConnectionResults().get(0).canConnect());
+    }
+
+    //itEnforcesTheProxyhasAPort
+    //itRejectsAnythingBesidesHttpProxy
+
 }

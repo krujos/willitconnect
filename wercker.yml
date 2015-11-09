@@ -1,4 +1,4 @@
-box: java
+box: jdubois/jhipster-docker
 # Build definition
 build:
   # The steps that will be executed on build
@@ -8,6 +8,7 @@ build:
         code: |
           ./gradlew -v
           javac -version
+    - npm-install
     - script:
             name: run tests
             code: |
@@ -15,7 +16,7 @@ build:
     - script:
             name: run build
             code: |
-              ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build
+              ./gradlew webpack --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build
     - script:
             name: upload artifacts
             code: |

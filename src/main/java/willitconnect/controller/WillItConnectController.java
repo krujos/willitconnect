@@ -1,5 +1,6 @@
 package willitconnect.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import willitconnect.model.CheckedEntry;
 import willitconnect.service.VcapServicesChecker;
@@ -10,6 +11,14 @@ import java.util.List;
 @RestController
 public class WillItConnectController {
 
+    private final VcapServicesChecker vcapServicesChecker;
+
+    @Autowired
+    public WillItConnectController(VcapServicesChecker vcapServicesChecker) {
+        this.vcapServicesChecker = vcapServicesChecker;
+    }
+
+    //TODO Do we still need this?
     @RequestMapping(value = "/guide", method = RequestMethod.GET)
     public String root() {
         return new StringBuilder()
@@ -25,16 +34,35 @@ public class WillItConnectController {
     }
 
     @RequestMapping(value = "/willitconnect")
-    public String root(@RequestParam("host") String host,
+    public String connect(@RequestParam("host") String host,
                        @RequestParam ("port") int port)  {
         if (Connection.checkConnection(host, port))
             return "I can connect to " + host + " on " + port;
         return "I cannot connect to " + host + " on " + port;
     }
 
-    @RequestMapping(value = "/serviceresults")
-    public @ResponseBody List<CheckedEntry> getServiceResults() {
-        return new VcapServicesChecker().results;
+    //TODO: refactor to remove code duplication 
+    @RequestMapping(value = "/willitconnectproxy")
+    public String proxyConnect(@RequestParam("host") String host,
+                       @RequestParam ("port") int port,
+                       @RequestParam("proxyHost") String proxyHost,
+                       @RequestParam ("proxyPort") int proxyPort)  {
+        if (Connection.checkProxyConnection(
+                host, port, proxyHost, proxyPort, "http"))
+            return "I can connect to " + host + " on " + port;
+        return "I cannot connect to " + host + " on " + port;
     }
 
+    @RequestMapping(value = "/serviceresults", method = RequestMethod.GET)
+    public @ResponseBody List<CheckedEntry> getServiceResults() {
+        return vcapServicesChecker.getConnectionResults();
+    }
+
+    @RequestMapping(value = "/proxy", method = RequestMethod.PUT)
+    public void proxy(@RequestParam("proxy") String proxy,
+                      @RequestParam("proxyPort") int proxyPort,
+                      @RequestParam("proxyType") String proxyType)
+    {
+        vcapServicesChecker.setProxy(proxy, proxyPort, proxyType);
+    }
 }
