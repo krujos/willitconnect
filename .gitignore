@@ -1,4 +1,5 @@
 *.class
+bundle.js
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -23,6 +24,7 @@ target/
 
 .gradle
 build/
+src/main/resources/static/scripts/bundle.js
 
 *.log*twelvefactorapp.iml
 twelvefactorapp.iml

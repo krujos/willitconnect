@@ -6,16 +6,19 @@ buildscript {
         mavenCentral()
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("com.moowork.gradle:gradle-node-plugin:0.11")
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'spring-boot' 
+apply plugin: 'spring-boot'
+apply plugin: 'com.moowork.node'
 
 jar {
     baseName = 'willitconnect'
@@ -30,7 +33,6 @@ repositories {
     maven { url "https://repo.spring.io/milestone" }
 }
 
-
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-web")
@@ -40,6 +42,9 @@ dependencies {
     testCompile("com.jayway.jsonpath:json-path:2.0.0")
 }
 
+task webpack(type: NodeTask) {
+  script = file('node_modules/webpack/bin/webpack')
+}
 
 eclipse {
     classpath {
@@ -49,5 +54,8 @@ eclipse {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '2.8'
 }
+
+project.tasks.jar.dependsOn('npmInstall')
+project.tasks.jar.dependsOn('webpack')
