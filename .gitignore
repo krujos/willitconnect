@@ -23,6 +23,7 @@ target/
 
 .gradle
 build/
+src/main/resources/static/scripts/bundle.js
 
 *.log*twelvefactorapp.iml
 twelvefactorapp.iml
