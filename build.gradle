@@ -57,5 +57,5 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.8'
 }
 
-project.tasks.jar.dependsOn('npmInstall')
-project.tasks.jar.dependsOn('webpack')
+project.tasks.processResources.dependsOn('npmInstall')
+project.tasks.processResources.dependsOn('webpack')
