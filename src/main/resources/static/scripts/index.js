@@ -12,7 +12,13 @@ var Entry = React.createClass({
     return {status: []};
   },
   componentWillMount: function() {
-    var path = '/willitconnect?host=' + this.props.host + '&port=' + this.props.port;
+    var path;
+    if(this.props.proxyHost && this.props.proxyPort) {
+      path = '/willitconnectproxy?host=' + this.props.host + '&port=' + this.props.port + '&proxyHost=' + this.props.proxyHost + '&proxyPort=' + this.props.proxyPort;
+    }
+    else {
+      path = '/willitconnect?host=' + this.props.host + '&port=' + this.props.port;
+    }
     $.get(path, function(status) {
       this.setState({status: status});
     }.bind(this));
@@ -72,7 +78,7 @@ var EntryList = React.createClass({
   render: function() {
     var entryNodes = this.props.data.map(function(entry, index) {
       return (
-        <Entry host={entry.host} port={entry.port} status={entry.status} key={index} />
+        <Entry host={entry.host} port={entry.port} status={entry.status} proxyHost={entry.proxyHost} proxyPort={entry.proxyPort} key={index} />
       );
     });
     return (
@@ -88,10 +94,15 @@ var EntryForm = React.createClass({
     e.preventDefault();
     var host = ReactDOM.findDOMNode(this.refs.host).value.trim();
     var port = ReactDOM.findDOMNode(this.refs.port).value.trim();
+
     if (!port || !host) {
       return;
     }
-    this.props.onEntrySubmit({host: host, port: port});
+
+    var proxyHost = ReactDOM.findDOMNode(this.refs.proxyHost).value.trim();
+    var proxyPort = ReactDOM.findDOMNode(this.refs.proxyPort).value.trim();
+
+    this.props.onEntrySubmit({host: host, port: port, proxyHost: proxyHost, proxyPort: proxyPort});
     ReactDOM.findDOMNode(this.refs.host).value = '';
     ReactDOM.findDOMNode(this.refs.port).value = '';
   },
@@ -100,35 +111,16 @@ var EntryForm = React.createClass({
       <form className="entryForm" onSubmit={this.handleSubmit}>
       <input type="text" placeholder="Host" ref="host" />
       <input type="number" placeholder="Port" ref="port" />
+      <div></div>
+      <input type="text" placeholder="Proxy Host (optional)" ref="proxyHost" />
+      <input type="number" placeholder="Proxy Port (optional)" ref="proxyPort" />
       <input type="submit" value="Check" />
       </form>
     );
   }
 });
 
-var dateComponent = React.createClass({
-  convertDate: function() {
-    this.state.lastChecked = Date.parse(this.props.data).format("YYYY-MM-DD HH:m:s");
-  },
-  render: function(){
-    return (
-      <div>{this.convertDate}</div>
-    );
-  }
-});
-
-var boolComponent = React.createClass({
-  render: function(){
-    if(this.props.data){
-      return(
-        <div>Yes</div>
-      );
-    }
-    return(
-      <div>No</div>
-    );
-  }
-});
+//TODO: move this to a test
 
 var fakeData = [
   {
@@ -162,9 +154,9 @@ var columns = [
   { name: 'canConnect', render: function(value) {
     if(value)
     {
-      return "true";
+      return "Yes";
     }
-    return "false";
+    return "No";
   }
 }
 ];
@@ -215,6 +207,7 @@ var VCapServicesList = React.createClass({
       <DataGrid
       idProperty='dataGrid'
       dataSource={this.state.services}
+      //dataSource={fakeData}
       columns={columns}
       style={{height: 200}}
       withColumnMenu={false}
