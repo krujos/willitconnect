@@ -179,8 +179,8 @@ var VCapServicesList = React.createClass({
                 <h4> Bound services: </h4>
                 <DataGrid
                     idProperty='dataGrid'
-                    //dataSource={this.state.services}
-                    dataSource={fakeData}
+                    dataSource={this.state.services}
+                    //dataSource={fakeData}
                     columns={columns}
                     style={{height: 200}}
                     withColumnMenu={false}
