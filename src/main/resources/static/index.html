@@ -1,41 +1,17 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="../styles/octicons/octicons.css">
-  </head>
-  <body>
-
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">willitconnect</a>
-      </div>
-      <div id="header" class="navbar-right">
-        <ul class="nav navbar-nav">
-          <li><a href="https://github.com/krujos/willitconnect"><span class="mega-octicon octicon-mark-github"></span></a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-    <div class="container">
-        <div id="content">
-          <script type="text/javascript" src="scripts/bundle.js"></script>
-          <h4>or use me like this:</h4>
-          <code>$ curl <span id="url">http://willitconnect.yourcfdomain.com/</span>willitconnect -d host=somehostname -d port=443</code>
-	  <script>
-		var url = location.href;
-		document.getElementById('url').innerHTML = url;
-	  </script>
-	  <h4>Find out more <a href="https://github.com/krujos/willitconnect">here</a></h4>
-          <!-- TODO: make this more command line friendly -->
-	  <noscript><pre>USE ME LIKE THIS:  curl http://willitconnect.yourcfdomain.com/willitconnect -d host=somehostname -d port=443</pre></noscript>
-      </div>
-    </div>
-  </body>
+</head>
+<body>
+<noscript>
+    <pre>Use me like this:  curl http://willitconnect.yourcfdomain.com/willitconnect -d host=somehostname -d port=443</pre>
+</noscript>
+<div id="content">
+    <script type="text/javascript" src="scripts/bundle.js"></script>
+</div>
+</body>
 </html>

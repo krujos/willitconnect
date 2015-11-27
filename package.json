@@ -13,11 +13,21 @@
     "imports-loader": "^0.6.5",
     "jquery": "^2.1.4",
     "react": "^0.14.0",
-    "react-datagrid": "^1.2.15",
     "react-dom": "^0.14.0",
     "react-model": "0.0.0",
     "style-loader": "^0.13.0",
-    "webpack": "^1.12.2"
+    "babel-preset-react": "^6.1.18",
+    "babel-preset-stage-2": "^6.1.18",
+    "bootstrap": "^3.3.6",
+    "bootstrap-webpack": "0.0.5",
+    "exports-loader": "^0.6.2",
+    "extract-text-webpack-plugin": "^0.9.1",
+    "fixed-data-table": "^0.6.0",
+    "less": "^2.5.3",
+    "less-loader": "^2.2.2",
+    "react-bootstrap": "^0.28.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -31,19 +41,5 @@
   "bugs": {
     "url": "https://github.com/krujos/willitconnect/issues"
   },
-  "homepage": "https://github.com/krujos/willitconnect#readme",
-  "dependencies": {
-    "babel-plugin-transform-react-constant-elements": "^6.1.20",
-    "babel-preset-react": "^6.1.18",
-    "babel-preset-stage-2": "^6.1.18",
-    "bootstrap": "^3.3.6",
-    "bootstrap-webpack": "0.0.5",
-    "exports-loader": "^0.6.2",
-    "extract-text-webpack-plugin": "^0.9.1",
-    "fixed-data-table": "^0.6.0",
-    "less": "^2.5.3",
-    "less-loader": "^2.2.2",
-    "url-loader": "^0.5.7",
-    "webpack": "^1.12.3"
-  }
+  "homepage": "https://github.com/krujos/willitconnect#readme"
 }
