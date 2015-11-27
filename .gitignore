@@ -1,4 +1,9 @@
 *.class
+*.woff
+*.eot
+*.svg
+*.woff2
+*.ttf
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
