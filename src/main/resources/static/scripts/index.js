@@ -1,6 +1,3 @@
-/**
- * Extensive use was made of the fantastic tutorials at https://facebook.github.io/react/index.html
- */
 var React = require('react');
 var ReactDOM = require('react-dom');
 var FixedDataTable = require('fixed-data-table');
@@ -16,10 +13,12 @@ import { Row } from 'react-bootstrap';
 import { Navbar } from 'react-bootstrap';
 import { Nav } from 'react-bootstrap';
 import { NavItem } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
+import { Input } from 'react-bootstrap';
+import { ButtonInput } from 'react-bootstrap';
 
 const {Table, Column, Cell} = FixedDataTable;
 
-/* https://github.com/facebook/fixed-data-table/blob/master/examples/ObjectDataExample.js */
 "use strict";
 
 
@@ -75,6 +74,8 @@ var Entry = React.createClass({
     }
 });
 
+
+
 var EntryBox = React.createClass({
     handleEntrySubmit: function (entry) {
         var entries = this.state.data;
@@ -85,15 +86,17 @@ var EntryBox = React.createClass({
         return {data: []};
     },
     render: function () {
+
+        var bodyStyle = { 'padding' : 75};
+
         return (
             <Grid>
                 <HeaderBar />
-                <Row>
-                    <Col xs={6} md={4} xsOffset={3} mdOffset={4}>
+                <Row style={ bodyStyle }>
                         <EntryList data={this.state.data}/>
                         <EntryForm onEntrySubmit={this.handleEntrySubmit}/>
+                        <h5> Bound Services </h5>
                         <EntryTable />
-                    </Col>
                 </Row>
             </Grid>
         );
@@ -103,8 +106,15 @@ var EntryBox = React.createClass({
 var TableCell = React.createClass ({
     render: function() {
         const {rowIndex, field, data, ...props} = this.props;
+
+        var connectionStyle = {color: 'gray'};
+
+        if (data[rowIndex]["validHostname"]) {
+            connectionStyle = data[rowIndex]["canConnect"] ? {color: 'green'} : {color: 'red'};
+        }
+
         return (
-            <Cell {...props}>
+            <Cell style={ connectionStyle } {...props}>
                 {data[rowIndex][field]}
             </Cell>
         );
@@ -117,7 +127,7 @@ var StatusCell = React.createClass  ({
         const value = data[rowIndex][field];
         return (
             <Cell {...props}>
-                { value ? 'Yes' : 'No' }
+                { value ? <span className="mega-octicon octicon-thumbsup"></span> : <span className="mega-octicon octicon-thumbsdown"></span> }
             </Cell>
         );
     }
@@ -176,7 +186,7 @@ var EntryTable = React.createClass ({
     render: function() {
         return (
                     <Table
-                        rowsCount={fakeData.length}
+                        rowsCount={this.state.services.length}
                         rowHeight={50}
                         headerHeight={50}
                         width={1000}
@@ -185,23 +195,23 @@ var EntryTable = React.createClass ({
                             header={<Cell>Entry</Cell>}
                             cell={
                      <TableCell
-                        data={fakeData}
+                        data={this.state.services}
                         field='entry'
                      />
                     }
                             flexGrow={2}
-                            width={75}
+                            width={10}
                         />
                         <Column
                             header={<Cell>Can Connect</Cell>}
                             cell={
                         <StatusCell
-                            data={fakeData}
-                             field='canConnect'
+                            data={this.state.services}
+                            field='canConnect'
                          />
                     }
                             flexGrow={1}
-                            width={25}
+                            width={2}
                         />
                     </Table>
         );
@@ -227,44 +237,49 @@ var EntryList = React.createClass({
 var EntryForm = React.createClass({
     handleSubmit: function (e) {
         e.preventDefault();
-        var host = ReactDOM.findDOMNode(this.refs.host).value.trim();
-        var port = ReactDOM.findDOMNode(this.refs.port).value.trim();
+        var host = this.refs.host.getValue();
+        var port = this.refs.port.getValue();
+
 
         if (!port || !host) {
             return;
         }
 
-        var proxyHost = ReactDOM.findDOMNode(this.refs.proxyHost).value.trim();
-        var proxyPort = ReactDOM.findDOMNode(this.refs.proxyPort).value.trim();
+        var proxyHost = this.refs.proxyHost.getValue();
+        var proxyPort = this.refs.proxyPort.getValue();
 
         this.props.onEntrySubmit({host: host, port: port, proxyHost: proxyHost, proxyPort: proxyPort});
-        ReactDOM.findDOMNode(this.refs.host).value = '';
-        ReactDOM.findDOMNode(this.refs.port).value = '';
     },
     render: function () {
         return (
             <form className="entryForm" onSubmit={this.handleSubmit}>
-                <input type="text" placeholder="Host" ref="host"/>
-                <input type="number" placeholder="Port" ref="port"/>
-                <div></div>
-                <input type="text" placeholder="Proxy Host (optional)" ref="proxyHost"/>
-                <input type="number" placeholder="Proxy Port (optional)" ref="proxyPort"/>
-                <input type="submit" value="Check"/>
+                <Row>
+                    <Col xs={3} xsOffset={3} bsSize="large">
+                        <Input type="text" placeholder="Host" ref="host"/>
+                    </Col>
+                    <Col xs={3}>
+                        <Input type="number" placeholder="Port" ref="port"/>
+                    </Col>
+                    <Col xs={3}>
+                        <ButtonInput type="submit" value="Check"/>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col xs={3} xsOffset={3} bsSize="large">
+                        <Input type="text" placeholder="Proxy Host (optional)" ref="proxyHost"/>
+                    </Col>
+                    <Col xs={3}>
+                        <Input type="number" placeholder="Proxy Port (optional)" ref="proxyPort"/>
+                    </Col>
+                    <Col xs={3}>
+                        <Input type="checkbox" label="Use Proxy" ref="proxyBox" />
+                    </Col>
+                </Row>
             </form>
         );
     }
 });
-
-function rowStyle(data, props) {
-
-    if (data.canConnect) {
-        return {color: 'green'};
-    }
-
-    return data.validHostname ? {color: 'red'} : {color: 'gray'};
-}
-
-
 
 ReactDOM.render(
     <EntryBox />,
