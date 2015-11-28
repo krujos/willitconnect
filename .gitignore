@@ -33,6 +33,7 @@ src/main/resources/static/scripts/bundle.js
 *.log*twelvefactorapp.iml
 twelvefactorapp.iml
 .gradel/
+_cache/
 _builds/
 _projects/
 _steps/
