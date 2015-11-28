@@ -106,9 +106,12 @@ public class EntryConsumer implements Consumer<String> {
     }
 
     private void addNewEntry(String host) {
-        CheckedEntry entry;
-        log.info("Entry To Add == " + host);
-        entry = new CheckedEntry(host);
-        entries.add(entry);
+        //TODO: cleaner way to do this?
+        if(!(host.equals("null:-1"))) {
+            CheckedEntry entry;
+            log.info("Entry To Add == " + host);
+            entry = new CheckedEntry(host);
+            entries.add(entry);
+        } 
     }
 }
