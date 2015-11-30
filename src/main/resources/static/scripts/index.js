@@ -1,13 +1,48 @@
-/**
- * Extensive use was made of the fantastic tutorials at https://facebook.github.io/react/index.html
- */
 var React = require('react');
 var ReactDOM = require('react-dom');
-var DataGrid = require('react-datagrid');
-require('react-datagrid/index.css');
-var $ = require('jquery');
+var FixedDataTable = require('fixed-data-table');
+
+require('fixed-data-table/dist/fixed-data-table.min.css');
+require('expose?$!expose?jQuery!jquery');
+require('bootstrap/dist/css/bootstrap.min.css');
+require('bootstrap/dist/css/bootstrap-theme.min.css');
+
+import { Col } from 'react-bootstrap';
+import { Grid } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
+import { Navbar } from 'react-bootstrap';
+import { Nav } from 'react-bootstrap';
+import { NavItem } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
+import { Input } from 'react-bootstrap';
+import { ButtonInput } from 'react-bootstrap';
+
+const {Table, Column, Cell} = FixedDataTable;
 
 "use strict";
+
+
+var HeaderBar = React.createClass ({
+
+    render: function () {
+        return (
+        <Navbar inverse fixedTop fluid>
+            <Navbar.Header>
+                <Navbar.Brand>
+                    <a href="#">willitconnect</a>
+                </Navbar.Brand>
+                <Navbar.Toggle />
+            </Navbar.Header>
+            <Navbar.Collapse>
+                <Nav pullRight>
+                    <NavItem eventKey={1} href="https://github.com/krujos/willitconnect"><span className="mega-octicon octicon-mark-github"></span></NavItem>
+                </Nav>
+            </Navbar.Collapse>
+        </Navbar>
+        );
+    }
+
+});
 
 var Entry = React.createClass({
     getInitialState: function () {
@@ -30,7 +65,7 @@ var Entry = React.createClass({
         var connectionStyle = this.state.status.indexOf("cannot") > -1 ? {color: 'red'} : {color: 'green'};
 
         return (
-            <div style={connectionStyle} className="">
+            <div style={ connectionStyle }>
                 <h3 className="entry">
                     {this.props.host} : {this.props.port}
                 </h3>
@@ -38,6 +73,8 @@ var Entry = React.createClass({
         );
     }
 });
+
+
 
 var EntryBox = React.createClass({
     handleEntrySubmit: function (entry) {
@@ -49,60 +86,49 @@ var EntryBox = React.createClass({
         return {data: []};
     },
     render: function () {
+
+        var bodyStyle = { 'padding' : 75};
+
         return (
-            <div className="entryBox">
-                <h1>willitconnect</h1>
-                <EntryList data={this.state.data}/>
-                <EntryForm onEntrySubmit={this.handleEntrySubmit}/>
-                <VCapServicesList services={this.state.services}/>
-            </div>
+            <Grid>
+                <HeaderBar />
+                <Row style={ bodyStyle }>
+                        <EntryList data={this.state.data}/>
+                        <EntryForm onEntrySubmit={this.handleEntrySubmit}/>
+                        <h5> Bound Services </h5>
+                        <EntryTable />
+                </Row>
+            </Grid>
         );
     }
 });
 
-var EntryList = React.createClass({
-    render: function () {
-        var entryNodes = this.props.data.map(function (entry, index) {
-            return (
-                <Entry host={entry.host} port={entry.port} status={entry.status} proxyHost={entry.proxyHost}
-                       proxyPort={entry.proxyPort} key={index}/>
-            );
-        });
-        return (
-            <div className="entryList">
-                {entryNodes}
-            </div>
-        );
-    }
-});
+var TableCell = React.createClass ({
+    render: function() {
+        const {rowIndex, field, data, ...props} = this.props;
 
-var EntryForm = React.createClass({
-    handleSubmit: function (e) {
-        e.preventDefault();
-        var host = ReactDOM.findDOMNode(this.refs.host).value.trim();
-        var port = ReactDOM.findDOMNode(this.refs.port).value.trim();
+        var connectionStyle = {color: 'gray'};
 
-        if (!port || !host) {
-            return;
+        if (data[rowIndex]["validHostname"]) {
+            connectionStyle = data[rowIndex]["canConnect"] ? {color: 'green'} : {color: 'red'};
         }
 
-        var proxyHost = ReactDOM.findDOMNode(this.refs.proxyHost).value.trim();
-        var proxyPort = ReactDOM.findDOMNode(this.refs.proxyPort).value.trim();
-
-        this.props.onEntrySubmit({host: host, port: port, proxyHost: proxyHost, proxyPort: proxyPort});
-        ReactDOM.findDOMNode(this.refs.host).value = '';
-        ReactDOM.findDOMNode(this.refs.port).value = '';
-    },
-    render: function () {
         return (
-            <form className="entryForm" onSubmit={this.handleSubmit}>
-                <input type="text" placeholder="Host" ref="host"/>
-                <input type="number" placeholder="Port" ref="port"/>
-                <div></div>
-                <input type="text" placeholder="Proxy Host (optional)" ref="proxyHost"/>
-                <input type="number" placeholder="Proxy Port (optional)" ref="proxyPort"/>
-                <input type="submit" value="Check"/>
-            </form>
+            <Cell style={ connectionStyle } {...props}>
+                {data[rowIndex][field]}
+            </Cell>
+        );
+    }
+});
+
+var StatusCell = React.createClass  ({
+    render: function() {
+        const {rowIndex, field, data, ...props} = this.props;
+        const value = data[rowIndex][field];
+        return (
+            <Cell {...props}>
+                { value ? <span className="mega-octicon octicon-thumbsup"></span> : <span className="mega-octicon octicon-thumbsdown"></span> }
+            </Cell>
         );
     }
 });
@@ -134,24 +160,8 @@ var fakeData = [
     }
 ];
 
-var columns = [
-    {name: 'entry'}, {
-        name: 'canConnect', render: function (value) {
-            return value ? 'Yes' : 'No';
-        }
-    }
-];
+var EntryTable = React.createClass ({
 
-function rowStyle(data, props) {
-
-    if (data.canConnect) {
-        return {color: 'green'};
-    }
-
-    return data.validHostname ? {color: 'red'} : {color: 'gray'};
-}
-
-var VCapServicesList = React.createClass({
     loadServiceDataFromServer: function () {
         $.ajax({
             url: '/serviceresults',
@@ -171,23 +181,102 @@ var VCapServicesList = React.createClass({
     },
     componentDidMount: function () {
         this.loadServiceDataFromServer();
-        //setInterval(this.loadServiceDataFromServer, 2000);
+    },
+
+    render: function() {
+        return (
+                    <Table
+                        rowsCount={this.state.services.length}
+                        rowHeight={50}
+                        headerHeight={50}
+                        width={1000}
+                        maxHeight={500}>
+                        <Column
+                            header={<Cell>Entry</Cell>}
+                            cell={
+                     <TableCell
+                        data={this.state.services}
+                        field='entry'
+                     />
+                    }
+                            flexGrow={2}
+                            width={10}
+                        />
+                        <Column
+                            header={<Cell>Can Connect</Cell>}
+                            cell={
+                        <StatusCell
+                            data={this.state.services}
+                            field='canConnect'
+                         />
+                    }
+                            flexGrow={1}
+                            width={2}
+                        />
+                    </Table>
+        );
+    }
+});
+
+var EntryList = React.createClass({
+    render: function () {
+        var entryNodes = this.props.data.map(function (entry, index) {
+            return (
+                <Entry host={entry.host} port={entry.port} status={entry.status} proxyHost={entry.proxyHost}
+                       proxyPort={entry.proxyPort} key={index}/>
+            );
+        });
+        return (
+            <div className="entryList">
+                {entryNodes}
+            </div>
+        );
+    }
+});
+
+var EntryForm = React.createClass({
+    handleSubmit: function (e) {
+        e.preventDefault();
+        var host = this.refs.host.getValue();
+        var port = this.refs.port.getValue();
+
+
+        if (!port || !host) {
+            return;
+        }
+
+        var proxyHost = this.refs.proxyHost.getValue();
+        var proxyPort = this.refs.proxyPort.getValue();
+
+        this.props.onEntrySubmit({host: host, port: port, proxyHost: proxyHost, proxyPort: proxyPort});
     },
     render: function () {
         return (
-            <div className="ServicesList">
-                <h4> Bound services: </h4>
-                <DataGrid
-                    idProperty='dataGrid'
-                    dataSource={this.state.services}
-                    //dataSource={fakeData}
-                    columns={columns}
-                    style={{height: 200}}
-                    withColumnMenu={false}
-                    rowStyle={rowStyle}
-                    emptyText={'Validate your service bindings'}
-                />
-            </div>
+            <form className="entryForm" onSubmit={this.handleSubmit}>
+                <Row>
+                    <Col xs={3} xsOffset={3} bsSize="large">
+                        <Input type="text" placeholder="Host" ref="host"/>
+                    </Col>
+                    <Col xs={3}>
+                        <Input type="number" placeholder="Port" ref="port"/>
+                    </Col>
+                    <Col xs={3}>
+                        <ButtonInput type="submit" value="Check"/>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col xs={3} xsOffset={3} bsSize="large">
+                        <Input type="text" placeholder="Proxy Host (optional)" ref="proxyHost"/>
+                    </Col>
+                    <Col xs={3}>
+                        <Input type="number" placeholder="Proxy Port (optional)" ref="proxyPort"/>
+                    </Col>
+                    <Col xs={3}>
+                        <Input type="checkbox" label="Use Proxy" ref="proxyBox" />
+                    </Col>
+                </Row>
+            </form>
         );
     }
 });
