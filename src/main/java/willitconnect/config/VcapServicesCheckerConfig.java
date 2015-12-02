@@ -9,11 +9,10 @@ import willitconnect.service.VcapServicesChecker;
 public class VcapServicesCheckerConfig {
 
     @Bean
-    VcapServicesChecker newVcapServicesChecker() {
+    VcapServicesChecker vcapServicesChecker() {
         String vcapServices = System.getenv("VCAP_SERVICES");
         if (null == vcapServices)
                 vcapServices = "{}";
-        return VcapServicesChecker.checkVcapServices(
-                new JSONObject(vcapServices));
+        return new VcapServicesChecker(new JSONObject(vcapServices));
     }
 }
