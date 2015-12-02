@@ -16,7 +16,7 @@ public class VcapServicesCheckerConfigTest {
     @Test
     public void itHandlesANullVcapServices() {
         VcapServicesCheckerConfig config = new VcapServicesCheckerConfig();
-        VcapServicesChecker checker = config.newVcapServicesChecker();
+        VcapServicesChecker checker = config.vcapServicesChecker();
         assertThat(checker.getConnectionResults(), hasSize(0));
 
     }

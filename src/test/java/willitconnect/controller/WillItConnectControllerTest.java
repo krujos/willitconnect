@@ -60,11 +60,10 @@ public class WillItConnectControllerTest {
         mockMvc.perform(get("/serviceresults").accept(MediaType
                 .APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(jsonPath("$", hasSize(2)))
                 // It's false because we default everything to false before
                 // parsing
-                //TODO: fix test too
-                //.andExpect(jsonPath("$[0].canConnect", is(false)));
+                .andExpect(jsonPath("$[0].canConnect", is(false)));
     }
 
     @Test

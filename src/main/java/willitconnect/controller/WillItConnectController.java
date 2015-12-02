@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import willitconnect.model.CheckedEntry;
 import willitconnect.service.VcapServicesChecker;
 import willitconnect.service.util.Connection;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -56,13 +55,7 @@ public class WillItConnectController {
 
     @RequestMapping(value = "/serviceresults", method = RequestMethod.GET)
     public @ResponseBody List<CheckedEntry> getServiceResults() {
-        //TODO: this was needed as the private variable was not being properly set
-        String vcapServices = System.getenv("VCAP_SERVICES");
-        if (null == vcapServices)
-            vcapServices = "{}";
-        VcapServicesChecker vcapSC =  VcapServicesChecker.checkVcapServices(
-                        new JSONObject(vcapServices));
-        return vcapSC.getConnectionResults();
+        return vcapServicesChecker.getConnectionResults();
     }
 
     @RequestMapping(value = "/proxy", method = RequestMethod.PUT)
