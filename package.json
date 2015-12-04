@@ -34,11 +34,24 @@
     "webpack": "^1.12.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "pack": "webpack --progress --colors --watch",
+    "deploy": "./gradlew build && cf push"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/krujos/willitconnect.git"
+  },
+  "jest": {
+    "scriptPreprocessor": "./preprocessor.js",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/jspm_packages"
+    ],
+    "unmockedModulePathPatterns": [
+      "./node_modules/react"
+    ],
+    "testDirectoryName": "src/test/jsx" 
   },
   "author": "",
   "license": "Apache-2.0",
