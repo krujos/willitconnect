@@ -1,12 +1,11 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var FixedDataTable = require('fixed-data-table');
-
 require('fixed-data-table/dist/fixed-data-table.min.css');
 require('expose?$!expose?jQuery!jquery');
 require('bootstrap/dist/css/bootstrap.min.css');
 require('bootstrap/dist/css/bootstrap-theme.min.css');
 
+import React, { PropTypes } from 'react';
+import ReactDOM from 'react-dom'
+import FixedDataTable from 'fixed-data-table'
 import { Col } from 'react-bootstrap';
 import { Grid } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
@@ -16,11 +15,11 @@ import { NavItem } from 'react-bootstrap';
 import { Container } from 'react-bootstrap';
 import { Input } from 'react-bootstrap';
 import { ButtonInput } from 'react-bootstrap';
+import Dimensions from 'react-dimensions'
 
 const {Table, Column, Cell} = FixedDataTable;
 
 "use strict";
-
 
 var HeaderBar = React.createClass ({
 
@@ -96,7 +95,7 @@ var EntryBox = React.createClass({
                         <EntryList data={this.state.data}/>
                         <EntryForm onEntrySubmit={this.handleEntrySubmit}/>
                         <h5> Bound Services </h5>
-                        <EntryTable />
+                        <EnhancedTable />
                 </Row>
             </Grid>
         );
@@ -160,6 +159,7 @@ var fakeData = [
     }
 ];
 
+
 var EntryTable = React.createClass ({
 
     loadServiceDataFromServer: function () {
@@ -187,15 +187,17 @@ var EntryTable = React.createClass ({
         return (
                     <Table
                         rowsCount={this.state.services.length}
+                        //rowsCount={fakeData.length}
                         rowHeight={50}
                         headerHeight={50}
-                        width={1000}
+                        width={this.props.containerWidth}
                         maxHeight={500}>
                         <Column
                             header={<Cell>Entry</Cell>}
                             cell={
                      <TableCell
                         data={this.state.services}
+                        //data={fakeData}
                         field='entry'
                      />
                     }
@@ -207,6 +209,7 @@ var EntryTable = React.createClass ({
                             cell={
                         <StatusCell
                             data={this.state.services}
+                            //data={fakeData}
                             field='canConnect'
                          />
                     }
@@ -217,6 +220,8 @@ var EntryTable = React.createClass ({
         );
     }
 });
+
+const EnhancedTable = Dimensions()(EntryTable);
 
 var EntryList = React.createClass({
     render: function () {
@@ -254,10 +259,10 @@ var EntryForm = React.createClass({
         return (
             <form className="entryForm" onSubmit={this.handleSubmit}>
                 <Row>
-                    <Col xs={3} xsOffset={3} bsSize="large">
+                    <Col xs={4} xsOffset={1} bsSize="large">
                         <Input type="text" placeholder="Host" ref="host"/>
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={4}>
                         <Input type="number" placeholder="Port" ref="port"/>
                     </Col>
                     <Col xs={3}>
@@ -266,10 +271,10 @@ var EntryForm = React.createClass({
                 </Row>
 
                 <Row>
-                    <Col xs={3} xsOffset={3} bsSize="large">
+                    <Col  xs={4} xsOffset={1} bsSize="large">
                         <Input type="text" placeholder="Proxy Host (optional)" ref="proxyHost"/>
                     </Col>
-                    <Col xs={3}>
+                    <Col xs={4}>
                         <Input type="number" placeholder="Proxy Port (optional)" ref="proxyPort"/>
                     </Col>
                     <Col xs={3}>
