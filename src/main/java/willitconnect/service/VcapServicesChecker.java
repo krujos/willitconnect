@@ -1,6 +1,5 @@
 package willitconnect.service;
 
-import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import willitconnect.model.CheckedEntry;
@@ -17,7 +16,6 @@ import java.util.List;
  */
 @Service
 public class VcapServicesChecker {
-    private Logger log = Logger.getLogger(VcapServicesChecker.class);
     private String proxy;
     private String proxyType;
     private int proxyPort;
@@ -27,14 +25,7 @@ public class VcapServicesChecker {
         return results;
     }
 
-    public VcapServicesChecker(){
-        log.info("default constructor for services checker*********************");
-        this.vcapServices = new JSONObject();
-        initialize();
-    }
-
     public VcapServicesChecker(JSONObject vcapServices) {
-        log.info("json constructor for services checker*********************");
         this.vcapServices = vcapServices;
         initialize();
     }
@@ -100,7 +91,6 @@ public class VcapServicesChecker {
     }
 
     private void initialize() {
-        log.info("initializing services checker*********************");
         results = new ArrayList<>();
         this.parse();
         this.check();
