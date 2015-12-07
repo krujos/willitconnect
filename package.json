@@ -4,38 +4,42 @@
   "description": "Will It Connect?",
   "main": "index.js",
   "dependencies": {
-    "babel-core": "^6.2.1",
+    "babel-core": "^6.3.17",
+    "babel-jest": "^6.0.1",
     "babel-loader": "^6.2.0",
-    "babel-preset-es2015": "^6.1.18",
-    "babel-preset-react": "^6.1.18",
-    "babel-preset-stage-2": "^6.1.18",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-2": "^6.3.13",
     "bootstrap": "^3.3.6",
     "bootstrap-webpack": "0.0.5",
     "css-loader": "^0.23.0",
     "exports-loader": "^0.6.2",
     "expose-loader": "^0.7.1",
     "extract-text-webpack-plugin": "^0.9.1",
-    "file-loader": "^0.8.4",
+    "file-loader": "^0.8.5",
     "fixed-data-table": "^0.6.0",
     "imports-loader": "^0.6.5",
-    "jest-cli": "^0.8.0",
+    "jest-cli": "^0.8.1",
     "jquery": "^2.1.4",
     "less": "^2.5.3",
     "less-loader": "^2.2.2",
     "octicons": "^3.1.0",
-    "react": "^0.14.0",
+    "react": "^0.14.3",
     "react-addons-test-utils": "^0.14.3",
     "react-bootstrap": "^0.28.1",
     "react-dimensions": "^1.0.0",
-    "react-dom": "^0.14.0",
+    "react-dom": "^0.14.3",
     "react-model": "0.0.0",
+    "react-test-utils": "0.0.1",
+    "react-testutils-additions": "^0.2.0",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
-    "webpack": "^1.12.3"
+    "webpack": "^1.12.9",
+    "webpack-babel-jest": "^1.0.2"
   },
   "scripts": {
     "test": "jest",
-    "pack": "webpack --progress --colors --watch",
+    "packit": "webpack --progress --colors --watch",
     "deploy": "./gradlew build && cf push"
   },
   "repository": {
@@ -43,15 +47,15 @@
     "url": "git+https://github.com/krujos/willitconnect.git"
   },
   "jest": {
-    "scriptPreprocessor": "./preprocessor.js",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/jspm_packages"
-    ],
-    "unmockedModulePathPatterns": [
-      "./node_modules/react"
-    ],
-    "testDirectoryName": "src/test/jsx" 
+      "testRunner": "node_modules/jest-cli/src/testRunners/jasmine/jasmine2",
+      "scriptPreprocessor": "node_modules/babel-jest",
+      "unmockedModulePathPatterns": [
+        "node_modules/"
+      ],
+      "modulePathIgnorePatterns": [
+        "node_modules/"
+      ],
+      "testDirectoryName": "src/main/resources/static/scripts/__test__"
   },
   "author": "",
   "license": "Apache-2.0",

@@ -8,6 +8,7 @@ build:
         code: |
           ./gradlew -v
           javac -version
+          export
     - npm-install
     - script:
             name: run tests

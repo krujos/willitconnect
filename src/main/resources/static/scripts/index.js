@@ -3,15 +3,16 @@ require('expose?$!expose?jQuery!jquery');
 require('bootstrap/dist/css/bootstrap.min.css');
 require('bootstrap/dist/css/bootstrap-theme.min.css');
 
+
+import HeaderBar from './HeaderBar';
+
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom'
 import FixedDataTable from 'fixed-data-table'
 import { Col } from 'react-bootstrap';
 import { Grid } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
-import { Navbar } from 'react-bootstrap';
-import { Nav } from 'react-bootstrap';
-import { NavItem } from 'react-bootstrap';
+
 import { Container } from 'react-bootstrap';
 import { Input } from 'react-bootstrap';
 import { ButtonInput } from 'react-bootstrap';
@@ -20,28 +21,6 @@ import Dimensions from 'react-dimensions'
 const {Table, Column, Cell} = FixedDataTable;
 
 "use strict";
-
-var HeaderBar = React.createClass ({
-
-    render: function () {
-        return (
-        <Navbar inverse fixedTop fluid>
-            <Navbar.Header>
-                <Navbar.Brand>
-                    <a href="#">willitconnect</a>
-                </Navbar.Brand>
-                <Navbar.Toggle />
-            </Navbar.Header>
-            <Navbar.Collapse>
-                <Nav pullRight>
-                    <NavItem eventKey={1} href="https://github.com/krujos/willitconnect"><span className="mega-octicon octicon-mark-github"></span></NavItem>
-                </Nav>
-            </Navbar.Collapse>
-        </Navbar>
-        );
-    }
-
-});
 
 var Entry = React.createClass({
     getInitialState: function () {
