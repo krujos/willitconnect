@@ -23,3 +23,11 @@ build:
             code: |
                 #gradle --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR uploadArtifacts
                 echo 'step not implemented'
+deploy:
+  steps:
+    - dlapiduz/cloud-foundry-deploy:
+      api: $CF_API # Set as environment variables
+      username: $CF_USER
+      password: $CF_PASS
+      organization: $CF_ORG
+      space: $CF_SPACE
