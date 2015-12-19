@@ -32,18 +32,19 @@ public class VcapServicesCheckerTest {
 
     @Test(expected = NullPointerException.class)
     public void itShouldComplainAboutNullVcapServices() {
-        VcapServicesChecker.checkVcapServices(null);
+        new VcapServicesChecker(null);
     }
 
     @Test
     public void itShouldNotComplainAboutEmptyVcapServices() {
         JSONObject services = new JSONObject();
-        VcapServicesChecker.checkVcapServices(services);
+        new VcapServicesChecker(services);
     }
 
     @Test
     public void itShouldFindTwoHostnamesToCheck() {
-        checker = VcapServicesChecker.checkVcapServices(
+
+        checker = new VcapServicesChecker(
                 new JSONObject(VcapServicesStrings.cleardb));
 
         List<CheckedEntry> shouldBeASingleHostName = checker.getConnectionResults();
@@ -57,7 +58,7 @@ public class VcapServicesCheckerTest {
     @Test
     public void itShouldCheckOnlyValidHostnames() {
         String json = "{ a: [{'hostname':'a.com:80'},{'hostname':'e.com'}]}";
-        checker = VcapServicesChecker.checkVcapServices(new JSONObject(json));
+        checker = new VcapServicesChecker(new JSONObject(json));
         assertThat(checker.getConnectionResults().get(0).getLastChecked(),
                 is(not(equalTo(Date.from(Instant.EPOCH)))));
         assertThat(checker.getConnectionResults().get(1).getLastChecked(),
@@ -70,7 +71,8 @@ public class VcapServicesCheckerTest {
         when(Connection.checkConnection("a.com", 80)).thenReturn(true);
 
         String json = "{ a: [{'hostname':'a.com:80'},{'hostname':'e.com'}]}";
-        VcapServicesChecker.checkVcapServices(new JSONObject(json));
+        checker = new VcapServicesChecker(new JSONObject(json));
+        checker.getConnectionResults();
 
         verifyStatic(times(1));
         Connection.checkConnection("a.com", 80);
@@ -85,7 +87,7 @@ public class VcapServicesCheckerTest {
                     new IllegalArgumentException());
 
         String json = "{ a: [{'hostname':'a.com:80'},{'hostname':'e.com'}]}";
-        checker = VcapServicesChecker.checkVcapServices(new JSONObject(json));
+        checker = new VcapServicesChecker(new JSONObject(json));
 
         assertTrue(checker.getConnectionResults().get(0).canConnect());
         assertFalse(checker.getConnectionResults().get(1).canConnect());
@@ -94,19 +96,24 @@ public class VcapServicesCheckerTest {
 
     @Test
     public void itShouldHandleAnEmptyVcapServices() {
-        checker = VcapServicesChecker.checkVcapServices(new JSONObject("{}"));
+        checker = new VcapServicesChecker(new JSONObject("{}"));
         assertThat(checker.getConnectionResults(), hasSize(0));
     }
 
     @Test
     public void itShouldHandleAFullVcapServices() {
-        checker = VcapServicesChecker.checkVcapServices(
+        checker = new VcapServicesChecker(
                 new JSONObject("{ VCAP_SERVICES: " + VcapServicesStrings.cleardb + "}"));
         assertThat(checker.getConnectionResults(), hasSize(2));
     }
 
     @Test
     public void itUsesAHttpProxy() {
+
+
+        String json = "{ a: [{'hostname':'a.com:80'}]}";
+        checker = new VcapServicesChecker(new JSONObject(json));
+
         mockStatic(Connection.class);
         when(Connection.checkProxyConnection("a.com", 80, "proxy.com", 80,
                 "http"))
@@ -114,13 +121,27 @@ public class VcapServicesCheckerTest {
         when(Connection.checkConnection(anyString(), anyInt())).thenThrow(new
                 IllegalArgumentException());
 
-        String json = "{ a: [{'hostname':'a.com:80'}]}";
-        checker = VcapServicesChecker.checkVcapServicesWithProxy(
-                new JSONObject(json), "proxy.com", 80, "http");
+        checker.setProxy("proxy.com", 80, "http");
         assertTrue(checker.getConnectionResults().get(0).canConnect());
     }
 
-    //itEnforcesTheProxyhasAPort
-    //itRejectsAnythingBesidesHttpProxy
+    @Test
+    public void itRemovesAHttpProxy() {
+
+
+        String json = "{ a: [{'hostname':'a.com:80'}]}";
+        checker = new VcapServicesChecker(new JSONObject(json));
+        checker.setProxy("proxy.com", 80, "http");
+
+        mockStatic(Connection.class);
+        when(Connection.checkConnection("a.com", 80))
+                .thenReturn(true);
+        when(Connection.checkProxyConnection(anyString(), anyInt(), anyString(), anyInt(), anyString())).thenThrow(new
+                IllegalArgumentException());
+
+        checker.unSetProxy();
+
+        assertTrue(checker.getConnectionResults().get(0).canConnect());
+    }
 
 }

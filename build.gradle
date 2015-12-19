@@ -46,6 +46,10 @@ task webpack(type: NodeTask) {
   script = file('node_modules/webpack/bin/webpack')
 }
 
+task jest(type: NpmTask) {
+    args = ['test']
+}
+
 eclipse {
     classpath {
          containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
@@ -59,3 +63,4 @@ task wrapper(type: Wrapper) {
 
 project.tasks.processResources.dependsOn('npmInstall')
 project.tasks.processResources.dependsOn('webpack')
+project.tasks.processResources.dependsOn('jest')

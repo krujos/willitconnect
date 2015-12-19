@@ -1,6 +1,5 @@
 package willitconnect.service;
 
-import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import willitconnect.model.CheckedEntry;
@@ -17,43 +16,25 @@ import java.util.List;
  */
 @Service
 public class VcapServicesChecker {
-    private static Logger log = Logger.getLogger(VcapServicesChecker.class);
     private String proxy;
     private String proxyType;
     private int proxyPort;
-
-    public static VcapServicesChecker checkVcapServices(JSONObject vcapServices) {
-        VcapServicesChecker checker = new VcapServicesChecker();
-        checker.parse(vcapServices);
-        checker.check();
-        return checker;
-    }
-
-    public static VcapServicesChecker checkVcapServicesWithProxy(
-            JSONObject vcapServices, String proxy, int proxyPort,
-            String proxyType) {
-        VcapServicesChecker checker = new VcapServicesChecker();
-        checker.setProxy(proxy, proxyPort, proxyType);
-        checker.parse(vcapServices);
-        checker.check();
-        return checker;
-    }
+    private JSONObject vcapServices;
 
     public List<CheckedEntry> getConnectionResults() {
         return results;
     }
 
-    private VcapServicesChecker() {
-        results = new ArrayList<>();
+    public VcapServicesChecker(JSONObject vcapServices) {
+        this.vcapServices = vcapServices;
+        initialize();
     }
 
-    private volatile ArrayList<CheckedEntry> results;
+    private ArrayList<CheckedEntry> results;
 
-
-    private void parse(JSONObject vcapServices) {
+    private void parse() {
         java.util.Objects.requireNonNull(vcapServices);
 
-        log.info(vcapServices);
         if (0 == vcapServices.length())
             return;
 
@@ -97,6 +78,22 @@ public class VcapServicesChecker {
         this.proxy = proxy;
         this.proxyPort = port;
         this.proxyType = proxyType;
+        // validate connection status with proxy set
+        initialize();
+    }
+
+    public void unSetProxy() {
+        this.proxy = null;
+        this.proxyPort = 0;
+        this.proxyType = null;
+        // validate connection with proxy removed
+        initialize();
+    }
+
+    private void initialize() {
+        results = new ArrayList<>();
+        this.parse();
+        this.check();
     }
 
     public String getProxy() {
