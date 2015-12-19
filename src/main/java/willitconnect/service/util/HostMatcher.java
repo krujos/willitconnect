@@ -19,7 +19,6 @@ public class HostMatcher {
             Integer.parseInt(port);
             return true;
         } catch(Exception e) {}
-
         return false;
     }
 }
