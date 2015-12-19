@@ -1,14 +1,15 @@
 package willitconnect.service.util;
 
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
-import java.net.Proxy;
+import java.net.*;
 
 public class Connection {
+    private static Logger log = Logger.getLogger(Connection.class);
+
     public static boolean checkConnection(String host, int port) {
+        logHost(host, port);
         Socket socket = new Socket();
         try {
             SocketAddress addr = new InetSocketAddress(
@@ -23,9 +24,14 @@ public class Connection {
         return false;
     }
 
+    private static void logHost(String host, int port) {
+        log.info("cheking" + host +  ":" + port);
+    }
+
     public static boolean checkProxyConnection(
             String host, int port, String proxyHost, int proxyPort,
             String proxyType) {
+        logHost(host, port);
         if ("http" != proxyType ) {
             throw new IllegalArgumentException("Proxy type must be http");
         }

@@ -1,5 +1,6 @@
 package willitconnect.service;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import willitconnect.model.CheckedEntry;
@@ -20,12 +21,14 @@ public class VcapServicesChecker {
     private String proxyType;
     private int proxyPort;
     private JSONObject vcapServices;
+    private Logger log = Logger.getLogger(VcapServicesChecker.class);
 
     public List<CheckedEntry> getConnectionResults() {
         return results;
     }
 
     public VcapServicesChecker(JSONObject vcapServices) {
+        log.info("Creating service checker with " + vcapServices);
         this.vcapServices = vcapServices;
         initialize();
     }
@@ -44,6 +47,7 @@ public class VcapServicesChecker {
 
     private void check() {
         results.forEach(e -> {
+            log.info("checking " + e.getEntry());
             if (e.isValidHostname()) {
                 String hostname = getHostname(e);
                 int port = getPort(e, hostname);
@@ -57,6 +61,7 @@ public class VcapServicesChecker {
                 }
                 e.setLastChecked(Date.from(Instant.now()));
             }
+            log.error(e.getEntry() + " is not a valid hostname");
         });
     }
 

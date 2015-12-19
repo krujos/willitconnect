@@ -35,8 +35,7 @@ public class EntryConsumer implements Consumer<String> {
                 hostname += ":" + getPort();
             addNewEntry(hostname);
             return;
-        } else if (isUrl(key) || isUri(key) || isJSONObject(key)
-                || isJSONArray(key))
+        } else if (isUrl(key) || isUri(key) || isJSONObject(key) || isJSONArray(key))
         {
             return;
         }
@@ -44,6 +43,7 @@ public class EntryConsumer implements Consumer<String> {
 
     private boolean isUrl(String key) {
         if (!ResourcePatternUtils.isUrl(vcapServices.optString(key))) {
+
             return false;
         }
         try {

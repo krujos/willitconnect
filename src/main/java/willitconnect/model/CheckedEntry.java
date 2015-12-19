@@ -48,6 +48,6 @@ public class CheckedEntry {
     }
 
     public boolean isValidHostname() {
-        return entry.matches("[\\w\\.]+:\\d+");
+        return entry.matches("[\\w\\.-]+:\\d+");
     }
 }
