@@ -54,6 +54,7 @@ and push it
 
 ```
 ➜ git clone https://github.com/krujos/willitconnect
+➜ npm install
 ➜ ./gradlew assemble
 ➜ cf push
 ```
