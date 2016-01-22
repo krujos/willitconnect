@@ -14,70 +14,31 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: org.json:json:20141113" level="project" />
     <orderEntry type="library" name="Gradle: org.yaml:snakeyaml:1.16" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-classic:1.1.3" level="project" />
     <orderEntry type="library" name="Gradle: javax.validation:validation-api:1.1.0.Final" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml:classmate:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-core:1.1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.jayway.jsonpath:json-path:2.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.mockito:mockito-core:1.10.19" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-library:1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-core:1.6.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-core:1.6.2:sources" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-api-mockito:1.6.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-api-mockito:1.6.2:sources" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit4-common:1.6.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit4-common:1.6.2:sources" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit4:1.6.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit4:1.6.2:sources" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit4-legacy:1.6.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit4-legacy:1.6.2:sources" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit3:1.6.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit3:1.6.2:sources" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-reflect:1.6.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-reflect:1.6.2:sources" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-api-support:1.6.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-api-support:1.6.2:sources" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-testng:1.6.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-testng:1.6.2:sources" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-testng-common:1.6.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-classloading-base:1.6.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-classloading-base:1.6.2:sources" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: net.minidev:json-smart:2.1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.objenesis:objenesis:2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.javassist:javassist:3.18.1-GA" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.mockito:mockito-all:1.10.19" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.testng:testng:6.8.21" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: net.minidev:asm:1.0.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.beanshell:bsh:2.0b4" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.beust:jcommander:1.27" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: asm:asm:3.3.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-actuator:1.3.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-web:1.3.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter:1.3.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-actuator:1.3.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-tomcat:1.3.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-validation:1.3.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.6.4" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-web:4.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-webmvc:4.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-core:4.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.13" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot:1.3.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-autoconfigure:1.3.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-logging:1.3.1.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-context:4.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.tomcat.embed:tomcat-embed-core:8.0.30" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.tomcat.embed:tomcat-embed-el:8.0.30" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.tomcat.embed:tomcat-embed-logging-juli:8.0.30" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.tomcat.embed:tomcat-embed-websocket:8.0.30" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate:hibernate-validator:5.2.2.Final" level="project" />
-    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.6.4" level="project" />
-    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.6.4" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-aop:4.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-beans:4.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-expression:4.2.4.RELEASE" level="project" />
@@ -85,7 +46,45 @@
     <orderEntry type="library" name="Gradle: org.slf4j:jul-to-slf4j:1.7.13" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:log4j-over-slf4j:1.7.13" level="project" />
     <orderEntry type="library" name="Gradle: org.jboss.logging:jboss-logging:3.3.0.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-test:1.3.1.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework:spring-test:4.2.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-actuator:1.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-web:1.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.json:json:20151123" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter:1.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-actuator:1.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-tomcat:1.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-validation:1.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.6.5" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot:1.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-autoconfigure:1.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-logging:1.3.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.6.5" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.6.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-test:1.3.2.RELEASE" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.jayway.jsonpath:json-path:2.1.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-core:1.6.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-core:1.6.4:sources" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-api-mockito:1.6.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-api-mockito:1.6.4:sources" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit4-common:1.6.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit4-common:1.6.4:sources" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit4:1.6.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit4:1.6.4:sources" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit4-legacy:1.6.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit4-legacy:1.6.4:sources" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit3:1.6.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-junit3:1.6.4:sources" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-reflect:1.6.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-reflect:1.6.4:sources" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-api-support:1.6.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-api-support:1.6.4:sources" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-testng:1.6.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-testng:1.6.4:sources" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-module-testng-common:1.6.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-classloading-base:1.6.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.powermock:powermock-classloading-base:1.6.4:sources" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: net.minidev:json-smart:2.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: net.minidev:accessors-smart:1.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.ow2.asm:asm:5.0.3" level="project" />
   </component>
 </module>
