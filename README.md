@@ -33,7 +33,7 @@ I cannot connect to nowaynohow.io on 443
 
 ## Will It Connect also consumes bound services!
 If you bind a service to willitconnect we'll do our best to connect to them. We
-for fields with the substring `host` and `port` to try to make reasonable guesses
+look for fields with the substring `host` and `port` to try to make reasonable guesses
 about what your service needs. We also connect to keys named 'URI' and anything
 that looks like a URL. See the `accept` method in [EntryConsumer.java](src/main/java/willitconnect/service/util/EntryConsumer.java)
 for the algorithm used. You can see the results of this scan by calling the
@@ -70,4 +70,4 @@ You can run it locally by using
 
 #TODO
 * improve test coverage for UI
-* refactor ???
+
