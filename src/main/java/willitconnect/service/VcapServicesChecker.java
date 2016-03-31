@@ -46,23 +46,26 @@ public class VcapServicesChecker {
     }
 
     private void check() {
-        results.forEach(e -> {
-            log.info("checking " + e.getEntry());
-            if (e.isValidHostname()) {
-                String hostname = getHostname(e);
-                int port = getPort(e, hostname);
-                if ( hasProxy() ) {
-                    e.setCanConnect(
-                            Connection.checkProxyConnection(
-                                    hostname, port, proxy, proxyPort,
-                                    proxyType));
-                } else {
-                    e.setCanConnect(Connection.checkConnection(hostname, port));
-                }
-                e.setLastChecked(Date.from(Instant.now()));
+        results.forEach(e -> checkEntry(e));
+    }
+
+    public void checkEntry(CheckedEntry e) {
+        log.info("checking " + e.getEntry());
+        if (e.isValidHostname()) {
+            String hostname = getHostname(e);
+            int port = getPort(e, hostname);
+            if ( hasProxy() ) {
+                e.setCanConnect(
+                        Connection.checkProxyConnection(
+                                hostname, port, proxy, proxyPort,
+                                proxyType));
+            } else {
+                e.setCanConnect(Connection.checkConnection(hostname, port));
             }
+            e.setLastChecked(Date.from(Instant.now()));
+        } else {
             log.error(e.getEntry() + " is not a valid hostname");
-        });
+        }
     }
 
     private boolean hasProxy() {

@@ -1,5 +1,6 @@
 package willitconnect.model;
 
+import java.net.URL;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
@@ -49,5 +50,13 @@ public class CheckedEntry {
 
     public boolean isValidHostname() {
         return entry.matches("[\\w\\.-]+:\\d+");
+    }
+
+    public boolean isValidUrl() {
+        try {
+            new URL(entry);
+            return true;
+        } catch (Exception e) {}
+        return false;
     }
 }
