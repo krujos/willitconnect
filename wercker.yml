@@ -18,11 +18,8 @@ build:
             name: run build
             code: |
               ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build
-    - script:
-            name: upload artifacts
-            code: |
-                #gradle --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR uploadArtifacts
-                echo 'step not implemented'
+
+
 deploy:
   steps:
     - dlapiduz/cloud-foundry-deploy:
@@ -31,4 +28,9 @@ deploy:
       password: $CF_PASS
       organization: $CF_ORG
       space: $CF_SPACE
-      appname: willitconnect
+      appname: willitconnect-smoke-test
+    - script:
+           name: smoke test
+           code: |
+             curl willitconnect-smoke-test.cfapps.io/willitconnect -d host=amazon.com -d port=80 | grep -v cannot
+
