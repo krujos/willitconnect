@@ -3,5 +3,4 @@ applications:
 - name: willitconnect
   memory: 1G
   path: build/libs/willitconnect-0.4.2.jar
-  random-route: true
 
