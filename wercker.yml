@@ -33,4 +33,4 @@ deploy:
            name: smoke test
            code: |
              curl willitconnect-smoke-test.cfapps.io/willitconnect -d host=amazon.com -d port=80 | grep -v cannot
-
+             curl -i willitconnect-smoke-test.cfapps.io/willitconnect -d '{"target":"http://amazon.com"}' -H "Content-Type: application/json" | grep 200

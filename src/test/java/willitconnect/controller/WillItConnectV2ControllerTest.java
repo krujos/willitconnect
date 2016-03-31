@@ -15,6 +15,7 @@ import willitconnect.service.util.Connection;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -41,7 +42,12 @@ public class WillItConnectV2ControllerTest {
         CheckedEntry entry = new CheckedEntry(REQUEST.getString("target"));
         entry.setCanConnect(true);
 
-        when(entryChecker.check(any(CheckedEntry.class))).thenReturn(entry);
+        when(entryChecker.check(any(CheckedEntry.class),
+                any(),
+                anyInt(),
+                any()))
+                .thenReturn(entry);
+
         mockMvc.perform(get("/v2/willitconnect")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(REQUEST.toString()))

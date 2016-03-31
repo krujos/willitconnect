@@ -109,8 +109,6 @@ public class VcapServicesCheckerTest {
 
     @Test
     public void itUsesAHttpProxy() {
-
-
         String json = "{ a: [{'hostname':'a.com:80'}]}";
         checker = new VcapServicesChecker(new JSONObject(json));
 
@@ -127,8 +125,6 @@ public class VcapServicesCheckerTest {
 
     @Test
     public void itRemovesAHttpProxy() {
-
-
         String json = "{ a: [{'hostname':'a.com:80'}]}";
         checker = new VcapServicesChecker(new JSONObject(json));
         checker.setProxy("proxy.com", 80, "http");
