@@ -20,7 +20,7 @@ Sometimes, you just want to know if you can reach your thing (service really)
 
 V2 API
 ```
-➜  willitconnect git:(master) curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"http://amazon.com"}' -H "Content-Type: application/json" | jq '.'
+➜ curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"http://amazon.com"}' -H "Content-Type: application/json" | jq '.'
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   148  100   118  100    30    108     27  0:00:01  0:00:01 --:--:--   108
@@ -32,7 +32,7 @@ V2 API
   "validHostname": false,
   "validUrl": true
 }
-➜  willitconnect git:(master) curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"google.com:443"}' -H "Content-Type: application/json" | jq '.'
+➜ curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"google.com:443"}' -H "Content-Type: application/json" | jq '.'
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   152  100   125  100    27   1121    242 --:--:-- --:--:-- --:--:--  1126
@@ -44,7 +44,7 @@ V2 API
   "validHostname": true,
   "validUrl": false
 }
-➜  willitconnect git:(master) curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"https://twitter.com"}' -H "Content-Type: application/json" | jq '.'
+➜ curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"https://twitter.com"}' -H "Content-Type: application/json" | jq '.'
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   152  100   120  100    32    173     46 --:--:-- --:--:-- --:--:--   173
@@ -56,7 +56,7 @@ V2 API
   "validHostname": false,
   "validUrl": true
 }
-➜  willitconnect git:(master) curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"http://does-not-exist.com"}' -H "Content-Type: application/json" | jq '.'
+➜ curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"http://does-not-exist.com"}' -H "Content-Type: application/json" | jq '.'
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   163    0   125    0    38      0      0 --:--:--  0:02:07 --:--:--    17
@@ -69,7 +69,7 @@ V2 API
   "validUrl": true
 }
 
-➜  willitconnect git:(master) curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"does-not-exist.com"}' -H "Content-Type: application/json" | jq '.'
+➜ curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"does-not-exist.com"}' -H "Content-Type: application/json" | jq '.'
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   150  100   119  100    31    193     50 --:--:-- --:--:-- --:--:--   193
