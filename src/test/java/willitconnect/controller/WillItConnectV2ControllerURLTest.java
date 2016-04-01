@@ -22,7 +22,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-public class WillItConnectV2ControllerTest {
+public class WillItConnectV2ControllerURLTest {
     private MockMvc mockMvc;
 
     static String TARGET = "https://pivotal.io";
@@ -72,7 +72,5 @@ public class WillItConnectV2ControllerTest {
                 .andExpect(jsonPath("$.entry", is(REQUEST.get("target"))))
                 .andExpect(jsonPath("$.httpStatus", is(HttpStatus.BAD_REQUEST.value()
                 )));
-
     }
-
 }
