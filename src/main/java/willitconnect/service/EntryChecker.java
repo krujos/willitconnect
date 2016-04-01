@@ -90,8 +90,7 @@ public class EntryChecker {
     }
 
     private ClientHttpRequestFactory swapProxy(CheckedEntry e) {
-        ClientHttpRequestFactory oldFactory;
-        oldFactory = restTemplate.getRequestFactory();
+        ClientHttpRequestFactory oldFactory = restTemplate.getRequestFactory();
 
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
 
