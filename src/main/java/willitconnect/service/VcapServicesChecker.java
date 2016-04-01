@@ -3,6 +3,7 @@ package willitconnect.service;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import willitconnect.model.CheckedEntry;
 import willitconnect.service.util.EntryConsumer;
 
@@ -28,7 +29,7 @@ public class VcapServicesChecker {
     public VcapServicesChecker(JSONObject vcapServices) {
         log.info("Creating service checker with " + vcapServices);
         this.vcapServices = vcapServices;
-        checker = new EntryChecker();
+        checker = new EntryChecker(new RestTemplate());
         initialize();
     }
 

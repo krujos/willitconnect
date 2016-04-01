@@ -29,7 +29,7 @@ import static org.apache.log4j.Logger.getLogger;
  * If it lacks a scheme we make a socket connection
  *   i.e. amazon.com:443 ends up making a socket connection to amazon.com:443
  *
- * If it has a scheme and it's http or https we try to make a full web request
+ * If it has a scheme and it's http or https we try to make a get request
  *   i.e. https://amazon.com ends up making an https connection to amazon
  *   and returns the http status code. It completes the ssl handshake.
  *
@@ -42,7 +42,7 @@ import static org.apache.log4j.Logger.getLogger;
 @RequestMapping(value="/v2")
 public class WillItConnectV2Controller {
 
-    EntryChecker entryChecker;
+    private EntryChecker entryChecker;
 
     @Autowired
     public WillItConnectV2Controller(EntryChecker entryChecker) {

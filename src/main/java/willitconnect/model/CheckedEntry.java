@@ -1,5 +1,7 @@
 package willitconnect.model;
 
+import org.springframework.http.HttpStatus;
+
 import java.net.URL;
 import java.time.Instant;
 import java.util.Date;
@@ -12,6 +14,7 @@ public class CheckedEntry {
     private Date lastChecked;
     private String entry;
     private boolean canConnect;
+    private int httpStatus;
 
     public boolean isCanConnect() {
         return canConnect();
@@ -58,5 +61,22 @@ public class CheckedEntry {
             return true;
         } catch (Exception e) {}
         return false;
+    }
+
+    /**
+     * give back the status as an int to avoid forcing consumers to understand
+     * how java marshals status codes to something other than an int.
+     * @return the status
+     */
+    public int getHttpStatus() {
+        return httpStatus;
+    }
+
+    /**
+     * Set the status of the request
+     * @param statusCode in an HttpStatus to save ourselves validation headache
+     */
+    public void setHttpStatus(HttpStatus statusCode) {
+        httpStatus = statusCode.value();
     }
 }
