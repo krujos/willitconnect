@@ -32,7 +32,7 @@ public class EntryCheckerUnknownHostTests {
         EntryChecker checker = new EntryChecker(template);
         CheckedEntry entry = new CheckedEntry("http://does_not_exist.com");
 
-        CheckedEntry returnedEntry = checker.check(entry, null, 0, null);
+        CheckedEntry returnedEntry = checker.check(entry);
 
         System.out.println("status = " + entry.getHttpStatus());
         assertFalse(returnedEntry.canConnect());

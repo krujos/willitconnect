@@ -45,6 +45,7 @@ import static org.apache.log4j.Logger.getLogger;
 @RestController()
 @RequestMapping(value="/v2")
 public class WillItConnectV2Controller {
+    private Logger log = getLogger(WillItConnectV2Controller.class);
 
     private EntryChecker entryChecker;
 
@@ -53,14 +54,17 @@ public class WillItConnectV2Controller {
         this.entryChecker = entryChecker;
     }
 
-    private Logger log = getLogger(WillItConnectV2Controller.class);
     @RequestMapping(value="willitconnect")
     public @ResponseBody CheckedEntry willItConnect(
             @RequestBody String request) {
 
         log.info(request.toString());
+
         JSONObject r = new JSONObject(request);
         CheckedEntry entry = new CheckedEntry(r.getString("target"));
-        return entryChecker.check(entry, null, 0, null);
+        if ( r.has("http_proxy")) {
+            entry.setHttpProxy(r.getString("http_proxy"));
+        }
+        return entryChecker.check(entry);
     }
 }
