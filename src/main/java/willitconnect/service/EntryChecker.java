@@ -90,7 +90,10 @@ public class EntryChecker {
     }
 
     private ClientHttpRequestFactory swapProxy(CheckedEntry e) {
-        ClientHttpRequestFactory oldFactory;SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        ClientHttpRequestFactory oldFactory;
+        oldFactory = restTemplate.getRequestFactory();
+
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
 
         Proxy proxy= new Proxy(Proxy.Type.HTTP,
                 new InetSocketAddress(
@@ -99,7 +102,6 @@ public class EntryChecker {
                     )));
         requestFactory.setProxy(proxy);
 
-        oldFactory = restTemplate.getRequestFactory();
         return oldFactory;
     }
 
