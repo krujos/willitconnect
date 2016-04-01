@@ -81,8 +81,18 @@ V2 API
   "validHostname": false,
   "validUrl": false
 }
-
-
+➜ curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"google.com:20"}' -H "Content-Type: application/json" | jq '.'
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   151  100   125  100    26     37      7  0:00:03  0:00:03 --:--:--    37
+{
+  "lastChecked": 1459477570094,
+  "entry": "google.com:20",
+  "canConnect": false,
+  "httpStatus": 0,
+  "validHostname": true,
+  "validUrl": false
+}
 ```
 
 V1 API
