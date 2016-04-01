@@ -3,12 +3,10 @@ package willitconnect.service;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import willitconnect.model.CheckedEntry;
-import willitconnect.service.util.Connection;
 import willitconnect.service.util.EntryConsumer;
 
-import java.sql.Date;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +20,7 @@ public class VcapServicesChecker {
     private int proxyPort;
     private JSONObject vcapServices;
     private Logger log = Logger.getLogger(VcapServicesChecker.class);
+    private EntryChecker checker;
 
     public List<CheckedEntry> getConnectionResults() {
         return results;
@@ -30,6 +29,7 @@ public class VcapServicesChecker {
     public VcapServicesChecker(JSONObject vcapServices) {
         log.info("Creating service checker with " + vcapServices);
         this.vcapServices = vcapServices;
+        checker = new EntryChecker(new RestTemplate());
         initialize();
     }
 
@@ -46,37 +46,15 @@ public class VcapServicesChecker {
     }
 
     private void check() {
-        results.forEach(e -> {
-            log.info("checking " + e.getEntry());
-            if (e.isValidHostname()) {
-                String hostname = getHostname(e);
-                int port = getPort(e, hostname);
-                if ( hasProxy() ) {
-                    e.setCanConnect(
-                            Connection.checkProxyConnection(
-                                    hostname, port, proxy, proxyPort,
-                                    proxyType));
-                } else {
-                    e.setCanConnect(Connection.checkConnection(hostname, port));
-                }
-                e.setLastChecked(Date.from(Instant.now()));
-            }
-            log.error(e.getEntry() + " is not a valid hostname");
-        });
+        results.forEach(e -> checkEntry(e));
+    }
+
+    public void checkEntry(CheckedEntry e) {
+        checker.check(e, proxy, proxyPort, proxyType);
     }
 
     private boolean hasProxy() {
         return null != getProxy();
-    }
-
-    private int getPort(CheckedEntry e, String hostname) {
-        return Integer.parseInt(e.getEntry().substring(
-                hostname.length() + 1,
-                e.getEntry().length()));
-    }
-
-    private String getHostname(CheckedEntry e) {
-        return e.getEntry().substring(0, e.getEntry().indexOf(':'));
     }
 
     public void setProxy(String proxy, int port, String proxyType) {
