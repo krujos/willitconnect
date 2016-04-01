@@ -20,35 +20,69 @@ Sometimes, you just want to know if you can reach your thing (service really)
 
 V2 API
 ```
-➜  ~ curl -i http://willitconnect.cfapps.io/v2/willitconnect/ -d '{"target":"http://aslkasolasfow.com"}' -H "Content-Type: application/json"
-HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: application
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Fri, 01 Apr 2016 01:18:15 GMT
+➜  willitconnect git:(master) curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"http://amazon.com"}' -H "Content-Type: application/json" | jq '.'                                                  $
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   148  100   118  100    30    108     27  0:00:01  0:00:01 --:--:--   108
+{
+  "lastChecked": 0,
+  "entry": "http://amazon.com",
+  "canConnect": true,
+  "httpStatus": 200,
+  "validHostname": false,
+  "validUrl": true
+}
+➜  willitconnect git:(master) curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"google.com:443"}' -H "Content-Type: application/json" | jq '.'                                                     $
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   152  100   125  100    27   1121    242 --:--:-- --:--:-- --:--:--  1126
+{
+  "lastChecked": 1459476345175,
+  "entry": "google.com:443",
+  "canConnect": true,
+  "httpStatus": 0,
+  "validHostname": true,
+  "validUrl": false
+}
+➜  willitconnect git:(master) curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"https://twitter.com"}' -H "Content-Type: application/json" | jq '.'                                                $
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   152  100   120  100    32    173     46 --:--:-- --:--:-- --:--:--   173
+{
+  "lastChecked": 0,
+  "entry": "https://twitter.com",
+  "canConnect": true,
+  "httpStatus": 200,
+  "validHostname": false,
+  "validUrl": true
+}
+➜  willitconnect git:(master) curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"http://does-not-exist.com"}' -H "Content-Type: application/json" | jq '.'                                          $
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   163    0   125    0    38      0      0 --:--:--  0:02:07 --:--:--    17
+{
+  "lastChecked": 0,
+  "entry": "http://does-not-exist.com",
+  "canConnect": false,
+  "httpStatus": 0,
+  "validHostname": false,
+  "validUrl": true
+}
 
-{"lastChecked":0,"entry":"http://aslkasolasfow.com","canConnect":false,"httpStatus":0,"validUrl":true,"validHostname":false}
+➜  willitconnect git:(master) curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"does-not-exist.com"}' -H "Content-Type: application/json" | jq '.'                                                 $
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   150  100   119  100    31    193     50 --:--:-- --:--:-- --:--:--   193
+{
+  "lastChecked": 0,
+  "entry": "does-not-exist.com",
+  "canConnect": false,
+  "httpStatus": 0,
+  "validHostname": false,
+  "validUrl": false
+}
 
-➜  ~ curl -i http://willitconnect.cfapps.io/v2/willitconnect/ -d '{"target":"amazon.com:80"}' -H "Content-Type: application/json"
-HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: application
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Fri, 01 Apr 2016 01:28:58 GMT
 
-{"lastChecked":1459474138239,"entry":"amazon.com:80","canConnect":true,"httpStatus":0,"validUrl":false,"validHostname":true}
-
-➜  ~ curl -i http://willitconnect.cfapps.io/v2/willitconnect/ -d '{"target":"amazon.com:8120"}' -H "Content-Type: application/json"
-HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: application
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Fri, 01 Apr 2016 01:29:13 GMT
-
-{"lastChecked":1459474153523,"entry":"amazon.com:8120","canConnect":false,"httpStatus":0,"validUrl":false,"validHostname":true}
 ```
 
 V1 API
