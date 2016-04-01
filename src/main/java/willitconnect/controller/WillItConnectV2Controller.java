@@ -21,7 +21,7 @@ import static org.apache.log4j.Logger.getLogger;
  *     "target": "something"
  * }
  *
- * Something is looseley interperated to be a URI
+ * Something is loosely interpreted to be a URI
  *
  * If it lacks a port we default to 80
  *   i.e. amazon.com ends up making a socket connection to amazon.com:80
@@ -32,6 +32,10 @@ import static org.apache.log4j.Logger.getLogger;
  * If it has a scheme and it's http or https we try to make a get request
  *   i.e. https://amazon.com ends up making an https connection to amazon
  *   and returns the http status code. It completes the ssl handshake.
+ *
+ *   Make sure to check canConnect and httpStatus on the object. It's possible
+ *   to have a bad hostname which results in canConnect == false and
+ *   httpStatus == 0
  *
  * It it has a scheme and it's not http it makes a socket connection
  *   i.e. mysql://10.0.0.10:5407 ends up making a socket connection to

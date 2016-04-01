@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.DefaultResponseErrorHandler;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import willitconnect.model.CheckedEntry;
@@ -42,11 +43,15 @@ public class EntryChecker {
                               String proxyType) {
         log.info("checking " + e.getEntry());
         if (e.isValidUrl()) {
-            ResponseEntity<String> resp =
-                    restTemplate.getForEntity(e.getEntry(), String.class);
-            log.info("Status = "+ resp.getStatusCode());
-            e.setCanConnect(true);
-            e.setHttpStatus(resp.getStatusCode());
+            try {
+                ResponseEntity<String> resp =
+                        restTemplate.getForEntity(e.getEntry(), String.class);
+                log.info("Status = " + resp.getStatusCode());
+                e.setCanConnect(true);
+                e.setHttpStatus(resp.getStatusCode());
+            } catch (ResourceAccessException ex) {
+                e.setCanConnect(false);
+            }
         } else if (e.isValidHostname()) {
             String hostname = getHostname(e);
             int port = getPort(e, hostname);
