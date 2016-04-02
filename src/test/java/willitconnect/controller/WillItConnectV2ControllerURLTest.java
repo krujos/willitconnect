@@ -15,6 +15,7 @@ import willitconnect.model.CheckedEntry;
 import willitconnect.service.EntryChecker;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.number.OrderingComparison.greaterThan;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
@@ -76,7 +77,10 @@ public class WillItConnectV2ControllerURLTest {
                 .content(REQUEST.toString()))
                 .andExpect(jsonPath("$.canConnect", is(true)))
                 .andExpect(jsonPath("$.entry", is(REQUEST.get("target"))))
-                .andExpect(jsonPath("$.httpStatus", is(HttpStatus.BAD_REQUEST.value())));
+                .andExpect(jsonPath("$.httpStatus",
+                        is(HttpStatus.BAD_REQUEST.value())))
+                .andExpect(jsonPath("$.lastChecked").value(
+                        is(greaterThan(0L))));
     }
 
     @Test

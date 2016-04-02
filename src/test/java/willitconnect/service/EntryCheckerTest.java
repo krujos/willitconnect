@@ -12,8 +12,12 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import willitconnect.model.CheckedEntry;
 
+import java.sql.Date;
+import java.time.Instant;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -27,6 +31,7 @@ public class EntryCheckerTest {
     private CheckedEntry entry;
     private EntryChecker checker;
     private RestTemplate restTemplate;
+    private CheckedEntry returnedEntry;
 
     @Mock
     SimpleClientHttpRequestFactory requestFactory;
@@ -43,6 +48,7 @@ public class EntryCheckerTest {
                 .andRespond(withServerError());
 
         checker = new EntryChecker(restTemplate);
+
     }
 
     @After
@@ -52,17 +58,26 @@ public class EntryCheckerTest {
 
     @Test
     public void itShouldConnectEvenWithABadStatus() throws Exception {
-        CheckedEntry returnedEntry = checker.check(entry);
+        returnedEntry = checker.check(entry);
+
         assertTrue(returnedEntry.canConnect());
     }
 
     @Test
     public void itShouldReturnTheHttpResponse() {
-        CheckedEntry returnedEntry = checker.check(entry);
+        returnedEntry = checker.check(entry);
+
         assertEquals(returnedEntry.getHttpStatus(), HttpStatus
                 .INTERNAL_SERVER_ERROR.value());
     }
 
+    @Test
+    public void itShouldSetTheLastCheckedTime() {
+        returnedEntry = checker.check(entry);
+
+        assertThat(returnedEntry.getLastChecked(),
+                is(greaterThan(Date.from(Instant.EPOCH))));
+    }
     @Test
     public void itShouldConnectToAURLThroughAProxy() {
         entry.setHttpProxy("proxy.example.com:8080");
