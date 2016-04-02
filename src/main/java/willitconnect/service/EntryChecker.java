@@ -45,48 +45,53 @@ public class EntryChecker {
 
     public CheckedEntry check(CheckedEntry e) {
         log.info("checking " + e.getEntry());
-
         if (e.isValidUrl()) {
-            try {
-                ClientHttpRequestFactory oldFactory = null;
-                if ( null != e.getHttpProxy() ) {
-                    oldFactory = swapProxy(e);
-                }
-
-                ResponseEntity<String> resp =
-                        restTemplate.getForEntity(e.getEntry(), String.class);
-
-                if ( null != oldFactory ) {
-                    restTemplate.setRequestFactory(oldFactory);
-                }
-
-                log.info("Status = " + resp.getStatusCode());
-                e.setCanConnect(true);
-                e.setHttpStatus(resp.getStatusCode());
-            } catch (ResourceAccessException ex) {
-                e.setCanConnect(false);
-            }
-            e.setLastChecked(Date.from(Instant.now()));
-
+            checkUrl(e);
         } else if (e.isValidHostname()) {
-            String hostname = getHostname(e);
-            int port = getPort(e, hostname);
-            if (null != e.getHttpProxy()) {
-                String proxy = e.getHttpProxy().split(":")[0];
-                int proxyPort = Integer.parseInt(e.getHttpProxy().split(":")[1]);
-
-                e.setCanConnect(
-                        Connection.checkProxyConnection(
-                                hostname, port, proxy, proxyPort, "http"));
-            } else {
-                e.setCanConnect(Connection.checkConnection(hostname, port));
-            }
-            e.setLastChecked(Date.from(Instant.now()));
-
+            checkHostname(e);
         } else {
             log.error(e.getEntry() + " is not a valid hostname");
         }
         return e;
+    }
+
+    private void checkHostname(CheckedEntry e) {
+        String hostname = getHostname(e);
+        int port = getPort(e, hostname);
+        if (null != e.getHttpProxy()) {
+            String proxy = e.getHttpProxy().split(":")[0];
+            int proxyPort = Integer.parseInt(e.getHttpProxy().split(":")[1]);
+
+            e.setCanConnect(
+                    Connection.checkProxyConnection(
+                            hostname, port, proxy, proxyPort, "http"));
+        } else {
+            e.setCanConnect(Connection.checkConnection(hostname, port));
+        }
+        e.setLastChecked(Date.from(Instant.now()));
+    }
+
+    private void checkUrl(CheckedEntry e) {
+        try {
+            ClientHttpRequestFactory oldFactory = null;
+            if ( null != e.getHttpProxy() ) {
+                oldFactory = swapProxy(e);
+            }
+
+            ResponseEntity<String> resp =
+                    restTemplate.getForEntity(e.getEntry(), String.class);
+
+            if ( null != oldFactory ) {
+                restTemplate.setRequestFactory(oldFactory);
+            }
+
+            log.info("Status = " + resp.getStatusCode());
+            e.setCanConnect(true);
+            e.setHttpStatus(resp.getStatusCode());
+        } catch (ResourceAccessException ex) {
+            e.setCanConnect(false);
+        }
+        e.setLastChecked(Date.from(Instant.now()));
     }
 
     private ClientHttpRequestFactory swapProxy(CheckedEntry e) {
