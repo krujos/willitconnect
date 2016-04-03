@@ -104,6 +104,7 @@ public class EntryChecker {
                     e.getHttpProxy().split(":")[0],
                     Integer.parseInt(e.getHttpProxy().split(":")[1]
                     )));
+        log.info("Using proxy " + proxy + " for " + e.getEntry());
         requestFactory.setProxy(proxy);
 
         return oldFactory;
