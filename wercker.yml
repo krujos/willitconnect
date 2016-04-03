@@ -32,5 +32,6 @@ deploy:
     - script:
            name: smoke test
            code: |
-             curl willitconnect-smoke-test.cfapps.io/willitconnect -d host=amazon.com -d port=80 | grep -v cannot
-             curl -i willitconnect-smoke-test.cfapps.io/v2/willitconnect -d '{"target":"http://amazon.com"}' -H "Content-Type: application/json" | grep 200
+             curl -v -i willitconnect-smoke-test.cfapps.io/willitconnect -d host=amazon.com -d port=80 | grep -v cannot
+             curl -v -i willitconnect-smoke-test.cfapps.io/v2/willitconnect -d '{"target":"http://amazon.com"}' -H "Content-Type: application/json" | grep 200
+             curl -v -i willitconnect-smoke-test.cfapps.io/v2/willitconnect -H "Content-Type: application/json" -d '{"target":"http://google.com", "http_proxy":"http-proxy-postnecrotic-complaint.cfapps.io:80"}'

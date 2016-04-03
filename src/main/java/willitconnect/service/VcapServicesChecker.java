@@ -50,7 +50,10 @@ public class VcapServicesChecker {
     }
 
     public void checkEntry(CheckedEntry e) {
-        checker.check(e, proxy, proxyPort, proxyType);
+        if ( null != proxy ) {
+            e.setHttpProxy(proxy + ":" + proxyPort);
+        }
+        checker.check(e);
     }
 
     private boolean hasProxy() {

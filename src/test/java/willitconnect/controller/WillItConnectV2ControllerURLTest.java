@@ -15,6 +15,7 @@ import willitconnect.model.CheckedEntry;
 import willitconnect.service.EntryChecker;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.number.OrderingComparison.greaterThan;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
@@ -26,7 +27,13 @@ public class WillItConnectV2ControllerURLTest {
     private MockMvc mockMvc;
 
     static String TARGET = "https://pivotal.io";
+    static String PROXY = "proxy.example.com:80";
     static JSONObject REQUEST = new JSONObject().put("target", TARGET);
+
+    static JSONObject PROXY_REQUEST = new JSONObject()
+            .put("target", TARGET)
+            .put("http_proxy", PROXY);
+
     CheckedEntry entry = new CheckedEntry(REQUEST.getString("target"));
 
     RestTemplate restTemplate = new RestTemplate();
@@ -70,7 +77,22 @@ public class WillItConnectV2ControllerURLTest {
                 .content(REQUEST.toString()))
                 .andExpect(jsonPath("$.canConnect", is(true)))
                 .andExpect(jsonPath("$.entry", is(REQUEST.get("target"))))
-                .andExpect(jsonPath("$.httpStatus", is(HttpStatus.BAD_REQUEST.value()
-                )));
+                .andExpect(jsonPath("$.httpStatus",
+                        is(HttpStatus.BAD_REQUEST.value())))
+                .andExpect(jsonPath("$.lastChecked").value(
+                        is(greaterThan(0L))));
+    }
+
+    @Test
+    public void itShouldConnectThroughAProxy() throws Exception {
+        mockServer.expect(requestTo(TARGET)).andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess());
+
+        mockMvc.perform(get("/v2/willitconnect")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(PROXY_REQUEST.toString()))
+                .andExpect(jsonPath("$.canConnect", is(true)))
+                .andExpect(jsonPath("$.httpProxy", is(PROXY)));
+
     }
 }

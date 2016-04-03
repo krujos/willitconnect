@@ -15,6 +15,7 @@ public class CheckedEntry {
     private String entry;
     private boolean canConnect;
     private int httpStatus;
+    private String httpProxy;
 
     public boolean isCanConnect() {
         return canConnect();
@@ -78,5 +79,13 @@ public class CheckedEntry {
      */
     public void setHttpStatus(HttpStatus statusCode) {
         httpStatus = statusCode.value();
+    }
+
+    public void setHttpProxy(String proxy) {
+        this.httpProxy = proxy;
+    }
+
+    public String getHttpProxy() {
+        return httpProxy;
     }
 }
