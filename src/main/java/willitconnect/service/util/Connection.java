@@ -25,7 +25,7 @@ public class Connection {
     }
 
     private static void logHost(String host, int port) {
-        log.info("checking" + host +  ":" + port);
+        log.info("checking " + host +  ":" + port);
     }
 
     public static boolean checkProxyConnection(
