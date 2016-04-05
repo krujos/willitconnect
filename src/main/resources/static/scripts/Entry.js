@@ -40,6 +40,7 @@ var Entry = React.createClass({
 
         if(Object.keys(this.state.status).length) {
             connectionStyle = this.state.status.canConnect ? {color: 'green'} : {color: 'red'};
+            mixpanel.track("connection attempted", {"canConnect":this.state.status.canConnect});
         }
 
         return (
