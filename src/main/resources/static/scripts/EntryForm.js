@@ -47,7 +47,6 @@ var EntryForm = React.createClass({
     isPortRequired: function() {
         var host = this.refs.host;
         if(host) {
-            console.log(host);
             if(host.getValue().startsWith("http")) {
                 return false;
             }

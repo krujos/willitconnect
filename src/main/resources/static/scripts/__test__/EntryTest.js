@@ -8,6 +8,7 @@ import jquery from 'jquery';
 const Entry = require('../Entry');
 import {createRenderer} from 'react-addons-test-utils';
 
+
 describe('Entry', () => {
 
     var entry, renderedEntry;
@@ -17,12 +18,12 @@ describe('Entry', () => {
     };
 
     beforeEach(function() {
+        entry = TestUtils.renderIntoDocument(<Entry />);
+        renderedEntry = ReactDOM.findDOMNode(entry);
         window.mixpanel = mixpanel;
     });
 
     it("displays the entry", function() {
-        entry = TestUtils.renderIntoDocument(<Entry />);
-        renderedEntry = ReactDOM.findDOMNode(entry);
         expect(renderedEntry.children.length).toEqual(1);
         let div = renderedEntry.children[0];
         expect(div.children.length).toEqual(0);
@@ -89,5 +90,4 @@ describe('Entry', () => {
         expect(renderedEntry.children[0].textContent).toEqual("test.com:80");
         expect(renderedEntry.style._values.color).toEqual("blue");
     });
-
 });

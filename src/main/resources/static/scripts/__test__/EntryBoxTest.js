@@ -32,16 +32,4 @@ describe('EntryBox', () => {
         expect(row.children.length).toEqual(2);
     });
 
-    xit("handles submissions", function() {
-        entryBox = TestUtils.renderIntoDocument(<EntryBox host="test.com" port="80"/>);
-        jquery.ajax = jest.fn(() =>
-            entryBox.successFunc({"canConnect": true}));
-
-        entryBox.componentWillMount();
-        renderedEntry = ReactDOM.findDOMNode(entryBox);
-
-        expect(renderedEntry.children[0].textContent).toEqual("test.com:80");
-        expect(renderedEntry.style._values.color).toEqual("green");
-    });
-
 });
