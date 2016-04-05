@@ -1,4 +1,5 @@
 import React from 'react';
+import jQuery from 'jquery';
 
 var Entry = React.createClass({
     getInitialState: function () {
@@ -11,18 +12,28 @@ var Entry = React.createClass({
 
     componentWillMount: function () {
 
-        var path = '/v2/willitconnect';
+        var path;
 
-        jQuery.ajax ({
-            url: path,
-            type: "POST",
-            data: this.getData(),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                this.setState({status: data});
-            }.bind(this)
-        });
+        if (this.props.proxyHost && this.props.proxyPort) {
+            path = '/willitconnectproxy?host=' + this.props.host + '&port=' + this.props.port + '&proxyHost=' + this.props.proxyHost + '&proxyPort=' + this.props.proxyPort;
+            $.get(path, function (status) {
+                this.setState({status: status.indexOf("cannot") > -1 ? {'canConnect': false} : {'canConnect': true}});
+            }.bind(this));
+        }
+        else {
+            path = '/v2/willitconnect';
+            jQuery.ajax ({
+                url: path,
+                type: "POST",
+                data: this.getData(),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    mixpanel.track("connection attempted", {"canConnect":data.canConnect});
+                    this.setState({status: data});
+                }.bind(this)
+            });
+        }
     },
     render: function () {
         var connectionStyle = {color: 'blue'};
@@ -32,9 +43,7 @@ var Entry = React.createClass({
         }
 
         if(Object.keys(this.state.status).length) {
-            console.log(this.state.status);
             connectionStyle = this.state.status.canConnect ? {color: 'green'} : {color: 'red'};
-            mixpanel.track("connection attempted", {"canConnect":this.state.status.canConnect});
         }
 
         return (

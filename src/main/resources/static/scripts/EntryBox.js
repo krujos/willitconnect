@@ -8,13 +8,10 @@ import EntryList from './EntryList';
 
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom'
-import { Col } from 'react-bootstrap';
 import { Grid } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 
 import { Container } from 'react-bootstrap';
-import { Input } from 'react-bootstrap';
-import { ButtonInput } from 'react-bootstrap';
 
 "use strict";
 
