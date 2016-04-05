@@ -26,15 +26,21 @@ var Entry = React.createClass({
     },
     render: function () {
         var connectionStyle = {color: 'blue'};
+        var resultString = this.props.host;
+        if(this.props.port) {
+            resultString += ":" + this.props.port;
+        }
+
         if(Object.keys(this.state.status).length) {
             console.log(this.state.status);
             connectionStyle = this.state.status.canConnect ? {color: 'green'} : {color: 'red'};
+            mixpanel.track("connection attempted", {"canConnect":this.state.status.canConnect});
         }
 
         return (
             <div style={ connectionStyle }>
                 <h3 className="entry">
-                    {this.props.host} : {this.props.port}
+                    {resultString}
                 </h3>
             </div>
         );

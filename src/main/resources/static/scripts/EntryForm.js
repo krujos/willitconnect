@@ -13,11 +13,14 @@ var EntryForm = React.createClass({
         var port = this.refs.port.getValue();
         
         if (!this.isValid()) {
+            mixpanel.track("submit attempted with invalid form");
             return;
         }
 
         var proxyHost = this.refs.proxyHost.getValue();
         var proxyPort = this.refs.proxyPort.getValue();
+
+        mixpanel.track("request submitted");
 
         this.props.onEntrySubmit({host: host, port: port, proxyHost: proxyHost, proxyPort: proxyPort});
     },
@@ -32,6 +35,7 @@ var EntryForm = React.createClass({
     isPortRequired: function() {
         var host = this.refs.host;
         if(host) {
+            console.log(host);
             if(host.getValue().startsWith("http")) {
                 return false;
             }

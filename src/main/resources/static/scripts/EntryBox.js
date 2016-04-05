@@ -25,12 +25,13 @@ var EntryBox = React.createClass({
         this.setState({data: newEntries});
     },
     getInitialState: function () {
+
         return {data: []};
     },
     render: function () {
 
+        mixpanel.track("page loaded");
         var bodyStyle = { 'padding' : 75};
-
         return (
             <Grid>
                 <HeaderBar />
