@@ -11,9 +11,8 @@ var EntryForm = React.createClass({
         e.preventDefault();
         var host = this.refs.host.getValue();
         var port = this.refs.port.getValue();
-
-
-        if (!port || !host) {
+        
+        if (!this.isValid()) {
             return;
         }
 
@@ -22,18 +21,32 @@ var EntryForm = React.createClass({
 
         this.props.onEntrySubmit({host: host, port: port, proxyHost: proxyHost, proxyPort: proxyPort});
     },
+    isValid: function() {
+        if (this.refs.host && this.refs.host.getValue()) {
+            if(!this.isPortRequired() || (this.refs.port && this.refs.port.getValue())) {
+                return true;
+            }
+        }
+        return false;
+    },
     isPortRequired: function() {
-      return true;  
+        var host = this.refs.host;
+        if(host) {
+            if(host.getValue().startsWith("http")) {
+                return false;
+            }
+        }
+        return true;
     },
     render: function () {
         return (
             <form className="entryForm" onSubmit={this.handleSubmit}>
                 <Row>
                     <Col xs={4} xsOffset={1} bsSize="large">
-                        <Input type="text" placeholder="Host" ref="host"/>
+                        <Input className="host" type="text" placeholder="Host" ref="host"/>
                     </Col>
                     <Col xs={4}>
-                        <Input type="number" placeholder="Port" ref="port" required={this.isPortRequired()}/>
+                        <Input className="port" type="number" placeholder="Port" ref="port" required={this.isPortRequired()}/>
                     </Col>
                     <Col xs={3}>
                         <ButtonInput type="submit" value="Check"/>

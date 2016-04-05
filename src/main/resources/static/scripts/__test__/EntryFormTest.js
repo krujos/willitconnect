@@ -30,5 +30,37 @@ describe('EntryForm', () => {
     it("requires the port by default", function() {
         expect(entryForm.isPortRequired()).toBe(true);
     });
+
+    it ("does not require a port when host is a url", function() {
+        let host = TestUtils.findRenderedDOMComponentWithClass(entryForm, "host");
+        host.value = "http://test.com";
+        TestUtils.Simulate.change(host);
+        expect(entryForm.isPortRequired()).toBe(false);
+    });
     
+    describe("valid port host conbinations", function() {
+        
+        it("should be valid with a url" , function() {
+            let host = TestUtils.findRenderedDOMComponentWithClass(entryForm, "host");
+            host.value = "http://test.com";
+            expect(entryForm.isValid()).toBe(true);
+        });
+        
+        it("should be valid with a host and a port", function() {
+            let host = TestUtils.findRenderedDOMComponentWithClass(entryForm, "host");
+            host.value = "test.com";
+            let port = TestUtils.findRenderedDOMComponentWithClass(entryForm, "port");
+            port.value = 50;
+            expect(entryForm.isValid()).toBe(true);
+        });
+
+        it("should not be valid with a host and no port", function() {
+            let host = TestUtils.findRenderedDOMComponentWithClass(entryForm, "host");
+            host.value = "test.com";
+            expect(entryForm.isValid()).toBe(false);
+            console.log("done");
+        });
+        
+  
+    })
 });
