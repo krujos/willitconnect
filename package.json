@@ -47,19 +47,22 @@
     "url": "git+https://github.com/krujos/willitconnect.git"
   },
   "jest": {
-      "scriptPreprocessor": "node_modules/babel-jest",
-      "unmockedModulePathPatterns": [
-        "node_modules/"
-      ],
-      "modulePathIgnorePatterns": [
-        "node_modules/"
-      ],
-      "testDirectoryName": "src/main/resources/static/scripts/__test__"
+    "scriptPreprocessor": "node_modules/babel-jest",
+    "unmockedModulePathPatterns": [
+      "node_modules/"
+    ],
+    "modulePathIgnorePatterns": [
+      "node_modules/"
+    ],
+    "testDirectoryName": "src/main/resources/static/scripts/__test__"
   },
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/krujos/willitconnect/issues"
   },
-  "homepage": "https://github.com/krujos/willitconnect#readme"
+  "homepage": "https://github.com/krujos/willitconnect#readme",
+  "devDependencies": {
+    "jest": "^0.1.40"
+  }
 }
