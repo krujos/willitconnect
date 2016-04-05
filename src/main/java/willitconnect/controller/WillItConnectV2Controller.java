@@ -67,4 +67,5 @@ public class WillItConnectV2Controller {
         }
         return entryChecker.check(entry);
     }
+
 }
