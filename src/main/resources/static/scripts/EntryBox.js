@@ -1,19 +1,17 @@
-require('expose?$!expose?jQuery!jquery');
-require('bootstrap/dist/css/bootstrap.min.css');
-require('bootstrap/dist/css/bootstrap-theme.min.css');
-
+"use strict";
 import HeaderBar from './HeaderBar';
 import EntryForm from './EntryForm';
 import EntryList from './EntryList';
 
 import React, { PropTypes } from 'react';
-import ReactDOM from 'react-dom'
+
 import { Grid } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 
+
 import { Container } from 'react-bootstrap';
 
-"use strict";
+
 
 var EntryBox = React.createClass({
     handleEntrySubmit: function (entry) {
@@ -33,15 +31,12 @@ var EntryBox = React.createClass({
             <Grid>
                 <HeaderBar />
                 <Row style={ bodyStyle }>
-                        <EntryForm onEntrySubmit={this.handleEntrySubmit}/>
-                        <EntryList data={this.state.data}/>
+                    <EntryForm onEntrySubmit={this.handleEntrySubmit}/>
+                    <EntryList data={this.state.data}/>
                 </Row>
             </Grid>
         );
     }
 });
 
-ReactDOM.render(
-    <EntryBox />,
-    document.getElementById('content')
-);
+module.exports = EntryBox;
