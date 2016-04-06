@@ -8,7 +8,7 @@ import React from 'react';
 var EntryForm = React.createClass({
 
     getInitialState: function () {
-        return {isChecked: false, };
+        return {isChecked: false};
     },
     onProxyBoxChange: function () {
         this.setState({isChecked: !this.state.isChecked});
