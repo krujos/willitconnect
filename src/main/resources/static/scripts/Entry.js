@@ -14,7 +14,9 @@ var Entry = React.createClass({
         return JSON.stringify({"target": this.props.host+":"+this.props.port});
     },
     successFunc: function(data){
-        mixpanel.track("connection attempted", {"canConnect":data.canConnect});
+        mixpanel.track("connection attempted", { "canConnect": data.canConnect,
+            "httpStatus": data.httpStatus, "validHostName":data.validHostName,
+            "validUrl":data.validUrl});
         this.setState({status: data});
     },
     componentWillMount: function () {
@@ -37,6 +39,9 @@ var Entry = React.createClass({
 
         if(Object.keys(this.state.status).length) {
             connectionStyle = this.state.status.canConnect ? {color: 'green'} : {color: 'red'};
+            if(this.state.status.statusCode) {
+                resultString += " statusCode - " + this.state.status.statusCode;
+            }
         }
 
         return (

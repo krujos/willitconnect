@@ -1,7 +1,8 @@
-[![Stories in Ready](https://badge.waffle.io/krujos/willitconnect.png?label=ready&title=Ready)](https://waffle.io/krujos/willitconnect)
+
 Will It Connect?
 ================
 [![wercker status](https://app.wercker.com/status/95669acf2b99f3b76662dd01e0696d37/m "wercker status")](https://app.wercker.com/project/bykey/95669acf2b99f3b76662dd01e0696d37)
+[![Stories in Ready](https://badge.waffle.io/krujos/willitconnect.png?label=ready&title=Ready)](https://waffle.io/krujos/willitconnect)
 
 Sometimes, you just want to know if you can reach your thing (service really)
  from Cloud Foundry. Is there a proxy in the way, is there an app security
@@ -151,6 +152,4 @@ You can run it locally by using
 ➜ ./gradlew bootRun
 ```
 
-#TODO
-* improve test coverage for UI
 
