@@ -31,5 +31,4 @@ describe('EntryBox', () => {
         let row = renderedEntry.children[1];
         expect(row.children.length).toEqual(2);
     });
-
 });

@@ -3,6 +3,7 @@ import HeaderBar from './HeaderBar';
 import EntryForm from './EntryForm';
 import EntryList from './EntryList';
 import React, { PropTypes } from 'react';
+
 import { Grid } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 
