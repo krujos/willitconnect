@@ -2,7 +2,7 @@ var path = require('path');
 
 module.exports = {
     entry: [
-        "./src/main/resources/static/scripts/index.js"
+        "./src/main/resources/static/scripts/Index.js"
       ],
     output: {
         path: "./src/main/resources/static/scripts/",

@@ -2,5 +2,5 @@
 applications:
 - name: willitconnect
   memory: 1G
-  path: build/libs/willitconnect-0.5.1.jar
+  path: build/libs/willitconnect-0.5.2.jar
 

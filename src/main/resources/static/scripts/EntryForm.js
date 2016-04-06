@@ -1,5 +1,4 @@
 import { Col } from 'react-bootstrap';
-import { Grid } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 import { Container } from 'react-bootstrap';
 import { Input } from 'react-bootstrap';
@@ -7,18 +6,34 @@ import { ButtonInput } from 'react-bootstrap';
 import React from 'react';
 
 var EntryForm = React.createClass({
+
+    getInitialState: function () {
+        return {isChecked: false};
+    },
+    onChange: function () {
+        this.setState({isChecked: !this.state.isChecked});
+    },
     handleSubmit: function (e) {
         e.preventDefault();
+        var proxyHost;
+        var proxyPort;
         var host = this.refs.host.getValue();
         var port = this.refs.port.getValue();
         
         if (!this.isValid()) {
+            mixpanel.track("connect attempted with invalid form");
             return;
         }
 
-        var proxyHost = this.refs.proxyHost.getValue();
-        var proxyPort = this.refs.proxyPort.getValue();
+        if(this.state.isChecked) {
+            proxyHost = this.refs.proxyHost.getValue();
+            proxyPort = this.refs.proxyPort.getValue();
+        }
 
+        this.connect(host, port, proxyHost, proxyPort);
+    },
+    connect: function(host, port, proxyHost, proxyPort) {
+        console.log(host, port, proxyHost, proxyPort);
         this.props.onEntrySubmit({host: host, port: port, proxyHost: proxyHost, proxyPort: proxyPort});
     },
     isValid: function() {
@@ -49,19 +64,19 @@ var EntryForm = React.createClass({
                         <Input className="port" type="number" placeholder="Port" ref="port" required={this.isPortRequired()}/>
                     </Col>
                     <Col xs={3}>
-                        <ButtonInput type="submit" value="Check"/>
+                        <ButtonInput type="submit" value="Check" className="submitButton"/>
                     </Col>
                 </Row>
 
                 <Row>
                     <Col  xs={4} xsOffset={1} bsSize="large">
-                        <Input type="text" placeholder="Proxy Host (optional)" ref="proxyHost"/>
+                        <Input className="proxyPort" type="text" placeholder="Proxy Host (optional)" ref="proxyHost"/>
                     </Col>
                     <Col xs={4}>
-                        <Input type="number" placeholder="Proxy Port (optional)" ref="proxyPort"/>
+                        <Input className="proxyHost" type="number" placeholder="Proxy Port (optional)" ref="proxyPort"/>
                     </Col>
                     <Col xs={3}>
-                        <Input type="checkbox" label="Use Proxy" ref="proxyBox" />
+                        <Input className="proxyBox" type="checkbox" label="Use Proxy" ref="proxyBox" checked={this.state.isChecked} onChange={this.onChange} />
                     </Col>
                 </Row>
             </form>

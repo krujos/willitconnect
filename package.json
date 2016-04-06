@@ -63,6 +63,7 @@
   },
   "homepage": "https://github.com/krujos/willitconnect#readme",
   "devDependencies": {
+    "jasmine": "^2.4.1",
     "jest": "^0.1.40"
   }
 }
