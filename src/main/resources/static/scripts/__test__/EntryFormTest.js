@@ -67,10 +67,8 @@ describe('EntryForm', () => {
             type: 'click',
             preventDefault: function () {}
         };
-        
+
         beforeEach(function() {
-            entryForm = TestUtils.renderIntoDocument(<EntryForm />);
-            renderedEntryForm = ReactDOM.findDOMNode(entryForm);
             entryForm.connect = jest.genMockFunction();
         });
 
@@ -100,7 +98,7 @@ describe('EntryForm', () => {
             let proxyPort = TestUtils.findRenderedDOMComponentWithClass(entryForm,
                 "proxyPort");
             proxyPort.value = 70;
-            
+
             entryForm.handleSubmit(event);
 
             expect(entryForm.connect.mock.calls[0][0])
