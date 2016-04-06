@@ -97,33 +97,6 @@ V2 API
 }
 ```
 
-V1 API
-```
-➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=amazon.com -d port=80
-I can connect to amazon.com on 80
-➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=twitter.com -d port=8080
-I cannot connect to twitter.com on 8080
-➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=twitter.com -d port=443
-I can connect to twitter.com on 443
-➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=google.com -d port=443
-I can connect to google.com on 443
-➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=pivotal.io -d port=443
-I can connect to pivotal.io on 443
-➜ curl "http://willitconnect.cfapps.io/willitconnect" -d host=nowaynohow.io -d port=443
-I cannot connect to nowaynohow.io on 443
-```
-
-## Will It Connect also consumes bound services!
-If you bind a service to willitconnect we'll do our best to connect to them. We
-look for fields with the substring `host` and `port` to try to make reasonable guesses
-about what your service needs. We also connect to keys named 'URI' and anything
-that looks like a URL. See the `accept` method in [EntryConsumer.java](src/main/java/willitconnect/service/util/EntryConsumer.java)
-for the algorithm used. You can see the results of this scan by calling the
-`/serviceresults` endpoint.
-
-*NOTE* This feature does not support HTTP(S) connections yet!!
-
-
 #Get Some
 3 steps get you up and running!
 ##From the latest release
