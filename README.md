@@ -125,4 +125,8 @@ You can run it locally by using
 ➜ ./gradlew bootRun
 ```
 
+#ChatOps
+
+Willitconnect can also be connected to hubot -- more information at [hubot-will-it-connect](https://www.npmjs.com/package/hubot-will-it-connect)
+
 

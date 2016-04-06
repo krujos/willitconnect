@@ -17,6 +17,7 @@ var Entry = React.createClass({
         mixpanel.track("connection attempted", { "canConnect": data.canConnect,
             "httpStatus": data.httpStatus, "validHostName":data.validHostName,
             "validUrl":data.validUrl});
+        console.log(data);
         this.setState({status: data});
     },
     componentWillMount: function () {
