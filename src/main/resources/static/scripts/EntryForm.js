@@ -8,9 +8,9 @@ import React from 'react';
 var EntryForm = React.createClass({
 
     getInitialState: function () {
-        return {isChecked: false};
+        return {isChecked: false, };
     },
-    onChange: function () {
+    onProxyBoxChange: function () {
         this.setState({isChecked: !this.state.isChecked});
     },
     handleSubmit: function (e) {
@@ -45,6 +45,12 @@ var EntryForm = React.createClass({
         }
         return false;
     },
+    hostUpdate: function() {
+        if(!this.isPortRequired()) {
+            this.setState({isPortRequired:false});
+            this.forceUpdate();
+        }
+    },
     isPortRequired: function() {
         var host = this.refs.host;
         if(host) {
@@ -59,10 +65,10 @@ var EntryForm = React.createClass({
             <form className="entryForm" onSubmit={this.handleSubmit}>
                 <Row>
                     <Col xs={4} xsOffset={1} bsSize="large">
-                        <Input className="host" type="text" placeholder="Host" ref="host"/>
+                        <Input className="host" type="text" placeholder="Host" ref="host" onchange={this.hostUpdate}/>
                     </Col>
                     <Col xs={4}>
-                        <Input className="port" type="number" placeholder="Port" ref="port" required={this.isPortRequired()}/>
+                        <Input className="port" type="number" placeholder="Port" ref="port" required={this.state.isPortRequired}/>
                     </Col>
                     <Col xs={3}>
                         <ButtonInput type="submit" value="Check" className="submitButton"/>
@@ -77,7 +83,7 @@ var EntryForm = React.createClass({
                         <Input className="proxyHost" type="number" placeholder="Proxy Port (optional)" ref="proxyPort"/>
                     </Col>
                     <Col xs={3}>
-                        <Input className="proxyBox" type="checkbox" label="Use Proxy" ref="proxyBox" checked={this.state.isChecked} onChange={this.onChange} />
+                        <Input className="proxyBox" type="checkbox" label="Use Proxy" ref="proxyBox" checked={this.state.isChecked} onChange={this.onProxyBoxChange} />
                     </Col>
                 </Row>
             </form>
