@@ -4,7 +4,6 @@ jest.dontMock('../EntryBox');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import jquery from 'jquery';
 const EntryBox = require('../EntryBox');
 import {createRenderer} from 'react-addons-test-utils';
 
@@ -31,4 +30,5 @@ describe('EntryBox', () => {
         let row = renderedEntry.children[1];
         expect(row.children.length).toEqual(2);
     });
+
 });
