@@ -63,9 +63,12 @@ describe('EntryForm', () => {
 
     describe("uses the proxy information appropriately", function() {
 
+        var event = {
+            type: 'click',
+            preventDefault: function () {}
+        };
+
         beforeEach(function() {
-            entryForm = TestUtils.renderIntoDocument(<EntryForm />);
-            renderedEntryForm = ReactDOM.findDOMNode(entryForm);
             entryForm.connect = jest.genMockFunction();
         });
 
@@ -96,10 +99,7 @@ describe('EntryForm', () => {
                 "proxyPort");
             proxyPort.value = 70;
             
-            var event = {
-                type: 'click',
-                preventDefault: function () {}
-            };
+
             entryForm.handleSubmit(event);
 
             expect(entryForm.connect.mock.calls[0][0])

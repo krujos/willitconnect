@@ -7,33 +7,29 @@ var Entry = React.createClass({
     },
 
     getData: function() {
+        if (this.props.proxyHost && this.props.proxyPort) {
+            return JSON.stringify({"target": this.props.host+":"+
+            this.props.port, "http_proxy" : this.props.proxyHost +
+            ":" + this.props.proxyPort});
+        }
         return JSON.stringify({"target": this.props.host+":"+this.props.port});
+    },
+    successFunc: function(data){
+        mixpanel.track("connection attempted", {"canConnect":data.canConnect});
+        this.setState({status: data});
     },
 
     componentWillMount: function () {
 
-        var path;
-
-        if (this.props.proxyHost && this.props.proxyPort) {
-            path = '/willitconnectproxy?host=' + this.props.host + '&port=' + this.props.port + '&proxyHost=' + this.props.proxyHost + '&proxyPort=' + this.props.proxyPort;
-            $.get(path, function (status) {
-                this.setState({status: status.indexOf("cannot") > -1 ? {'canConnect': false} : {'canConnect': true}});
-            }.bind(this));
-        }
-        else {
-            path = '/v2/willitconnect';
-            jQuery.ajax ({
-                url: path,
-                type: "POST",
-                data: this.getData(),
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (data) {
-                    mixpanel.track("connection attempted", {"canConnect":data.canConnect});
-                    this.setState({status: data});
-                }.bind(this)
-            });
-        }
+        var path = '/v2/willitconnect';
+        jQuery.ajax ({
+            url: path,
+            type: "POST",
+            data: this.getData(),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: this.successFunc
+        });
     },
     render: function () {
         var connectionStyle = {color: 'blue'};
