@@ -26,6 +26,7 @@ var EntryForm = React.createClass({
         }
 
         if(this.state.isChecked) {
+            mixpanel.track("connect attempted with proxy");
             proxyHost = this.refs.proxyHost.getValue();
             proxyPort = this.refs.proxyPort.getValue();
         }

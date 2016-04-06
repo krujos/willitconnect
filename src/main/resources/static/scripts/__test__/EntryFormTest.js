@@ -11,10 +11,14 @@ describe('EntryForm', () => {
 
     var entryForm, renderedEntryForm;
 
+    var mixpanel = {
+        track: function () {}
+    };
+
     beforeEach(function() {
+        window.mixpanel = mixpanel;
         entryForm = TestUtils.renderIntoDocument(<EntryForm />);
         renderedEntryForm = ReactDOM.findDOMNode(entryForm);
-
     });
 
     it("displays the form", function() {
