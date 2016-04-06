@@ -5,7 +5,6 @@ var Entry = React.createClass({
     getInitialState: function () {
         return {status: []};
     },
-
     getData: function() {
         if (this.props.proxyHost && this.props.proxyPort) {
             return JSON.stringify({"target": this.props.host+":"+
@@ -18,9 +17,7 @@ var Entry = React.createClass({
         mixpanel.track("connection attempted", {"canConnect":data.canConnect});
         this.setState({status: data});
     },
-
     componentWillMount: function () {
-
         var path = '/v2/willitconnect';
         jQuery.ajax ({
             url: path,

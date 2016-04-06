@@ -17,6 +17,8 @@ describe('Entry', () => {
     };
 
     beforeEach(function() {
+        entry = TestUtils.renderIntoDocument(<Entry />);
+        renderedEntry = ReactDOM.findDOMNode(entry);
         window.mixpanel = mixpanel;
     });
 
@@ -70,7 +72,7 @@ describe('Entry', () => {
                                                     proxyHost="test.com" proxyPort="80"/>);
         jquery.ajax = jest.fn(() =>
             entry.successFunc({"canConnect": false}));
-
+        
         entry.componentWillMount();
         renderedEntry = ReactDOM.findDOMNode(entry);
 
@@ -88,6 +90,18 @@ describe('Entry', () => {
 
         expect(renderedEntry.children[0].textContent).toEqual("test.com:80");
         expect(renderedEntry.style._values.color).toEqual("blue");
+
     });
 
+    it("displays a host and port without a canConnect response", function() {
+        entry = TestUtils.renderIntoDocument(<Entry host="test.com" port="80"/>);
+        jquery.ajax = jest.fn(() =>
+            entry.successFunc({}));
+
+        entry.componentWillMount();
+        renderedEntry = ReactDOM.findDOMNode(entry);
+
+        expect(renderedEntry.children[0].textContent).toEqual("test.com:80");
+        expect(renderedEntry.style._values.color).toEqual("blue");
+    });
 });

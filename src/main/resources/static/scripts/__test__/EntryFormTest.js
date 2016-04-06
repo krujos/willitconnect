@@ -98,7 +98,6 @@ describe('EntryForm', () => {
             let proxyPort = TestUtils.findRenderedDOMComponentWithClass(entryForm,
                 "proxyPort");
             proxyPort.value = 70;
-            
 
             entryForm.handleSubmit(event);
 
