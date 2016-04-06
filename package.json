@@ -35,7 +35,9 @@
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.14",
-    "webpack-babel-jest": "^1.0.4"
+    "webpack-babel-jest": "^1.0.4",
+    "jasmine": "^2.4.1",
+    "jest": "^0.1.40"
   },
   "scripts": {
     "test": "jest",
@@ -61,9 +63,5 @@
   "bugs": {
     "url": "https://github.com/krujos/willitconnect/issues"
   },
-  "homepage": "https://github.com/krujos/willitconnect#readme",
-  "devDependencies": {
-    "jasmine": "^2.4.1",
-    "jest": "^0.1.40"
-  }
+  "homepage": "https://github.com/krujos/willitconnect#readme"
 }
