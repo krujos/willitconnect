@@ -40,7 +40,7 @@ var Entry = React.createClass({
         if(Object.keys(this.state.status).length) {
             connectionStyle = this.state.status.canConnect ? {color: 'green'} : {color: 'red'};
             if(this.state.status.statusCode) {
-                resultString += " statusCode - " + this.state.status.statusCode;
+                resultString += " status: " + this.state.status.statusCode;
             }
         }
 

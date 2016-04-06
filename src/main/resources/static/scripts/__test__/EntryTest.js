@@ -93,6 +93,19 @@ describe('Entry', () => {
 
     });
 
+    it("displays a host and port with a status code", function() {
+        entry = TestUtils.renderIntoDocument(<Entry host="test.com" port="80"/>);
+        jquery.ajax = jest.fn(() =>
+            entry.successFunc({"canConnect": true, "statusCode": "200"}));
+
+        entry.componentWillMount();
+        renderedEntry = ReactDOM.findDOMNode(entry);
+
+        expect(renderedEntry.children[0].textContent).toEqual("test.com:80 status: 200");
+        expect(renderedEntry.style._values.color).toEqual("green");
+
+    });
+
     it("displays a host and port without a canConnect response", function() {
         entry = TestUtils.renderIntoDocument(<Entry host="test.com" port="80"/>);
         jquery.ajax = jest.fn(() =>
