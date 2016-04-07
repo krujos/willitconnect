@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
 import willitconnect.model.CheckedEntry;
 import willitconnect.service.EntryChecker;
+import willitconnect.service.Tracer;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
@@ -43,7 +44,10 @@ public class WillItConnectV2ControllerURLTest {
     @Before
     public void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(
-                new WillItConnectV2Controller(new EntryChecker(restTemplate))).build();
+                new WillItConnectV2Controller(
+                        new EntryChecker(restTemplate),
+                        new Tracer()))
+                .build();
 
         mockServer = MockRestServiceServer.createServer(restTemplate);
     }

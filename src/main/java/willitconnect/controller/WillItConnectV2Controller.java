@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import willitconnect.model.CheckedEntry;
+import willitconnect.model.TracedEntry;
 import willitconnect.service.EntryChecker;
+import willitconnect.service.Tracer;
 
 import static org.apache.log4j.Logger.getLogger;
 
@@ -48,10 +50,12 @@ public class WillItConnectV2Controller {
     private Logger log = getLogger(WillItConnectV2Controller.class);
 
     private EntryChecker entryChecker;
+    private Tracer tracer;
 
     @Autowired
-    public WillItConnectV2Controller(EntryChecker entryChecker) {
+    public WillItConnectV2Controller(EntryChecker entryChecker, Tracer tracer) {
         this.entryChecker = entryChecker;
+        this.tracer = tracer;
     }
 
     @RequestMapping(value="willitconnect")
@@ -66,6 +70,18 @@ public class WillItConnectV2Controller {
             entry.setHttpProxy(r.getString("http_proxy"));
         }
         return entryChecker.check(entry);
+    }
+
+    @RequestMapping(value="traceroute")
+    public @ResponseBody TracedEntry traceRoute(@RequestBody String request) {
+        JSONObject marshaledRequest = new JSONObject(request);
+
+        TracedEntry tracedEntry =
+                new TracedEntry(marshaledRequest.getString("target"));
+
+        TracedEntry returnedEntry = tracer.trace(tracedEntry);
+        log.info(returnedEntry.getTrace());
+        return returnedEntry;
     }
 
 }
