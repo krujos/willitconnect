@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
 import willitconnect.model.TracedEntry;
 import willitconnect.service.EntryChecker;
+import willitconnect.service.ProcessExecutor;
 import willitconnect.service.Tracer;
 import willitconnect.service.util.Connection;
 
@@ -60,7 +61,8 @@ public class WillItConnectV2ControllerHostnameTest {
                                 .setTrace(WillitConnectV2ControllerTestStrings.traceroute);
 
 
-        when(tracer.trace(any(TracedEntry.class))).thenReturn(entry);
+        when(tracer.trace(any(TracedEntry.class), any(ProcessExecutor.class)))
+                .thenReturn(entry);
 
         mockMvc.perform(post("/v2/traceroute").contentType(MediaType
                 .APPLICATION_JSON).content(REQUEST.toString()))

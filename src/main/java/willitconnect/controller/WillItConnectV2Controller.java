@@ -11,6 +11,7 @@ import willitconnect.model.CheckedEntry;
 import willitconnect.model.TracedEntry;
 import willitconnect.service.EntryChecker;
 import willitconnect.service.Tracer;
+import willitconnect.service.WICProcessExecutor;
 
 import static org.apache.log4j.Logger.getLogger;
 
@@ -79,7 +80,9 @@ public class WillItConnectV2Controller {
         TracedEntry tracedEntry =
                 new TracedEntry(marshaledRequest.getString("target"));
 
-        TracedEntry returnedEntry = tracer.trace(tracedEntry);
+        TracedEntry returnedEntry =
+                tracer.trace(tracedEntry, new WICProcessExecutor());
+
         log.info(returnedEntry.getTrace());
         return returnedEntry;
     }
