@@ -2,6 +2,7 @@ import React from 'react';
 import jQuery from 'jquery';
 import Alert from 'react-bootstrap/lib/Alert';
 import ProgressBar from 'react-bootstrap/lib/ProgressBar';
+import Panel from 'react-bootstrap/lib/Panel';
 
 var Entry = React.createClass({
     getInitialState: function () {
@@ -34,7 +35,7 @@ var Entry = React.createClass({
         });
     },
     render: function () {
-        var alertStyle = "info";
+        var panelStyle = "info";
 
         var gotResults = Object.keys(this.state.status).length;
 
@@ -60,24 +61,25 @@ var Entry = React.createClass({
 
         if(Object.keys(this.state.status).length) {
             if(this.state.status.canConnect){
-                alertStyle = "success";
+                panelStyle = "success";
             } else {
-                alertStyle = "danger";
+                panelStyle = "danger";
             }
 
             if(this.state.status.httpStatus && this.state.status.httpStatus != 0) {
                 statusReport = (
-                    <p>Some text?</p>
+                    <ul>
+                        <li>HttpStatus: {this.state.status.httpStatus}</li>
+                    </ul>
                 );
             }
         }
 
         return (
-            <Alert bsStyle={alertStyle}>
-                <h4>{resultString}</h4>
+            <Panel collapsible defaultExpanded bsStyle={panelStyle} header={resultString}>
                 {workingResult}
                 {statusReport}
-            </Alert>
+            </Panel>
         );
     }
 });

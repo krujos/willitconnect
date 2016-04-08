@@ -4,12 +4,7 @@ import EntryForm from './EntryForm';
 import EntryList from './EntryList';
 import React, { PropTypes } from 'react';
 
-import { Grid } from 'react-bootstrap';
-import { Row } from 'react-bootstrap';
-
-
-import { Container } from 'react-bootstrap';
-
+import { Grid, Row, Panel, Container } from 'react-bootstrap';
 
 
 var EntryBox = React.createClass({
@@ -30,6 +25,14 @@ var EntryBox = React.createClass({
             <Grid>
                 <HeaderBar />
                 <Row style={ bodyStyle }>
+                    <Panel collapsible header="Instructions">
+                        <ul>
+                            <li>If <strong>Port</strong> is not specified, the default is 80</li>
+                            <li>If <strong>Host</strong> lacks a scheme (example: <code>http://</code>) defaults to a socket connection</li>
+                            <li>If the scheme is http or https, tries to make a GET request, and tells you a bit about the HTTP connection</li>
+                            <li>If it's any other kind of scheme (<code>mysql://</code>) it will just make a socket connection</li>
+                        </ul>
+                    </Panel>
                     <EntryForm onEntrySubmit={this.handleEntrySubmit}/>
                     <EntryList data={this.state.data}/>
                 </Row>
