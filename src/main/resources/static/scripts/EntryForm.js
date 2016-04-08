@@ -21,12 +21,12 @@ var EntryForm = React.createClass({
         var port = this.refs.port.getValue();
         
         if (!this.isValid()) {
-            mixpanel.track("connect attempted with invalid form");
+            mixpanel.track("failed connect attempted", {"type": "invalid form"});
             return;
         }
 
         if(this.state.isChecked) {
-            mixpanel.track("connect attempted with proxy");
+            mixpanel.track("failed connect attempted", {"type": "invalid form"});
             proxyHost = this.refs.proxyHost.getValue();
             proxyPort = this.refs.proxyPort.getValue();
         }
@@ -48,7 +48,6 @@ var EntryForm = React.createClass({
     hostUpdate: function() {
         if(!this.isPortRequired()) {
             this.setState({isPortRequired:false});
-            this.forceUpdate();
         }
     },
     isPortRequired: function() {
