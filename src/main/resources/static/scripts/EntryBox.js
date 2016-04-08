@@ -27,10 +27,13 @@ var EntryBox = React.createClass({
                 <Row style={ bodyStyle }>
                     <Panel collapsible header="Instructions">
                         <ul>
-                            <li>If <strong>Port</strong> is not specified, the default is 80</li>
                             <li>If <strong>Host</strong> lacks a scheme (example: <code>http://</code>) defaults to a socket connection</li>
-                            <li>If the scheme is http or https, tries to make a GET request, and tells you a bit about the HTTP connection</li>
-                            <li>If it's any other kind of scheme (<code>mysql://</code>) it will just make a socket connection</li>
+                            <li>If <strong>Host</strong> has a <code>http</code> or <code>https</code> scheme,
+                                it will use the proper default ports (<code>80</code> or <code>443</code>, respectively),
+                                unless overridden</li>
+                            <li>If the scheme is <code>http</code> or <code>https</code>, tries to make a GET request,
+                                and reports data about the HTTP connection</li>
+                            <li>If it's any other kind of scheme (example: <code>mysql://</code>) it will just make a socket connection</li>
                         </ul>
                     </Panel>
                     <EntryForm onEntrySubmit={this.handleEntrySubmit}/>
