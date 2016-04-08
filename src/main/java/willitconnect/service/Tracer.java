@@ -1,6 +1,6 @@
 package willitconnect.service;
 
-import com.sun.deploy.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import willitconnect.model.TracedEntry;
 
 public class Tracer {
