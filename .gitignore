@@ -1,3 +1,10 @@
+#Ignore things generated into our source tree
+*.woff
+*.eot
+*.svg
+*.woff2
+*.ttf
+src/main/resources/static/scripts/bundle.js
 
 # Created by https://www.gitignore.io/api/gradle,java,node,intellij
 
