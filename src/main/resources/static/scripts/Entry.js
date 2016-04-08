@@ -1,5 +1,7 @@
 import React from 'react';
 import jQuery from 'jquery';
+import Alert from 'react-bootstrap/lib/Alert';
+import ProgressBar from 'react-bootstrap/lib/ProgressBar';
 
 var Entry = React.createClass({
     getInitialState: function () {
@@ -32,25 +34,50 @@ var Entry = React.createClass({
         });
     },
     render: function () {
-        var connectionStyle = {color: 'blue'};
+        var alertStyle = "info";
+
+        var gotResults = Object.keys(this.state.status).length;
+
         var resultString = this.props.host;
         if(this.props.port) {
             resultString += ":" + this.props.port;
         }
+        if(this.props.proxyHost){
+            resultString += " proxied through " + this.props.proxyHost;
+        }
+        if(this.props.proxyPort) {
+            resultString += ":" + this.props.proxyPort;
+        }
+
+        var workingResult = "";
+        if (!gotResults) {
+            workingResult = (
+            <ProgressBar active now={100}/>
+            )
+        }
+
+        var statusReport = "";
 
         if(Object.keys(this.state.status).length) {
-            connectionStyle = this.state.status.canConnect ? {color: 'green'} : {color: 'red'};
-            if(this.state.status.statusCode) {
-                resultString += " status: " + this.state.status.statusCode;
+            if(this.state.status.canConnect){
+                alertStyle = "success";
+            } else {
+                alertStyle = "danger";
+            }
+
+            if(this.state.status.httpStatus && this.state.status.httpStatus != 0) {
+                statusReport = (
+                    <p>Some text?</p>
+                );
             }
         }
 
         return (
-            <div style={ connectionStyle }>
-                <h3 className="entry">
-                    {resultString}
-                </h3>
-            </div>
+            <Alert bsStyle={alertStyle}>
+                <h4>{resultString}</h4>
+                {workingResult}
+                {statusReport}
+            </Alert>
         );
     }
 });
