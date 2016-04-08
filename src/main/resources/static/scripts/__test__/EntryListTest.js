@@ -30,7 +30,7 @@ describe('EntryList', () => {
     it("displays the entryList", function() {
         entryList = TestUtils.renderIntoDocument(<EntryList data={entries} />);
         renderedEntry = ReactDOM.findDOMNode(entryList);
-        expect(renderedEntry.children.length).toEqual(3);
+        expect(renderedEntry.children.length).toEqual(0);
     });
     
 });

@@ -4,7 +4,7 @@ Will It Connect?
 [![wercker status](https://app.wercker.com/status/95669acf2b99f3b76662dd01e0696d37/m "wercker status")](https://app.wercker.com/project/bykey/95669acf2b99f3b76662dd01e0696d37)
 [![Stories in Ready](https://badge.waffle.io/krujos/willitconnect.png?label=ready&title=Ready)](https://waffle.io/krujos/willitconnect)
 
-Sometimes, you just want to know if you can reach your thing (service really)
+ Sometimes, you just want to know if you can reach your thing (service really)
  from Cloud Foundry. Is there a proxy in the way, is there an app security
  group, the dreaded firewall of doom or is it your code? Will It Connect
  takes a url or hostname and a port or an ip and a port and tries to make a  

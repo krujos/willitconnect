@@ -22,13 +22,10 @@ describe('EntryBox', () => {
     it("displays the entryBox", function() {
         entryBox = TestUtils.renderIntoDocument(<EntryBox />);
         renderedEntry = ReactDOM.findDOMNode(entryBox);
-        expect(renderedEntry.children.length).toEqual(2);
+        expect(renderedEntry.children.length).toEqual(1);
 
         let bar = renderedEntry.children[0];
-        expect(bar.children.length).toEqual(0);
-
-        let row = renderedEntry.children[1];
-        expect(row.children.length).toEqual(2);
+        expect(bar.children.length).toEqual(1);
     });
 
 });

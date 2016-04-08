@@ -6,19 +6,16 @@ import React, { PropTypes } from 'react';
 
 import { Grid, Row, Panel, Container } from 'react-bootstrap';
 
-
 var EntryBox = React.createClass({
+    getInitialState: function () {
+        return {data: []};
+    },
     handleEntrySubmit: function (entry) {
         var entries = this.state.data;
         var newEntries = entries.concat([entry]);
         this.setState({data: newEntries});
     },
-    getInitialState: function () {
-
-        return {data: []};
-    },
     render: function () {
-
         mixpanel.track("page loaded");
         var bodyStyle = { 'padding' : 75};
         return (
