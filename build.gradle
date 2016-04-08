@@ -47,6 +47,7 @@ task webpack(type: NodeTask) {
 }
 
 task jest(type: NpmTask) {
+    dependsOn 'npmInstall'
     args = ['test']
 }
 
