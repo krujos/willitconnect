@@ -32,7 +32,7 @@ public class TracerTest {
             public List<String> execute(String[] command) {
                 assertThat(command, is(equalTo(
                         new String[]{"traceroute", "http://example.com"})));
-                isCalled[0] =true;
+                isCalled[0] = true;
                 return Collections.emptyList();
             }
         };
