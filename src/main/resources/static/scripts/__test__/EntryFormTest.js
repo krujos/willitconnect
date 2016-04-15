@@ -22,25 +22,22 @@ describe('EntryForm', () => {
     });
 
     it("displays the form", function() {
-        expect(renderedEntryForm.children.length).toEqual(2);
+        expect(renderedEntryForm.children.length).toEqual(3);
         let row1 = renderedEntryForm.children[0];
-        expect(row1.children.length).toEqual(3);
+        expect(row1.children.length).toEqual(2);
 
         let row2 = renderedEntryForm.children[1];
-        expect(row2.children.length).toEqual(3);
+        expect(row2.children.length).toEqual(1);
 
     });
-
-    it("requires the port by default", function() {
-        expect(entryForm.isPortRequired()).toBe(true);
-    });
-
-    it ("does not require a port when host is a url", function() {
-        let host = TestUtils.findRenderedDOMComponentWithClass(entryForm, "host");
-        host.value = "http://test.com";
-        TestUtils.Simulate.change(host);
-        expect(entryForm.isPortRequired()).toBe(false);
-    });
+    
+    //
+    // it ("does not require a port when host is a url", function() {
+    //     let host = TestUtils.findRenderedDOMComponentWithClass(entryForm, "host");
+    //     host.value = "http://test.com";
+    //     TestUtils.Simulate.change(host);
+    //     expect(entryForm.isPortRequired()).toBe(false);
+    // });
     
     describe("valid port host conbinations", function() {
         
@@ -110,9 +107,9 @@ describe('EntryForm', () => {
             expect(entryForm.connect.mock.calls[0][1])
                 .toBe('50');
             expect(entryForm.connect.mock.calls[0][2])
-                .toBe('70');
-            expect(entryForm.connect.mock.calls[0][3])
                 .toBe('testproxy.com');
+            expect(entryForm.connect.mock.calls[0][3])
+                .toBe('70');
         });
 
         it("doesn't use the proxy when proxybox is checked, but no proxy values are entered", function() {
@@ -122,37 +119,6 @@ describe('EntryForm', () => {
             port.value = 50;
 
             expect(entryForm.isValid()).toBe(true);
-
-            var event = {
-                type: 'click',
-                preventDefault: function () {}
-            };
-            entryForm.handleSubmit(event);
-
-            expect(entryForm.connect.mock.calls[0][0])
-                .toBe('test.com');
-            expect(entryForm.connect.mock.calls[0][1])
-                .toBe('50');
-            expect(entryForm.connect.mock.calls[0][2])
-                .toBe(undefined);
-            expect(entryForm.connect.mock.calls[0][3])
-                .toBe(undefined);
-        });
-
-        it("doesn't use the proxy when proxybox is checked, but values are entered", function() {
-            let host = TestUtils.findRenderedDOMComponentWithClass(entryForm, "host");
-            host.value = "test.com";
-            let port = TestUtils.findRenderedDOMComponentWithClass(entryForm, "port");
-            port.value = 50;
-
-            expect(entryForm.isValid()).toBe(true);
-
-            let proxyHost = TestUtils.findRenderedDOMComponentWithClass(entryForm,
-                "proxyHost");
-            proxyHost.value = "testproxy.com";
-            let proxyPort = TestUtils.findRenderedDOMComponentWithClass(entryForm,
-                "proxyPort");
-            proxyPort.value = 70;
 
             var event = {
                 type: 'click',

@@ -25,7 +25,7 @@ describe('EntryBox', () => {
         expect(renderedEntry.children.length).toEqual(1);
 
         let bar = renderedEntry.children[0];
-        expect(bar.children.length).toEqual(1);
+        expect(bar.children.length).toEqual(0);
     });
 
 });

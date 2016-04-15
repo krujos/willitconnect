@@ -65,13 +65,21 @@ var Entry = React.createClass({
                 panelStyle = "danger";
             }
 
-            if(this.state.status.httpStatus && this.state.status.httpStatus != 0) {
-                statusReport = (
-                    <ul>
-                        <li>HttpStatus: {this.state.status.httpStatus}</li>
-                    </ul>
-                );
-            }
+            // var utcSeconds = this.state.status.lastChecked;
+            // var d = new Date(0);
+            // d.setUTCSeconds(utcSeconds);
+            //
+            // var datestring = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear() + " " +
+            //     d.getHours() + ":" + d.getMinutes();
+            //
+            // console.log(datestring);
+            
+            statusReport = (
+                <ul>
+                    {this.state.status.canConnect ? <li> I can connect </li> : <li> I cannot connect </li> }
+                    {this.state.status.httpStatus && this.state.status.httpStatus != 0 ? <li>Http Status: {this.state.status.httpStatus}</li> : null }
+                </ul>
+            );
         }
 
         return (
@@ -82,5 +90,14 @@ var Entry = React.createClass({
         );
     }
 });
+
+// canConnect:true
+// entry:"http://google.com:80"
+// httpProxy:null
+// httpStatus:200
+// lastChecked:1460687063373
+// validHostname:false
+// validUrl:true
+
 
 module.exports = Entry;
