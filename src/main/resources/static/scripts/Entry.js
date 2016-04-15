@@ -1,6 +1,5 @@
 import React from 'react';
 import jQuery from 'jquery';
-import Alert from 'react-bootstrap/lib/Alert';
 import ProgressBar from 'react-bootstrap/lib/ProgressBar';
 import Panel from 'react-bootstrap/lib/Panel';
 

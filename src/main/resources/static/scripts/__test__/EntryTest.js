@@ -38,8 +38,8 @@ describe('Entry', () => {
         entry.componentWillMount();
         renderedEntry = ReactDOM.findDOMNode(entry);
 
+        expect(renderedEntry.classList[1]).toEqual("panel-success");
         expect(renderedEntry.children[0].textContent).toEqual("test.com:80");
-        //expect(renderedEntry.style._values.color).toEqual("green");
     });
 
     it("displays a host and port with unsuccessful connection", function() {
@@ -50,8 +50,8 @@ describe('Entry', () => {
         entry.componentWillMount();
         renderedEntry = ReactDOM.findDOMNode(entry);
 
+        expect(renderedEntry.classList[1]).toEqual("panel-danger");
         expect(renderedEntry.children[0].textContent).toEqual("test.com:80");
-        //expect(renderedEntry.style._values.color).toEqual("red");
     });
 
     it("displays a host and port with successful proxy connection", function() {
@@ -64,7 +64,7 @@ describe('Entry', () => {
         renderedEntry = ReactDOM.findDOMNode(entry);
 
         expect(renderedEntry.children[0].textContent).toEqual("test.com:80 proxied through test.com:80");
-        //expect(renderedEntry.style._values.color).toEqual("green");
+        expect(renderedEntry.classList[1]).toEqual("panel-success");
     });
 
     it("displays a host and port with unsuccessful proxy connection", function() {
@@ -77,7 +77,7 @@ describe('Entry', () => {
         renderedEntry = ReactDOM.findDOMNode(entry);
 
         expect(renderedEntry.children[0].textContent).toEqual("test.com:80 proxied through test.com:80");
-        //expect(renderedEntry.style._values.color).toEqual("red");
+        expect(renderedEntry.classList[1]).toEqual("panel-danger");
     });
 
     it("displays a host and port without a canConnect response", function() {
@@ -89,8 +89,7 @@ describe('Entry', () => {
         renderedEntry = ReactDOM.findDOMNode(entry);
 
         expect(renderedEntry.children[0].textContent).toEqual("test.com:80");
-      //  expect(renderedEntry.style._values.color).toEqual("blue");
-
+        expect(renderedEntry.classList[1]).toEqual("panel-info");
     });
 
     it("displays a host and port with a status code", function() {
@@ -102,7 +101,7 @@ describe('Entry', () => {
         renderedEntry = ReactDOM.findDOMNode(entry);
 
         expect(renderedEntry.children[0].textContent).toEqual("test.com:80");
-       // expect(renderedEntry.style._values.color).toEqual("green");
+        expect(renderedEntry.classList[1]).toEqual("panel-success");
 
     });
 
@@ -115,6 +114,6 @@ describe('Entry', () => {
         renderedEntry = ReactDOM.findDOMNode(entry);
 
         expect(renderedEntry.children[0].textContent).toEqual("test.com:80");
-      //  expect(renderedEntry.style._values.color).toEqual("blue");
+        expect(renderedEntry.classList[1]).toEqual("panel-info");
     });
 });
