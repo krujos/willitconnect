@@ -1,12 +1,24 @@
 import React from 'react';
 import jQuery from 'jquery';
-import Alert from 'react-bootstrap/lib/Alert';
 import ProgressBar from 'react-bootstrap/lib/ProgressBar';
 import Panel from 'react-bootstrap/lib/Panel';
 
 var Entry = React.createClass({
     getInitialState: function () {
         return {status: []};
+    },
+    getLastChecked: function() {
+            var utcSeconds = parseInt(this.state.status.lastChecked);
+            var date = new Date(utcSeconds);
+            var month = date.getMonth();
+            var day = date.getDay();
+            var year = date.getFullYear();
+
+            var hours = date.getHours();
+            var minutes = "0" + date.getMinutes();
+            var seconds = "0" + date.getSeconds();
+            var formattedTime = month + "-" + day + "-" + year + " " + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+            return formattedTime;
     },
     getData: function() {
         if (this.props.proxyHost && this.props.proxyPort) {
@@ -66,13 +78,13 @@ var Entry = React.createClass({
                 panelStyle = "danger";
             }
 
-            if(this.state.status.httpStatus && this.state.status.httpStatus != 0) {
-                statusReport = (
-                    <ul>
-                        <li>HttpStatus: {this.state.status.httpStatus}</li>
-                    </ul>
-                );
-            }
+            statusReport = (
+                <ul>
+                    {this.state.status.canConnect ? <li> I can connect </li> : <li> I cannot connect </li> }
+                    {this.state.status.httpStatus && this.state.status.httpStatus != 0 ? <li>Http Status: {this.state.status.httpStatus}</li> : null }
+                    {this.state.status.lastChecked ? <li>Time checked: {this.getLastChecked()}</li> : null }
+                </ul>
+            );
         }
 
         return (
@@ -83,5 +95,14 @@ var Entry = React.createClass({
         );
     }
 });
+
+// canConnect:true
+// entry:"http://google.com:80"
+// httpProxy:null
+// httpStatus:200
+// lastChecked:1460687063373
+// validHostname:false
+// validUrl:true
+
 
 module.exports = Entry;
