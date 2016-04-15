@@ -33,25 +33,29 @@ describe('Entry', () => {
     it("displays a host and port with successful connection", function() {
         entry = TestUtils.renderIntoDocument(<Entry host="test.com" port="80"/>);
         jquery.ajax = jest.fn(() =>
-            entry.successFunc({"canConnect": true}));
+            entry.successFunc({"canConnect": true, "lastChecked": 1460727927955}));
 
         entry.componentWillMount();
         renderedEntry = ReactDOM.findDOMNode(entry);
 
         expect(renderedEntry.classList[1]).toEqual("panel-success");
         expect(renderedEntry.children[0].textContent).toEqual("test.com:80");
+        expect(renderedEntry.children[1].children[0].children[0].textContent).toEqual(" I can connect Time checked: 3-5-2016 9:45:27");
+
     });
 
     it("displays a host and port with unsuccessful connection", function() {
         entry = TestUtils.renderIntoDocument(<Entry host="test.com" port="80"/>);
         jquery.ajax = jest.fn(() =>
-            entry.successFunc({"canConnect": false}));
+            entry.successFunc({"canConnect": false, "lastChecked": 1460727927955}));
 
         entry.componentWillMount();
         renderedEntry = ReactDOM.findDOMNode(entry);
 
         expect(renderedEntry.classList[1]).toEqual("panel-danger");
         expect(renderedEntry.children[0].textContent).toEqual("test.com:80");
+        expect(renderedEntry.children[1].children[0].children[0].textContent).toEqual(" I cannot connect Time checked: 3-5-2016 9:45:27");
+
     });
 
     it("displays a host and port with successful proxy connection", function() {

@@ -7,6 +7,19 @@ var Entry = React.createClass({
     getInitialState: function () {
         return {status: []};
     },
+    getLastChecked: function() {
+            var utcSeconds = parseInt(this.state.status.lastChecked);
+            var date = new Date(utcSeconds);
+            var month = date.getMonth();
+            var day = date.getDay();
+            var year = date.getFullYear();
+
+            var hours = date.getHours();
+            var minutes = "0" + date.getMinutes();
+            var seconds = "0" + date.getSeconds();
+            var formattedTime = month + "-" + day + "-" + year + " " + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+            return formattedTime;
+    },
     getData: function() {
         if (this.props.proxyHost && this.props.proxyPort) {
             return JSON.stringify({"target": this.props.host+":"+
@@ -65,19 +78,11 @@ var Entry = React.createClass({
                 panelStyle = "danger";
             }
 
-            // var utcSeconds = this.state.status.lastChecked;
-            // var d = new Date(0);
-            // d.setUTCSeconds(utcSeconds);
-            //
-            // var datestring = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear() + " " +
-            //     d.getHours() + ":" + d.getMinutes();
-            //
-            // console.log(datestring);
-            
             statusReport = (
                 <ul>
                     {this.state.status.canConnect ? <li> I can connect </li> : <li> I cannot connect </li> }
                     {this.state.status.httpStatus && this.state.status.httpStatus != 0 ? <li>Http Status: {this.state.status.httpStatus}</li> : null }
+                    {this.state.status.lastChecked ? <li>Time checked: {this.getLastChecked()}</li> : null }
                 </ul>
             );
         }
