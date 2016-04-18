@@ -1,4 +1,4 @@
-box: gambtho/java-node
+box: java
 # Build definition
 build:
   # The steps that will be executed on build
@@ -9,7 +9,14 @@ build:
           ./gradlew -v
           javac -version
           export
-    - npm-install
+    - install-packages:
+        packages: npm
+    - script:
+        name: install node
+        code: |
+          npm cache clean -f
+          npm install -g n
+          n latest
     - script:
             name: run tests
             code: |
