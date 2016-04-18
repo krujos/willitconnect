@@ -3,7 +3,7 @@ import jQuery from 'jquery';
 import ProgressBar from 'react-bootstrap/lib/ProgressBar';
 import Panel from 'react-bootstrap/lib/Panel';
 
-var Entry = React.createClass({
+var StatefulEntry = React.createClass({
     getInitialState: function () {
         return {status: []};
     },
@@ -62,39 +62,51 @@ var Entry = React.createClass({
             resultString += ":" + this.props.proxyPort;
         }
 
-        var workingResult = "";
-        if (!gotResults) {
-            workingResult = (
-            <ProgressBar active now={100}/>
-            )
-        }
-
-        var statusReport = "";
-
-        if(Object.keys(this.state.status).length) {
-            if(this.state.status.canConnect){
-                panelStyle = "success";
-            } else {
-                panelStyle = "danger";
-            }
-
-            statusReport = (
-                <ul>
-                    {this.state.status.canConnect ? <li> I can connect </li> : <li> I cannot connect </li> }
-                    {this.state.status.httpStatus && this.state.status.httpStatus != 0 ? <li>Http Status: {this.state.status.httpStatus}</li> : null }
-                    {this.state.status.lastChecked ? <li>Time checked: {this.getLastChecked()}</li> : null }
-                </ul>
-            );
-        }
+        const pending = this.state.status == null
+        const success = !pending && this.state.status.canConnect
 
         return (
-            <Panel collapsible defaultExpanded bsStyle={panelStyle} header={resultString}>
-                {workingResult}
-                {statusReport}
-            </Panel>
+            <Result header={ resultString } pending={ pending } success={ success }>
+                { !pending &&
+                    <Entry
+                        success={ success }
+                        httpStatus={ this.state.status.httpStatus }
+                        time={ this.getLastChecked() }
+                    />
+                }
+            </Result>
         );
     }
 });
+export default StatefulEntry;
+
+function getPanelStyle ( pending, success ) {
+    if ( success ) {
+        return "success";
+    }
+    if ( pending ) {
+        return "info";
+    }
+    return "danger";
+}
+export const Result = ( { success, pending, children, ...props }) =>
+    <Panel collapsible bsStyle={ getPanelStyle( pending, success ) } defaultExpanded { ...props }>
+        { pending && <ProgressBar active now={100}/> }
+        { children }
+    </Panel>
+
+
+
+export const Entry = ( {
+    success,
+    httpStatus,
+    time,
+} ) =>
+    <ul>
+        <li>I { success ? 'can' : 'cannot' } connect </li>
+        { httpStatus !=0 && <li>Http Status: { httpStatus } </li> }
+        <li>Time checked: { time }</li>
+    </ul>
 
 // canConnect:true
 // entry:"http://google.com:80"
@@ -105,4 +117,4 @@ var Entry = React.createClass({
 // validUrl:true
 
 
-module.exports = Entry;
+// module.exports = StatefulEntry;
