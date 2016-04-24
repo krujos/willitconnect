@@ -1,7 +1,8 @@
-var path = require('path');
+const path = require('path');
 
 module.exports = {
     entry: [
+        'babel-polyfill',
         "./src/main/resources/static/scripts/Index.js"
       ],
     output: {
@@ -13,7 +14,8 @@ module.exports = {
             { test: /\.css$/, exclude: '/node_modules/', loader: "style!css" },
             { test: /\.(js|jsx|es6)$/, exclude: /node_modules/, loader: 'babel',
                 query: {
-                            presets: ['react','es2015', 'stage-2']
+                            plugins: ['transform-runtime'],
+                            presets: ['react','es2015', 'stage-0']
                 }
             },
             { test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/font-woff'},
@@ -22,5 +24,12 @@ module.exports = {
             { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml'}
 
         ]
+    },
+    resolve: {
+        moduleDirectories: [
+            path.join(__dirname, `node_modules`),
+            path.join("./src/main/resources/static/scripts/Index.js")
+        ],
+        extensions: [``, `.js`]
     }
 };

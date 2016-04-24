@@ -55,7 +55,7 @@ var EntryForm = React.createClass({
                     <Col xs={5}>
                         <Input className="port" label="port"
                                help="defaults to 80/443 if host has url scheme" type="number"
-                               hasFeedback placeholder="Port" ref="port"/>
+                               placeholder="Port" ref="port"/>
                     </Col>
                 </Row>
                 <Row>
