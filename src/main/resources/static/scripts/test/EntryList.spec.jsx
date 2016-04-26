@@ -1,16 +1,11 @@
 'use strict';
-jest.dontMock('../EntryList');
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import TestUtils from 'react-addons-test-utils';
 const EntryList = require('../EntryList');
-import {createRenderer} from 'react-addons-test-utils';
+import { shallow } from 'enzyme';
 
 describe('EntryList', () => {
-
-    var entryList, renderedEntry;
-
+    
     var mixpanel = {
         track: function () {}
     };
@@ -28,9 +23,10 @@ describe('EntryList', () => {
     entries.push(entry2);
 
     it("displays the entryList", function() {
-        entryList = TestUtils.renderIntoDocument(<EntryList data={entries} />);
-        renderedEntry = ReactDOM.findDOMNode(entryList);
-        expect(renderedEntry.children.length).toEqual(0);
+        const entryList = shallow(<EntryList data={entries} />);
+        expect(entryList.find('StatefulEntry')).to.have.length.of(3);
+        expect(entryList.find('StatefulEntry').first().prop('host')).to.equal("google.com");
+        expect(entryList.find('StatefulEntry').at(2).prop('proxyPort')).to.equal('60');
     });
     
 });
