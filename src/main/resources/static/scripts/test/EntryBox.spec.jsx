@@ -16,7 +16,6 @@ describe('EntryBox', () => {
 
     it("displays the entryBox", function() {
         const entryBox = shallow(<EntryBox />);
-        console.log(entryBox.debug());
         expect(entryBox.contains('HeaderBar'));
         expect(entryBox.contains('EntryForm'));
         expect(entryBox.contains('EntryList'));
