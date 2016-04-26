@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 const EntryForm = require('../EntryForm');
+import { shallow } from 'enzyme';
 
 
 describe('EntryForm', () => {
@@ -16,17 +17,19 @@ describe('EntryForm', () => {
 
     beforeEach(function() {
         window.mixpanel = mixpanel;
-        entryForm = TestUtils.renderIntoDocument(<EntryForm />);
-        renderedEntryForm = ReactDOM.findDOMNode(entryForm);
+        
     });
 
-    xit("displays the form", function() {
-        expect(renderedEntryForm.children.length).toEqual(3);
-        let row1 = renderedEntryForm.children[0];
-        expect(row1.children.length).toEqual(2);
-
-        let row2 = renderedEntryForm.children[1];
-        expect(row2.children.length).toEqual(1);
+    it("displays the form", function() {
+        const entryForm = shallow(<EntryForm />);
+        console.log(entryForm.debug());
+        expect(entryForm.is('form')).to.equal(true);
+        // expect(renderedEntryForm.children.length).toEqual(3);
+        // let row1 = renderedEntryForm.children[0];
+        // expect(row1.children.length).toEqual(2);
+        //
+        // let row2 = renderedEntryForm.children[1];
+        // expect(row2.children.length).toEqual(1);
 
     });
     
