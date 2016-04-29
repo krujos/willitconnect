@@ -53,7 +53,6 @@ export default class StatefulEntry extends React.Component {
             "httpStatus": data.httpStatus, "validHostName": data.validHostName,
             "validUrl": data.validUrl
         });
-        console.log("data is: " + data);
         this.setState({status: data});
     }
     getData() {
@@ -64,7 +63,6 @@ export default class StatefulEntry extends React.Component {
                 ":" + this.props.proxyPort
             });
         }
-        console.log(JSON.stringify({"target": this.props.host + ":" + this.props.port}));
         return JSON.stringify({"target": this.props.host + ":" + this.props.port});
     }
     render() {
