@@ -61,7 +61,7 @@ V2 API
 ➜ curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"http://does-not-exist.com"}' -H "Content-Type: application/json" | jq '.'
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100   163    0   125    0    38      0      0 --:--:--  0:02:07 --:--:--    17
+100   163    0   126    0    38      0      0 --:--:--  0:02:07 --:--:--    17
 {
   "lastChecked": 0,
   "entry": "http://does-not-exist.com",
