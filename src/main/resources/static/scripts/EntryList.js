@@ -1,5 +1,5 @@
-import Entry from './Entry';
 import React from 'react';
+import StatefulEntry from './Entry';
 
 var EntryList = React.createClass({
     getInitialState: function () {
@@ -8,7 +8,7 @@ var EntryList = React.createClass({
     render: function () {
         var entryNodes = this.props.data.map(function (entry, index) {
             return (
-                <Entry host={entry.host} port={entry.port} status={entry.status} proxyHost={entry.proxyHost}
+                <StatefulEntry host={entry.host} port={entry.port} status={entry.status} proxyHost={entry.proxyHost}
                        proxyPort={entry.proxyPort} key={index}/>
             );
         });

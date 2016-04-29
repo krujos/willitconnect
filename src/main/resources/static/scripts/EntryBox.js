@@ -12,7 +12,7 @@ var EntryBox = React.createClass({
     },
     handleEntrySubmit: function (entry) {
         var entries = this.state.data;
-        var newEntries = entries.concat([entry]);
+        var newEntries = [ entry ].concat( entries );
         this.setState({data: newEntries});
     },
     render: function () {

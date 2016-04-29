@@ -3,41 +3,17 @@ import jQuery from 'jquery';
 import ProgressBar from 'react-bootstrap/lib/ProgressBar';
 import Panel from 'react-bootstrap/lib/Panel';
 
-var Entry = React.createClass({
-    getInitialState: function () {
-        return {status: []};
-    },
-    getLastChecked: function() {
-            var utcSeconds = parseInt(this.state.status.lastChecked);
-            var date = new Date(utcSeconds);
-            var month = date.getMonth();
-            var day = date.getDay();
-            var year = date.getFullYear();
-
-            var hours = date.getHours();
-            var minutes = "0" + date.getMinutes();
-            var seconds = "0" + date.getSeconds();
-            var formattedTime = month + "-" + day + "-" + year + " " + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-            return formattedTime;
-    },
-    getData: function() {
-        if (this.props.proxyHost && this.props.proxyPort) {
-            return JSON.stringify({"target": this.props.host+":"+
-            this.props.port, "http_proxy" : this.props.proxyHost +
-            ":" + this.props.proxyPort});
-        }
-        return JSON.stringify({"target": this.props.host+":"+this.props.port});
-    },
-    successFunc: function(data){
-        mixpanel.track("connection attempted", { "canConnect": data.canConnect,
-            "httpStatus": data.httpStatus, "validHostName":data.validHostName,
-            "validUrl":data.validUrl});
-        console.log(data);
-        this.setState({status: data});
-    },
-    componentWillMount: function () {
+export default class StatefulEntry extends React.Component {
+    constructor(props) {
+        super(props);
         var path = '/v2/willitconnect';
-        jQuery.ajax ({
+        this.getLastChecked = this.getLastChecked.bind(this);
+        this.getResultString = this.getResultString.bind(this);
+        this.render = this.render.bind(this);
+        this.setState = this.setState.bind(this);
+        this.successFunc = this.successFunc.bind(this);
+        this.state = {};
+        jQuery.ajax({
             url: path,
             type: "POST",
             data: this.getData(),
@@ -45,64 +21,96 @@ var Entry = React.createClass({
             contentType: "application/json; charset=utf-8",
             success: this.successFunc
         });
-    },
-    render: function () {
-        var panelStyle = "info";
+    }
+    getLastChecked() {
+        var utcSeconds = parseInt(this.state.status.lastChecked);
+        var date = new Date(utcSeconds);
+        var month = date.getMonth();
+        var day = date.getDay();
+        var year = date.getFullYear();
 
-        var gotResults = Object.keys(this.state.status).length;
-
+        var hours = date.getHours();
+        var minutes = "0" + date.getMinutes();
+        var seconds = "0" + date.getSeconds();
+        return (month + "-" + day + "-" + year + " " + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2));
+    }
+    getResultString() {
         var resultString = this.props.host;
-        if(this.props.port) {
+        if (this.props.port) {
             resultString += ":" + this.props.port;
         }
-        if(this.props.proxyHost){
+        if (this.props.proxyHost) {
             resultString += " proxied through " + this.props.proxyHost;
         }
-        if(this.props.proxyPort) {
+        if (this.props.proxyPort) {
             resultString += ":" + this.props.proxyPort;
         }
-
-        var workingResult = "";
-        if (!gotResults) {
-            workingResult = (
-            <ProgressBar active now={100}/>
-            )
-        }
-
-        var statusReport = "";
-
-        if(Object.keys(this.state.status).length) {
-            if(this.state.status.canConnect){
-                panelStyle = "success";
-            } else {
-                panelStyle = "danger";
-            }
-
-            statusReport = (
-                <ul>
-                    {this.state.status.canConnect ? <li> I can connect </li> : <li> I cannot connect </li> }
-                    {this.state.status.httpStatus && this.state.status.httpStatus != 0 ? <li>Http Status: {this.state.status.httpStatus}</li> : null }
-                    {this.state.status.lastChecked ? <li>Time checked: {this.getLastChecked()}</li> : null }
-                </ul>
-            );
-        }
-
-        return (
-            <Panel collapsible defaultExpanded bsStyle={panelStyle} header={resultString}>
-                {workingResult}
-                {statusReport}
-            </Panel>
-        );
+        return resultString;
     }
-});
+    successFunc(data) {
+        mixpanel.track("connection attempted", {
+            "canConnect": data.canConnect,
+            "httpStatus": data.httpStatus, "validHostName": data.validHostName,
+            "validUrl": data.validUrl
+        });
+        console.log("data is: " + data);
+        this.setState({status: data});
+    }
+    getData() {
+        if (this.props.proxyHost && this.props.proxyPort) {
+            return JSON.stringify({
+                "target": this.props.host + ":" +
+                this.props.port, "http_proxy": this.props.proxyHost +
+                ":" + this.props.proxyPort
+            });
+        }
+        console.log(JSON.stringify({"target": this.props.host + ":" + this.props.port}));
+        return JSON.stringify({"target": this.props.host + ":" + this.props.port});
+    }
+    render() {
 
-// canConnect:true
-// entry:"http://google.com:80"
-// httpProxy:null
-// httpStatus:200
-// lastChecked:1460687063373
-// validHostname:false
-// validUrl:true
+        const pending = (this.state == null || this.state.status == null);
+        const success = !pending && this.state.status.canConnect;
+        if(!pending) {
+            console.log("status is: " + this.state.status)
+        }
 
+        return (<Result header={ this.getResultString() } pending={ pending } success={ success }>
+                { !pending &&
+                <Entry
+                    success={ success }
+                    httpStatus={ this.state.status.httpStatus }
+                    time={ this.getLastChecked() }
+                />
+                }
+            </Result>);
+    }
+}
 
-module.exports = Entry;
+function getPanelStyle(pending, success) {
+    if (success) {
+        return "success";
+    }
+    if (pending) {
+        return "info";
+    }
+    return "danger";
+}
+
+export const Result = ({success, pending, children, ...props}) =>
+    <Panel collapsible bsStyle={ getPanelStyle( pending, success ) } defaultExpanded { ...props }>
+        { pending && <ProgressBar active now={100}/> }
+        { children }
+    </Panel>;
+
+export const Entry = ({
+    success,
+    httpStatus,
+    time,
+}) =>
+    <ul>
+        <li>I { success ? 'can' : 'cannot' } connect</li>
+        { httpStatus != 0 && <li>Http Status: { httpStatus } </li> }
+        <li>Time checked: { time }</li>
+    </ul>;
+
