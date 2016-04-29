@@ -10,14 +10,16 @@ export default class StatefulEntry extends React.Component {
         this.getLastChecked = this.getLastChecked.bind(this);
         this.getResultString = this.getResultString.bind(this);
         this.render = this.render.bind(this);
+        this.setState = this.setState.bind(this);
+        this.successFunc = this.successFunc.bind(this);
         this.state = {};
         jQuery.ajax({
             url: path,
             type: "POST",
-            data: this.getData.bind(this),
+            data: this.getData(),
             dataType: "json",
             contentType: "application/json; charset=utf-8",
-            success: this.successFunc.bind(this)
+            success: this.successFunc
         });
     }
     getLastChecked() {
@@ -62,6 +64,7 @@ export default class StatefulEntry extends React.Component {
                 ":" + this.props.proxyPort
             });
         }
+        console.log(JSON.stringify({"target": this.props.host + ":" + this.props.port}));
         return JSON.stringify({"target": this.props.host + ":" + this.props.port});
     }
     render() {
