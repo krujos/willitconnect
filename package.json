@@ -23,7 +23,7 @@
     "jquery": "^2.2.3",
     "less": "^2.6.1",
     "less-loader": "^2.2.3",
-    "octicons": "^4.0.0",
+    "octicons": "^4.1.0",
     "react": "^15.0.1",
     "react-bootstrap": "^0.29.3",
     "react-dom": "^15.0.1",
