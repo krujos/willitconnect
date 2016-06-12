@@ -2,6 +2,6 @@
 applications:
 - name: willitconnect
   memory: 1G
-  path: build/libs/willitconnect-1.0.3.jar
-  buildpack: https://github.com/cloudfoundry/java-buildpack#v3.7
+  path: build/libs/willitconnect-1.0.4.jar
+  buildpack: https://github.com/cloudfoundry/java-buildpack#v3.7.1
 

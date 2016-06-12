@@ -1,4 +1,4 @@
-box: java
+box: rowanto/docker-java8-mvn-nodejs-npm
 # Build definition
 build:
   # The steps that will be executed on build
@@ -8,15 +8,15 @@ build:
         code: |
           ./gradlew -v
           javac -version
+          node -v
           export
-    - install-packages:
-        packages: npm
     - script:
         name: install node
         code: |
           npm cache clean -f
           npm install -g n
           n latest
+          node -v
     - script:
             name: run tests
             code: |
