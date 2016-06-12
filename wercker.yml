@@ -8,7 +8,15 @@ build:
         code: |
           ./gradlew -v
           javac -version
+          node -v
           export
+    - script:
+        name: install node
+        code: |
+          npm cache clean -f
+          npm install -g n
+          n latest
+          node -v
     - script:
             name: run tests
             code: |
