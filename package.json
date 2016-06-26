@@ -62,7 +62,7 @@
     "enzyme": "^2.3.0",
     "expect": "^1.20.1",
     "fs": "0.0.2",
-    "karma": "^0.13.22",
+    "karma": "^1.1.0",
     "karma-babel-preprocessor": "^6.0.1",
     "karma-chai": "^0.1.0",
     "karma-mocha": "^1.0.1",
