@@ -15,7 +15,7 @@ webpackConfig.externals = Object.assign({}, webpackConfig.externals, {
 module.exports = karma => {
     const config = {
         basePath: ``,
-        frameworks: [ 'mocha', 'chai', 'sinon', 'sinon-chai' ],
+        frameworks: [ 'mocha', 'chai' ], 
         files: ['tests.webpack.js'],
         plugins: [
             'karma-phantomjs-launcher',
@@ -23,9 +23,7 @@ module.exports = karma => {
             'karma-mocha',
             'karma-sourcemap-loader',
             'karma-webpack',
-            'karma-mocha-reporter',
-            'karma-sinon',
-            'karma-sinon-chai'
+            'karma-mocha-reporter'
         ],
         preprocessors: {
             'tests.webpack.js': [ 'webpack' ]
@@ -35,7 +33,8 @@ module.exports = karma => {
         webpackServer: {
             noInfo: true
         },
-        autoWatch: true
+        autoWatch: true, 
+        colors: true
     };
 
     config.logLevel = config.LOG_INFO;
