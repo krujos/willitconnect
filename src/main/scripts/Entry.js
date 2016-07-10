@@ -6,16 +6,19 @@ import Panel from 'react-bootstrap/lib/Panel';
 export default class StatefulEntry extends React.Component {
     constructor(props) {
         super(props);
-        var path = '/v2/willitconnect';
         this.getLastChecked = this.getLastChecked.bind(this);
         this.getResultString = this.getResultString.bind(this);
-        this.render = this.render.bind(this);
-        this.setState = this.setState.bind(this);
+        this.getData = this.getData.bind(this);
         this.successFunc = this.successFunc.bind(this);
-        this.state = {};
+    }
+
+    componentDidMount() {
+        var path = '/v2/willitconnect';
+        console.log(this.props.host);
         jQuery.ajax({
             url: path,
             type: "POST",
+            cache: false,
             data: this.getData(),
             dataType: "json",
             contentType: "application/json; charset=utf-8",
@@ -56,6 +59,7 @@ export default class StatefulEntry extends React.Component {
         this.setState({status: data});
     }
     getData() {
+        //console.log({"target": this.props.host + ":" + this.props.port});
         if (this.props.proxyHost && this.props.proxyPort) {
             return JSON.stringify({
                 "target": this.props.host + ":" +
@@ -70,7 +74,7 @@ export default class StatefulEntry extends React.Component {
         const pending = (this.state == null || this.state.status == null);
         const success = !pending && this.state.status.canConnect;
         if(!pending) {
-            console.log("status is: " + this.state.status)
+            //console.table(this.state.status)
         }
 
         return (<Result header={ this.getResultString() } pending={ pending } success={ success }>
@@ -84,6 +88,8 @@ export default class StatefulEntry extends React.Component {
             </Result>);
     }
 }
+
+
 
 function getPanelStyle(pending, success) {
     if (success) {

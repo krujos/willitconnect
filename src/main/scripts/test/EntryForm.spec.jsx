@@ -3,13 +3,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-const EntryForm = require('../EntryForm');
+import EntryForm from '../EntryForm';
 import { shallow } from 'enzyme';
 
 
 describe('EntryForm', () => {
 
-    var entryForm, renderedEntryForm;
+    var entryForm;
 
     var mixpanel = {
         track: function () {}
@@ -22,26 +22,11 @@ describe('EntryForm', () => {
 
     it("displays the form", function() {
         const entryForm = shallow(<EntryForm />);
-        console.log(entryForm.debug());
-        expect(entryForm.is('form')).to.equal(true);
-        // expect(renderedEntryForm.children.length).toEqual(3);
-        // let row1 = renderedEntryForm.children[0];
-        // expect(row1.children.length).toEqual(2);
-        //
-        // let row2 = renderedEntryForm.children[1];
-        // expect(row2.children.length).toEqual(1);
-
+        //console.log(entryForm.debug());
+        expect(entryForm.is('Form')).to.equal(true);
     });
-    
-    //
-    // it ("does not require a port when host is a url", function() {
-    //     let host = TestUtils.findRenderedDOMComponentWithClass(entryForm, "host");
-    //     host.value = "http://test.com";
-    //     TestUtils.Simulate.change(host);
-    //     expect(entryForm.isPortRequired()).toBe(false);
-    // });
-    
-    describe("valid port host conbinations", function() {
+
+    describe("valid port host combinations", function() {
         
         xit("should be valid with a url" , function() {
             let host = TestUtils.findRenderedDOMComponentWithClass(entryForm, "host");

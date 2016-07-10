@@ -1,26 +1,26 @@
-import {Col} from 'react-bootstrap';
-import {Row} from 'react-bootstrap';
-import {Container} from 'react-bootstrap';
-import {Input} from 'react-bootstrap';
-import {ButtonInput} from 'react-bootstrap';
+import {Form, FormGroup, ControlLabel, HelpBlock, Col, FormControl, Button, Checkbox} from 'react-bootstrap';
 import React from 'react';
+import ReactDOM from 'react-dom';
 
-var EntryForm = React.createClass({
-
-    getInitialState: function () {
-        return {isChecked: false};
-    },
-    onProxyBoxChange: function () {
+export default class EntryForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {isChecked: false};
+        this.onProxyBoxChange = this.onProxyBoxChange.bind(this);
+        this.connect = this.connect.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    onProxyBoxChange() {
         this.setState({isChecked: !this.state.isChecked});
-    },
-    handleSubmit: function (e) {
+    }
+    handleSubmit(e){
         e.preventDefault();
         var proxyHost;
         var proxyPort;
-        var host = this.refs.host.getValue();
-        var port = this.refs.port.getValue();
+        var host = ReactDOM.findDOMNode(this.refs.host).value;
+        var port = ReactDOM.findDOMNode(this.refs.port).value;
 
-        if (!this.isValid()) {
+        if (!this.isValid(host, port)) {
             mixpanel.track("failed connect attempted", {"type": "invalid form"});
             return;
         }
@@ -31,61 +31,61 @@ var EntryForm = React.createClass({
         }
 
         this.connect(host, port, proxyHost, proxyPort);
-    },
-    connect: function (host, port, proxyHost, proxyPort) {
-        console.log(host, port, proxyHost, proxyPort);
+    }
+    connect(host, port, proxyHost, proxyPort) {
         this.props.onEntrySubmit({host: host, port: port, proxyHost: proxyHost, proxyPort: proxyPort});
-    },
-    isValid: function () {
-        if (this.refs.host && this.refs.host.getValue()) {
-            if (this.refs.host.getValue().startsWith("http") || (this.refs.port && this.refs.port.getValue())) {
+    }
+    isValid(host, port) {
+        if (host) {
+            if (host.startsWith("http") || port) {
                 return true;
             }
         }
         return false;
-    },
-    render: function () {
+    }
+    render() {
         return (
-            <form className="entryForm" onSubmit={this.handleSubmit}>
-                <Row>
+            <Form horizontal className="entryForm" onSubmit={this.handleSubmit}>
+                <FormGroup>
                     <Col xs={5} xsOffset={1} bsSize="large">
-                        <Input className="host" label="host" type="text" placeholder="Host" ref="host"
-                               help="scheme is optional"/>
+                        <ControlLabel> host </ControlLabel>
+                        <FormControl controlId="host" type="text" placeholder="Host" ref="host" />
+                        <HelpBlock> Scheme is optional </HelpBlock>
                     </Col>
                     <Col xs={5}>
-                        <Input className="port" label="port"
-                               help="defaults to 80/443 if host has url scheme" type="number"
-                               placeholder="Port" ref="port"/>
+                        <ControlLabel> port </ControlLabel>
+                        <FormControl className="port" type="number" placeholder="Port" ref="port"/>
+                        <HelpBlock> defaults to 80/443 if host has url scheme </HelpBlock>
                     </Col>
-                </Row>
-                <Row>
+                </FormGroup>
+                <FormGroup>
                     <Col xs={3} xsOffset={1}>
-                        <Input className="proxyBox" type="checkbox" label="Use Proxy" ref="proxyBox"
-                               checked={this.state.isChecked} onChange={this.onProxyBoxChange}/>
+                        <Checkbox className="proxyBox" type="checkbox" ref="proxyBox"
+                               checked={this.state.isChecked} onChange={this.onProxyBoxChange}> use proxy 
+                        </Checkbox>
                     </Col>
-                </Row>
+                </FormGroup>
                 { this.state.isChecked ?
-                    <Row>
+                    <FormGroup>
                         <Col xs={5} xsOffset={1} bsSize="large">
-                            <Input className="proxyHost" label="proxyHost" type="text" placeholder="Proxy Host"
+                            <ControlLabel> proxy host </ControlLabel>
+                            <FormControl className="proxyHost" label="proxyHost" type="text" placeholder="Proxy Host"
                                    ref="proxyHost"/>
                         </Col>
                         <Col xs={5}>
-                            <Input className="proxyPort" label="proxyPort" type="number" placeholder="Proxy Port"
+                            <ControlLabel> proxy port </ControlLabel>
+                            <FormControl className="proxyPort" label="proxyPort" type="number" placeholder="Proxy Port"
                                    ref="proxyPort"/>
                         </Col>
-                    </Row> 
+                    </FormGroup>
                     : null }
-                <Row>
+                <FormGroup>
                     <Col xs={1} xsOffset={11}>
-                        <ButtonInput type="submit" value="Check" className="submitButton"/>
+                        <Button type="submit"> Check </Button>
                     </Col>
-                </Row>
-            </form>
+                </FormGroup>
+            </Form>
         );
     }
-});
-
-
-module.exports = EntryForm;
+};
 

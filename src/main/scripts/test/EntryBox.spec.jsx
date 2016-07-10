@@ -1,11 +1,11 @@
 'use strict';
 
 import React from 'react';
-const EntryBox = require('../EntryBox');
+import EntryBox from '../EntryBox';
 import { shallow } from 'enzyme';
 
 describe('EntryBox', () => {
-    
+
     var mixpanel = {
         track: function () {}
     };

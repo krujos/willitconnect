@@ -2,22 +2,27 @@
 import HeaderBar from './HeaderBar';
 import EntryForm from './EntryForm';
 import EntryList from './EntryList';
-import React, { PropTypes } from 'react';
+import React from 'react';
 
-import { Grid, Row, Container } from 'react-bootstrap';
+import { Grid, Row }  from 'react-bootstrap';
 
-var EntryBox = React.createClass({
-    getInitialState: function () {
-        return {data: []};
-    },
-    handleEntrySubmit: function (entry) {
+export default class EntryBox extends React.Component {
+    
+    constructor(props) {
+        super(props);
+        this.state = {data: []};
+        this.handleEntrySubmit = this.handleEntrySubmit.bind(this);
+    }
+    
+    handleEntrySubmit(entry) {
         var entries = this.state.data;
-        var newEntries = [ entry ].concat( entries );
+        var newEntries = entries.concat(entry);
         this.setState({data: newEntries});
-    },
-    render: function () {
+    }
+    
+    render() {
         mixpanel.track("page loaded");
-        var bodyStyle = { 'padding' : 75};
+        var bodyStyle = {'padding': 75};
         return (
             <Grid>
                 <HeaderBar />
@@ -28,6 +33,4 @@ var EntryBox = React.createClass({
             </Grid>
         );
     }
-});
-
-module.exports = EntryBox;
+};
