@@ -28,7 +28,7 @@ export default class StatefulEntry extends React.Component {
         });
 
         var path = '/v2/willitconnect';
-        console.log(this.props.host);
+        //console.log(this.props.host);
         jQuery.ajax({
             url: path,
             type: "POST",
@@ -61,22 +61,22 @@ export default class StatefulEntry extends React.Component {
         });
         //Build a connections attempt object to store history
         const history = {
-            guid: this.state.connections.length, //TODO: I think this is okay?
+            guid: this.state.connections.length,
             success: data.canConnect,
             httpStatus: data.httpStatus,
             time: data.lastChecked
         };
 
-        console.log("data", data);
+        //console.log("data", data);
 
-        const newConnections = this.state.connections.concat([history])
+        const newConnections = this.state.connections.concat([history]);
 
         this.setState({
             status: data,
             connections: newConnections
         });
 
-        console.log("state", this.state);
+        //console.log("state", this.state);
     }
     getData() {
         //console.log({"target": this.props.host + ":" + this.props.port});
@@ -95,8 +95,9 @@ export default class StatefulEntry extends React.Component {
         const success = !pending && this.state.status.canConnect;
 
         //Build a list of all the historical connection attempts
+        //console.table(this.state.connections);
         const attempts = this.state.connections.map(attempt => {
-            console.log("creating attempt", attempt);
+            //console.log("creating attempt", attempt);
             return (
                 <Entry
                     key={attempt.guid}
@@ -116,7 +117,7 @@ export default class StatefulEntry extends React.Component {
         };
 
         return (<Result header={ ResultHeader(subProps) } pending={ pending } success={ success }>
-            {attempts}
+            <div>{attempts}</div>
             </Result>);
     }
 }
