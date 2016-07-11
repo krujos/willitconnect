@@ -7,12 +7,26 @@ export default class StatefulEntry extends React.Component {
     constructor(props) {
         super(props);
         this.getLastChecked = this.getLastChecked.bind(this);
-        this.getResultString = this.getResultString.bind(this);
         this.getData = this.getData.bind(this);
         this.successFunc = this.successFunc.bind(this);
+        this.performCheck = this.performCheck.bind(this);
+
+        this.state = {
+            status: null,
+            connections: []
+        }
+    }
+    componentDidMount() {
+        this.performCheck();
     }
 
-    componentDidMount() {
+    performCheck() {
+
+        //Set the state to pending
+        this.setState({
+            status: null
+        });
+
         var path = '/v2/willitconnect';
         console.log(this.props.host);
         jQuery.ajax({
@@ -25,8 +39,9 @@ export default class StatefulEntry extends React.Component {
             success: this.successFunc
         });
     }
-    getLastChecked() {
-        var utcSeconds = parseInt(this.state.status.lastChecked);
+
+    getLastChecked(lastChecked) {
+        var utcSeconds = parseInt(lastChecked);
         var date = new Date(utcSeconds);
         var month = date.getMonth();
         var day = date.getDay();
@@ -37,26 +52,31 @@ export default class StatefulEntry extends React.Component {
         var seconds = "0" + date.getSeconds();
         return (month + "-" + day + "-" + year + " " + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2));
     }
-    getResultString() {
-        var resultString = this.props.host;
-        if (this.props.port) {
-            resultString += ":" + this.props.port;
-        }
-        if (this.props.proxyHost) {
-            resultString += " proxied through " + this.props.proxyHost;
-        }
-        if (this.props.proxyPort) {
-            resultString += ":" + this.props.proxyPort;
-        }
-        return resultString;
-    }
     successFunc(data) {
         mixpanel.track("connection attempted", {
             "canConnect": data.canConnect,
-            "httpStatus": data.httpStatus, "validHostName": data.validHostName,
+            "httpStatus": data.httpStatus,
+            "validHostName": data.validHostName,
             "validUrl": data.validUrl
         });
-        this.setState({status: data});
+        //Build a connections attempt object to store history
+        const history = {
+            guid: this.state.connections.length, //TODO: I think this is okay?
+            success: data.canConnect,
+            httpStatus: data.httpStatus,
+            time: data.lastChecked
+        };
+
+        console.log("data", data);
+
+        const newConnections = this.state.connections.concat([history])
+
+        this.setState({
+            status: data,
+            connections: newConnections
+        });
+
+        console.log("state", this.state);
     }
     getData() {
         //console.log({"target": this.props.host + ":" + this.props.port});
@@ -73,23 +93,33 @@ export default class StatefulEntry extends React.Component {
 
         const pending = (this.state == null || this.state.status == null);
         const success = !pending && this.state.status.canConnect;
-        if(!pending) {
-            //console.table(this.state.status)
-        }
 
-        return (<Result header={ this.getResultString() } pending={ pending } success={ success }>
-                { !pending &&
+        //Build a list of all the historical connection attempts
+        const attempts = this.state.connections.map(attempt => {
+            console.log("creating attempt", attempt);
+            return (
                 <Entry
-                    success={ success }
-                    httpStatus={ this.state.status.httpStatus }
-                    time={ this.getLastChecked() }
+                    key={attempt.guid}
+                    success={attempt.success}
+                    httpStatus={attempt.httpStatus}
+                    time={this.getLastChecked(attempt.time)}
                 />
-                }
+            );
+        }).reverse();
+
+        const subProps = {
+            host: this.props.host,
+            port: this.props.port,
+            proxyHost: this.props.proxyHost,
+            proxyPort: this.props.proxyPort,
+            recheck: this.performCheck
+        };
+
+        return (<Result header={ ResultHeader(subProps) } pending={ pending } success={ success }>
+            {attempts}
             </Result>);
     }
 }
-
-
 
 function getPanelStyle(pending, success) {
     if (success) {
@@ -101,8 +131,35 @@ function getPanelStyle(pending, success) {
     return "danger";
 }
 
+export const ResultHeader = (props) => {
+    var resultString = props.host;
+    if (props.port) {
+        resultString += ":" + props.port;
+    }
+    if (props.proxyHost) {
+        resultString += " proxied through " + props.proxyHost;
+    }
+    if (props.proxyPort) {
+        resultString += ":" + props.proxyPort;
+    }
+
+    const rightStyle = {
+        float:"right"
+    };
+
+    return (
+        <div>
+            {resultString}
+            <span style={rightStyle}>
+                <button onClick={props.recheck}>Re-check</button>
+            </span>
+        </div>
+    );
+};
+
+
 export const Result = ({success, pending, children, ...props}) =>
-    <Panel collapsible bsStyle={ getPanelStyle( pending, success ) } defaultExpanded { ...props }>
+    <Panel bsStyle={ getPanelStyle( pending, success ) } { ...props }>
         { pending && <ProgressBar active now={100}/> }
         { children }
     </Panel>;
@@ -113,8 +170,8 @@ export const Entry = ({
     time,
 }) =>
     <ul>
-        <li>I { success ? 'can' : 'cannot' } connect</li>
-        { httpStatus != 0 && <li>Http Status: { httpStatus } </li> }
-        <li>Time checked: { time }</li>
+        <li>On {time}, I { success ? 'could' : 'could not' } connect.&nbsp;
+            { httpStatus != 0 && <span>Http Status: { httpStatus }</span> }
+        </li>
     </ul>;
 

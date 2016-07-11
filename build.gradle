@@ -65,4 +65,4 @@ task wrapper(type: Wrapper) {
 
 project.tasks.processResources.dependsOn('npmInstall')
 project.tasks.processResources.dependsOn('webpack')
-project.tasks.processResources.dependsOn('karma')
+project.tasks.test.dependsOn('karma')
