@@ -12,7 +12,9 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("com.moowork.gradle:gradle-node-plugin:0.13")
+        classpath("com.homedepot.gitprops:GitPropsPlugin:1.0.8")
     }
+
 }
 
 apply plugin: 'java'
@@ -20,6 +22,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'com.moowork.node'
+apply plugin: 'com.homedepot.gitprops'
 
 jar {
     baseName = 'willitconnect'
