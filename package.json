@@ -25,7 +25,7 @@
     "less-loader": "^2.2.3",
     "octicons": "^4.2.0",
     "react": "^15.2.1",
-    "react-bootstrap": "^0.29.5",
+    "react-bootstrap": "^0.30.0",
     "react-dom": "^15.2.1",
     "react-model": "0.0.0",
     "superagent": "^2.0.0"
