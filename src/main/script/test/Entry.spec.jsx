@@ -1,4 +1,3 @@
-'use strict';
 import React from 'react';
 import StatefulEntry from '../Entry';
 import {shallow, mount} from 'enzyme';

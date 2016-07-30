@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.3.6.RELEASE'
+        springBootVersion = '1.4.0.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -12,7 +12,18 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("com.moowork.gradle:gradle-node-plugin:0.13")
+        classpath("com.homedepot.gitprops:GitPropsPlugin:1.0.8")
     }
+
+}
+
+plugins {
+    id 'com.gradle.build-scan' version '1.0'
+}
+
+buildScan {
+    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
+    licenseAgree = 'yes'
 }
 
 apply plugin: 'java'
@@ -20,6 +31,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'com.moowork.node'
+apply plugin: 'com.homedepot.gitprops'
 
 jar {
     baseName = 'willitconnect'
@@ -60,7 +72,7 @@ eclipse {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.14'
+    gradleVersion = '2.14.1'
 }
 
 project.tasks.processResources.dependsOn('npmInstall')

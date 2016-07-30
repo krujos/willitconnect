@@ -3,10 +3,10 @@ const path = require('path');
 module.exports = {
     entry: [
         'babel-polyfill',
-        "./src/main/scripts/Index.js"
+        "./src/main/script/Index.js"
       ],
     output: {
-        path: "./src/main/resources/static/scripts/",
+        path: "./src/main/resources/static/script/",
         filename: "bundle.js"
     },
     module: {
@@ -28,7 +28,7 @@ module.exports = {
     resolve: {
         moduleDirectories: [
             path.join(__dirname, `node_modules`),
-            path.join("./src/main/scripts/Index.js")
+            path.join("./src/main/script/Index.js")
         ],
         extensions: [``, `.js`]
     }
