@@ -5,7 +5,7 @@ scratch
 *.svg
 *.woff2
 *.ttf
-src/main/resources/static/scripts/bundle.js
+src/main/resources/static/script/bundle.js
 
 # Created by https://www.gitignore.io/api/gradle,java,node,intellij
 

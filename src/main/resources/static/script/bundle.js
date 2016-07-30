@@ -48116,6 +48116,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var isValid = function isValid(host, port) {
+	  console.log('checking validity');
 	  if (host) {
 	    if (host.startsWith('http') || port) {
 	      return true;
@@ -48177,17 +48178,19 @@
 	};
 
 	var ProxyForm = function ProxyForm(_ref3) {
-	  var onChange = _ref3.onChange;
+	  var hostChange = _ref3.hostChange;
+	  var portChange = _ref3.portChange;
 	  return _react2.default.createElement(
 	    _reactBootstrap.FormGroup,
 	    null,
-	    _react2.default.createElement(InputItem, { field: 'proxyHost', type: 'text', onChange: onChange }),
-	    _react2.default.createElement(InputItem, { field: 'proxyPort', type: 'number', onChange: onChange })
+	    _react2.default.createElement(InputItem, { field: 'proxyHost', type: 'text', onChange: hostChange }),
+	    _react2.default.createElement(InputItem, { field: 'proxyPort', type: 'number', onChange: portChange })
 	  );
 	};
 
 	ProxyForm.propTypes = {
-	  onChange: _react2.default.PropTypes.func.isRequired
+	  hostChange: _react2.default.PropTypes.func.isRequired,
+	  portChange: _react2.default.PropTypes.func.isRequired
 	};
 
 	var EntryForm = function (_React$Component) {
@@ -48196,16 +48199,9 @@
 	  function EntryForm(props) {
 	    (0, _classCallCheck3.default)(this, EntryForm);
 
-	    // this.state = { isChecked: false };
 	    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(EntryForm).call(this, props));
 
-	    _this.state = {
-	      isChecked: false,
-	      proxyHost: ' ',
-	      proxyPort: 0,
-	      host: ' ',
-	      port: 0
-	    };
+	    _this.state = { isChecked: false };
 	    _this.connect = _this.connect.bind(_this);
 	    _this.handleSubmit = _this.handleSubmit.bind(_this);
 	    return _this;
@@ -48261,8 +48257,8 @@
 	        _react2.default.createElement(
 	          _reactBootstrap.FormGroup,
 	          null,
-	          _react2.default.createElement(InputItem, { field: 'host', type: 'text', onChange: this.onChangeOf }),
-	          _react2.default.createElement(InputItem, { field: 'port', type: 'number', onChange: this.onChangeOf })
+	          _react2.default.createElement(InputItem, { field: 'host', type: 'text', onChange: this.onChangeOf('host') }),
+	          _react2.default.createElement(InputItem, { field: 'port', type: 'number', onChange: this.onChangeOf('port') })
 	        ),
 	        _react2.default.createElement(
 	          _reactBootstrap.FormGroup,
@@ -48273,7 +48269,10 @@
 	            _react2.default.createElement(ProxyToggle, { enabled: this.state.isChecked, onChange: this.onChangeOf('isChecked') })
 	          )
 	        ),
-	        this.state.isChecked && _react2.default.createElement(ProxyForm, { onChange: this.onChangeOf }),
+	        this.state.isChecked && _react2.default.createElement(ProxyForm, {
+	          hostChange: this.onChangeOf('proxyHost'),
+	          portChange: this.onChangeOf('proxyPort')
+	        }),
 	        _react2.default.createElement(
 	          _reactBootstrap.FormGroup,
 	          null,
@@ -48711,10 +48710,10 @@
 
 
 	StatefulEntry.propTypes = {
-	  port: _react2.default.PropTypes.number.isRequired,
+	  port: _react2.default.PropTypes.string.isRequired,
 	  host: _react2.default.PropTypes.string.isRequired,
 	  proxyHost: _react2.default.PropTypes.string,
-	  proxyPort: _react2.default.PropTypes.number
+	  proxyPort: _react2.default.PropTypes.string
 	};
 
 /***/ },

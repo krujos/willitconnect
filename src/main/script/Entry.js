@@ -188,10 +188,10 @@ export default class StatefulEntry extends React.Component {
 }
 
 StatefulEntry.propTypes = {
-  port: React.PropTypes.number.isRequired,
+  port: React.PropTypes.string.isRequired,
   host: React.PropTypes.string.isRequired,
   proxyHost: React.PropTypes.string,
-  proxyPort: React.PropTypes.number,
+  proxyPort: React.PropTypes.string,
 };
 
 

@@ -2,6 +2,7 @@ import { Form, FormGroup, ControlLabel, HelpBlock, Col, FormControl, Button, Che
 import React from 'react';
 
 const isValid = (host, port) => {
+  console.log('checking validity');
   if (host) {
     if (host.startsWith('http') || port) {
       return true;
@@ -37,28 +38,22 @@ ProxyToggle.propTypes = {
   onChange: React.PropTypes.func.isRequired,
 };
 
-const ProxyForm = ({ onChange }) =>
+const ProxyForm = ({ hostChange, portChange }) =>
   <FormGroup>
-    <InputItem field="proxyHost" type="text" onChange={onChange} />
-    <InputItem field="proxyPort" type="number" onChange={onChange} />
+    <InputItem field="proxyHost" type="text" onChange={hostChange} />
+    <InputItem field="proxyPort" type="number" onChange={portChange} />
   </FormGroup>;
 
 ProxyForm.propTypes = {
-  onChange: React.PropTypes.func.isRequired,
+  hostChange: React.PropTypes.func.isRequired,
+  portChange: React.PropTypes.func.isRequired,
 };
 
 
 export default class EntryForm extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = { isChecked: false };
-    this.state = {
-      isChecked: false,
-      proxyHost: 'str-www-proxy2.homedepot.com',
-      proxyPort: 8080,
-      host: 'google.com',
-      port: 80,
-    };
+    this.state = { isChecked: false };
     this.connect = this.connect.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -95,15 +90,19 @@ export default class EntryForm extends React.Component {
     return (
       <Form horizontal className="entryForm" onSubmit={this.handleSubmit}>
         <FormGroup>
-          <InputItem field="host" type="text" onChange={this.onChangeOf} />
-          <InputItem field="port" type="number" onChange={this.onChangeOf} />
+          <InputItem field="host" type="text" onChange={this.onChangeOf('host')} />
+          <InputItem field="port" type="number" onChange={this.onChangeOf('port')} />
         </FormGroup>
         <FormGroup>
           <Col xs={3} xsOffset={1}>
             <ProxyToggle enabled={this.state.isChecked} onChange={this.onChangeOf('isChecked')} />
           </Col>
         </FormGroup>
-        {this.state.isChecked && <ProxyForm onChange={this.onChangeOf} />}
+        {this.state.isChecked &&
+          <ProxyForm
+            hostChange={this.onChangeOf('proxyHost')}
+            portChange={this.onChangeOf('proxyPort')}
+          />}
         <FormGroup>
           <Col xs={1} xsOffset={11}>
             <Button type="submit"> Check </Button>
