@@ -2,7 +2,6 @@ import { Form, FormGroup, ControlLabel, HelpBlock, Col, FormControl, Button, Che
 import React from 'react';
 
 const isValid = (host, port) => {
-  console.log('checking validity');
   if (host) {
     if (host.startsWith('http') || port) {
       return true;
