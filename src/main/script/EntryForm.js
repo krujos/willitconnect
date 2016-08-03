@@ -2,7 +2,6 @@ import { Form, FormGroup, ControlLabel, HelpBlock, Col, FormControl, Button, Che
 import React from 'react';
 
 const isValid = (host, port) => {
-  console.log('checking validity');
   if (host) {
     if (host.startsWith('http') || port) {
       return true;
@@ -29,7 +28,7 @@ InputItem.propTypes = {
 };
 
 const ProxyToggle = ({ enabled, onChange }) =>
-  <Checkbox type="checkbox" checked={enabled} onChange={e => onChange(!enabled)} >
+  <Checkbox type="checkbox" checked={enabled} onChange={() => onChange(!enabled)} >
     use proxy
   </Checkbox>;
 
@@ -50,40 +49,41 @@ ProxyForm.propTypes = {
 };
 
 
+const toEntry = ({ host, port, proxyHost, proxyPort }) => ({
+  host, port, proxyHost, proxyPort,
+});
+
 export default class EntryForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isChecked: false };
-    this.connect = this.connect.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   onChangeOf(field) {
-    return value => this.setState({ [field]: value });
+    return value => this.props.onChange(toEntry({
+      ...this.props,
+      [field]: value,
+    }));
   }
 
   handleSubmit(e) {
     e.preventDefault();
 
-    const { host, port } = this.state;
+    const { host, port } = this.props;
 
     if (!isValid(host, port)) {
-      mixpanel.track('failed connect attempted', {type: 'invalid form'});
+      mixpanel.track('failed connect attempted', { type: 'invalid form' });
       return;
     }
 
-    let { proxyHost, proxyPort } = this.state;
+    const { proxyHost, proxyPort } = this.props;
     const { isChecked } = this.state;
-    if (!isChecked) {
-      proxyHost = null;
-      proxyPort = null;
-    }
 
-    this.connect(host, port, proxyHost, proxyPort);
-  }
-
-  connect(host, port, proxyHost, proxyPort) {
-    this.props.onEntrySubmit({ host, port, proxyHost, proxyPort });
+    this.props.onSubmit(toEntry({ ...this.props,
+      proxyHost: isChecked ? proxyHost : null,
+      proxyPort: isChecked ? proxyPort : null,
+    }));
   }
 
   render() {
@@ -95,7 +95,10 @@ export default class EntryForm extends React.Component {
         </FormGroup>
         <FormGroup>
           <Col xs={3} xsOffset={1}>
-            <ProxyToggle enabled={this.state.isChecked} onChange={this.onChangeOf('isChecked')} />
+            <ProxyToggle
+              enabled={this.state.isChecked}
+              onChange={() => this.setState({ isChecked: !this.state.isChecked })}
+            />
           </Col>
         </FormGroup>
         {this.state.isChecked &&
@@ -114,5 +117,20 @@ export default class EntryForm extends React.Component {
 }
 
 EntryForm.propTypes = {
-  onEntrySubmit: React.PropTypes.func.isRequired,
+  host: React.PropTypes.string,
+  port: React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.string,
+  ]),
+  proxyHost: React.PropTypes.string,
+  proxyPort: React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.string,
+  ]),
+  onChange: React.PropTypes.func,
+  onSubmit: React.PropTypes.func,
+};
+EntryForm.defaultProps = {
+  onChange: entry => entry,
+  onSubmit: entry => entry,
 };

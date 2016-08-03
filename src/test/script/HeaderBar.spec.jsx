@@ -1,5 +1,5 @@
 import React from 'react';
-const HeaderBar = require('../HeaderBar');
+const HeaderBar = require('../../main/script/HeaderBar');
 import { shallow } from 'enzyme';
 
 describe('HeaderBar', () => {

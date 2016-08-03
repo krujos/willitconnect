@@ -35,9 +35,9 @@ deploy:
       password: $CF_PASS
       organization: $CF_ORG
       space: $CF_SPACE
-      appname: willitconnect-smoke-test
+      appname: willitconnect-smoke-script
     - script:
-           name: smoke test
+           name: smoke script
            code: |
              curl -v -i willitconnect-smoke-test.cfapps.io/v2/willitconnect -d '{"target":"http://amazon.com"}' -H "Content-Type: application/json" | grep 200
              curl -v -i willitconnect-smoke-test.cfapps.io/v2/willitconnect -H "Content-Type: application/json" -d '{"target":"http://google.com", "http_proxy":"http-proxy-postnecrotic-complaint.cfapps.io:80"}'
