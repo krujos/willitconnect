@@ -1,4 +1,4 @@
-scratch
+scratch.txt
 #Ignore things generated into our source tree
 *.woff
 *.eot
