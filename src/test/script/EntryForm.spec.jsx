@@ -27,7 +27,7 @@ describe('EntryForm', () => {
         host: 'http://script.com',
         port: '80',
         proxyHost: null,
-        proxyPort: null,
+        proxyPort: null
       }));
     });
 
