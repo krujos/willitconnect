@@ -1,11 +1,9 @@
-/* eslint-env node, mocha */
+/* eslint-env node, mocha, browser */
 
 import React from 'react';
-// import TestUtils from 'react-addons-test-utils';
 import { shallow, mount } from 'enzyme';
+import td from 'testdouble';
 import EntryForm from '../../main/script/EntryForm';
-
-
 
 describe('EntryForm', () => {
   const mixpanel = { track: () => {} };
@@ -19,104 +17,55 @@ describe('EntryForm', () => {
     // console.log(entryForm.debug());
     expect(entryForm.is('Form')).to.equal(true);
   });
-  //
-  // describe('valid port host combinations', () => {
-  //
-  //   it('should be valid with a url', () => {
-  //     const form = mount(<EntryForm/>);
-  //     const host = form.find('host');
-  //     host.value = 'http://script.com';
-  //     expect(entryForm.isValid()).to.equal(true);
-  //   });
-  //
-  //   xit("should be valid with a host and a port", function() {
-  //     let host = TestUtils.findRenderedDOMComponentWithClass(entryForm, "host");
-  //     host.value = "test.com";
-  //     let port = TestUtils.findRenderedDOMComponentWithClass(entryForm, "port");
-  //     port.value = 50;
-  //     expect(entryForm.isValid()).toBe(true);
-  //   });
-  //
-  //   xit("should not be valid with a host and no port", function() {
-  //     let host = TestUtils.findRenderedDOMComponentWithClass(entryForm, "host");
-  //     host.value = "test.com";
-  //     expect(entryForm.isValid()).toBe(false);
-  //   });
-  // });
-  //
-  // describe("uses the proxy information appropriately", function() {
-  //
-  //   var event = {
-  //     type: 'click',
-  //     preventDefault: () => {},
-  //   };
-  //
-  //   beforeEach(function() {
-  //     entryForm.connect = jest.genMockFunction();
-  //   });
-  //
-  //   xit("updates proxy flag when checkbox is used", function() {
-  //     let box = TestUtils.findRenderedDOMComponentWithClass(entryForm, "proxyBox");
-  //     expect(entryForm.state.isChecked).toBe(false);
-  //     TestUtils.Simulate.change(box);
-  //     expect(entryForm.state.isChecked).toBe(true);
-  //   });
-  //
-  //   xit("uses the proxy when proxybox is checked", function() {
-  //     let box = TestUtils.findRenderedDOMComponentWithClass(entryForm, "proxyBox");
-  //     expect(entryForm.state.isChecked).toBe(false);
-  //     TestUtils.Simulate.change(box);
-  //     expect(entryForm.state.isChecked).toBe(true);
-  //
-  //     let host = TestUtils.findRenderedDOMComponentWithClass(entryForm, "host");
-  //     host.value = "test.com";
-  //     let port = TestUtils.findRenderedDOMComponentWithClass(entryForm, "port");
-  //     port.value = 50;
-  //
-  //     expect(entryForm.isValid()).toBe(true);
-  //
-  //     let proxyHost = TestUtils.findRenderedDOMComponentWithClass(entryForm,
-  //       "proxyHost");
-  //     proxyHost.value = "testproxy.com";
-  //     let proxyPort = TestUtils.findRenderedDOMComponentWithClass(entryForm,
-  //       "proxyPort");
-  //     proxyPort.value = 70;
-  //
-  //     entryForm.handleSubmit(event);
-  //
-  //     expect(entryForm.connect.mock.calls[0][0])
-  //       .toBe('test.com');
-  //     expect(entryForm.connect.mock.calls[0][1])
-  //       .toBe('50');
-  //     expect(entryForm.connect.mock.calls[0][2])
-  //       .toBe('testproxy.com');
-  //     expect(entryForm.connect.mock.calls[0][3])
-  //       .toBe('70');
-  //   });
-  //
-  //   xit("doesn't use the proxy when proxybox is checked, but no proxy values are entered", function() {
-  //     let host = TestUtils.findRenderedDOMComponentWithClass(entryForm, "host");
-  //     host.value = "test.com";
-  //     let port = TestUtils.findRenderedDOMComponentWithClass(entryForm, "port");
-  //     port.value = 50;
-  //
-  //     expect(entryForm.isValid()).toBe(true);
-  //
-  //     var event = {
-  //       type: 'click',
-  //       preventDefault: function() {
-  //       }
-  //     };
-  //     entryForm.handleSubmit(event);
-  //
-  //     expect(entryForm.connect.mock.calls[0][0])
-  //       .toBe('test.com');
-  //     expect(entryForm.connect.mock.calls[0][1])
-  //       .toBe('50');
-  //     expect(entryForm.connect.mock.calls[0][2])
-  //       .toBe(undefined);
-  //     expect(entryForm.connect.mock.calls[0][3])
-  //       .toBe(undefined);
-  //   });
-  // })
+
+  describe('a valid host and port are provided', () => {
+    it('should submit the host and port', () => {
+      const onSubmit = td.function('.onSubmit');
+      const entryForm = mount(<EntryForm host="http://script.com" port="80" onSubmit={onSubmit} />);
+      entryForm.simulate('submit');
+      td.verify(onSubmit({
+        host: 'http://script.com',
+        port: '80',
+        proxyHost: null,
+        proxyPort: null,
+      }));
+    });
+
+    it('should populate the entry from props', () => {
+      const entryForm = mount(<EntryForm host="script.com" port="80" />);
+      const hostField = entryForm.find('input[name="host"]');
+      const portField = entryForm.find('input[name="port"]');
+      expect(hostField.prop('value')).to.eq('script.com');
+      expect(portField.prop('value')).to.eq('80');
+    });
+  });
+
+  context('when a proxy is provided', () => {
+    it('should submit the host and port and proxy', () => {
+      const onSubmit = td.function('.onSubmit');
+      const entryForm = mount(<EntryForm host="http://script.com" port="80" proxyHost="www.com" proxyPort="8080" onSubmit={onSubmit} />);
+      const toggle = entryForm.find('input[type="checkbox"]');
+      toggle.simulate('change');
+      entryForm.simulate('submit');
+
+      expect(toggle.prop('checked')).to.eq(true);
+
+      td.verify(onSubmit({
+        host: 'http://script.com',
+        port: '80',
+        proxyHost: 'www.com',
+        proxyPort: '8080',
+      }));
+    });
+
+    it('should populate the entry from props', () => {
+      const entryForm = mount(<EntryForm host="http://script.com" port="80" proxyHost="www.com" proxyPort="8080" />);
+      entryForm.find('input[type="checkbox"]').simulate('change');
+      const hostField = entryForm.find('input[name="proxyHost"]');
+      const portField = entryForm.find('input[name="proxyPort"]');
+      expect(hostField.prop('value')).to.eq('www.com');
+      expect(portField.prop('value')).to.eq('8080');
+    });
+
+  });
 });
