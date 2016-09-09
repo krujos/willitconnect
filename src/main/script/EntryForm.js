@@ -10,6 +10,7 @@ const isValid = (host, port) => {
   return false;
 };
 
+//    <HelpBlock> Scheme is optional </HelpBlock>
 const InputItem = ({ field, type, onChange, placeholder, value }) =>
   <Col xs={5} xsOffset={1} bsSize="large">
     <ControlLabel> {placeholder} </ControlLabel>
@@ -21,7 +22,6 @@ const InputItem = ({ field, type, onChange, placeholder, value }) =>
       onChange={e => onChange(e.target.value)}
       value={value}
     />
-    <HelpBlock> Scheme is optional </HelpBlock>
   </Col>;
 
 InputItem.propTypes = {
@@ -76,9 +76,11 @@ export default class EntryForm extends React.Component {
     const { proxyHost, proxyPort } = this.props;
     const { isChecked } = this.state;
 
+    const useProxy = isChecked && proxyHost && proxyPort;
+
     this.props.onSubmit(toEntry({ ...this.props,
-      proxyHost: isChecked ? proxyHost : null,
-      proxyPort: isChecked ? proxyPort : null,
+      proxyHost: useProxy ? proxyHost : null,
+      proxyPort: useProxy ? proxyPort : null,
     }));
   }
 
