@@ -1,20 +1,21 @@
 import React from 'react';
-import jQuery from 'jquery';
 import ProgressBar from 'react-bootstrap/lib/ProgressBar';
 import Panel from 'react-bootstrap/lib/Panel';
+import { PASSED, FAILED, SUBMIT } from './actions/entry-actions';
 
 
-const getPanelStyle = (pending, success) => {
-  if (success) {
-    return 'success';
+const getPanelStyle = (status) => {
+  switch (status) {
+    case PASSED:
+      return 'success';
+    case FAILED:
+      return 'danger';
+    default:
+      return 'info';
   }
-  if (pending) {
-    return 'info';
-  }
-  return 'danger';
 };
 
-export const resultHeader = (props) => {
+const resultHeader = (props) => {
   let resultString = props.host;
   if (props.port) {
     resultString += `:${props.port}`;
@@ -32,167 +33,90 @@ export const resultHeader = (props) => {
 
   return (
     <div>
-      {resultString}
+       {resultString}
       <span style={rightStyle}>
-        <button onClick={props.recheck}>Re-check</button>
+        <button onClick={() => props.recheck(props)}>Re-check</button>
       </span>
     </div>
   );
 };
 
 resultHeader.propTypes = {
-  port: React.PropTypes.number.isRequired,
-  host: React.PropTypes.string.isRequired,
-  recheck: React.PropTypes.func.isRequired,
+  port: React.PropTypes.number,
+  key: React.PropTypes.number,
+  host: React.PropTypes.string,
+  recheck: React.PropTypes.func,
   proxyHost: React.PropTypes.string,
   proxyPort: React.PropTypes.number,
+  onSubmit: React.PropTypes.func,
+  entry: React.PropTypes.any,
 };
 
-export const Result = ({ success, pending, children, ...props }) =>
-  <Panel bsStyle={getPanelStyle(pending, success)} {...props}>
-    {pending && < ProgressBar active now={100} />}
+const Result = ({ status, children, ...props }) =>
+  <Panel bsStyle={getPanelStyle(status)} {...props}>
+    {status === SUBMIT && <ProgressBar active now={100} />}
     {children}
   </Panel>;
 
 Result.propTypes = {
-  success: React.PropTypes.bool,
-  pending: React.PropTypes.bool,
-  children: React.PropTypes.object,
+  status: React.PropTypes.string,
+  children: React.PropTypes.any,
 };
 
-
-export const Entry = ({
+const Entry = ({
   success,
   httpStatus,
   time,
 }) =>
   <ul>
-    <li>On {time}, I {success ? 'could' : 'could not'} connect.
+    <li>  On {time}, I {success ? 'could' : 'could not'} connect.
       {httpStatus !== 0 && <span>Http Status: {httpStatus}</span>}
     </li>
   </ul>;
 
 Entry.propTypes = {
-  success: React.PropTypes.bool.isRequired,
+  success: React.PropTypes.string,
   httpStatus: React.PropTypes.number,
-  time: React.PropTypes.string.isRequired,
+  time: React.PropTypes.string,
 };
 
-export default class StatefulEntry extends React.Component {
-  constructor(props) {
-    super(props);
-    this.getLastChecked = this.getLastChecked.bind(this);
-    this.getData = this.getData.bind(this);
-    this.performCheck = this.performCheck.bind(this);
-    this.successFunc = this.successFunc.bind(this);
-    this.state = {
-      status: null,
-      connections: [],
-    };
-  }
-  componentDidMount() {
-    this.performCheck();
-  }
-  getLastChecked(lastChecked) {
-    const utcSeconds = parseInt(lastChecked);
-    const date = new Date(utcSeconds);
-    const month = date.getMonth();
-    const day = date.getDay();
-    const year = date.getFullYear();
-
-    const hours = date.getHours();
-    const minutes = `0${date.getMinutes()}`;
-    const seconds = `0${date.getSeconds()}`;
-    return (`${month}-${day}-${year} ${hours}:${minutes.substr(-2)}:${seconds.substr(-2)}`);
-  }
-  getData() {
-    if (this.props.proxyHost && this.props.proxyPort) {
-      return JSON.stringify({
-        target: `${this.props.host}:${this.props.port}`,
-        http_proxy: `${this.props.proxyHost}:${this.props.proxyPort}`,
-      });
-    }
-    return JSON.stringify({ target: `${this.props.host}:${this.props.port}` });
-  }
-
-  successFunc(data) {
-    mixpanel.track('connection attempted', {
-      canConnect: data.canConnect,
-      httpStatus: data.httpStatus,
-      validHostName: data.validHostName,
-      validUrl: data.validUrl,
-    });
-    // Build a connections attempt object to store history
-    const history = {
-      guid: this.state.connections.length,
-      success: data.canConnect,
-      httpStatus: data.httpStatus,
-      time: data.lastChecked,
-    };
-
-    // console.log("data", data);
-
-    const newConnections = this.state.connections.concat([history]);
-
-    this.setState({
-      status: data,
-      connections: newConnections,
-    });
-    // console.log("state", this.state);
-  }
-  performCheck() {
-    // Set the state to pending
-    this.setState({
-      status: null,
-    });
-    const path = '/v2/willitconnect';
-    // console.log(this.props.host);
-    jQuery.ajax({
-      url: path,
-      type: 'POST',
-      cache: false,
-      data: this.getData(),
-      dataType: 'json',
-      contentType: 'application/json; charset=utf-8',
-      success: this.successFunc,
-    });
-  }
-
-  render() {
-    const pending = (this.state == null || this.state.status == null);
-    const success = !pending && this.state.status.canConnect;
-    // Build a list of all the historical connection attempts
-    // console.table(this.state.connections);
-    const attempts = this.state.connections.map(attempt => {
-      // console.log("creating attempt", attempt);
+const StatelessEntry = (props) => {
+  const subProps = {
+    key: props.id,
+    host: props.host,
+    port: props.port,
+    proxyHost: props.proxyHost,
+    proxyPort: props.proxyPort,
+    recheck: props.onSubmit,
+  };
+  return (<Result header={resultHeader(subProps)} status={props.status} >
+    {props.connections.map((attempt) => {
       return (
         <Entry
-          key={attempt.guid}
-          success={attempt.success}
+          key={attempt.id}
+          success={attempt.canConnect}
           httpStatus={attempt.httpStatus}
-          time={this.getLastChecked(attempt.time)}
+          time={(new Date(attempt.time)).toLocaleString()}
         />
       );
-    }).reverse();
-    const subProps = {
-      host: this.props.host,
-      port: this.props.port,
-      proxyHost: this.props.proxyHost,
-      proxyPort: this.props.proxyPort,
-      recheck: this.performCheck,
-    };
-    return (<Result header={resultHeader(subProps)} pending={pending} success={success}>
-      <div>{attempts}</div>
-    </Result>);
-  }
-}
+    }).reverse()}
+  </Result>);
+};
+export default StatelessEntry;
 
-StatefulEntry.propTypes = {
-  port: React.PropTypes.string.isRequired,
-  host: React.PropTypes.string.isRequired,
+StatelessEntry.propTypes = {
+  port: React.PropTypes.string,
+  host: React.PropTypes.string,
+  key: React.PropTypes.string,
+  id: React.PropTypes.string,
   proxyHost: React.PropTypes.string,
   proxyPort: React.PropTypes.string,
+  status: React.PropTypes.string,
+  connections: React.PropTypes.array,
+  onSubmit: React.PropTypes.func,
 };
-
-
-
+// StatelessEntry.defaultProps = {
+//   port: '',
+//   host: '',
+//   connections: [],
+// };

@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import EntryList from '../EntryList';
+import EntryList from '../../main/script/EntryList';
 import { shallow } from 'enzyme';
 
 describe('EntryList', () => {
@@ -24,10 +24,10 @@ describe('EntryList', () => {
 
     it("displays the entryList", function() {
         const entryList = shallow(<EntryList data={entries} />);
-        expect(entryList.find('StatefulEntry')).to.have.length.of(3);
-        expect(entryList.find('StatefulEntry').at(2).prop('host')).to.equal("google.com");
-        expect(entryList.find('StatefulEntry').at(1).prop('port')).to.equal('80');
-        expect(entryList.find('StatefulEntry').at(0).prop('status')).to.equal('{canConnect:false}');
+        expect(entryList.find('StatelessEntry')).to.have.length.of(3);
+        expect(entryList.find('StatelessEntry').at(2).prop('host')).to.equal("google.com");
+        expect(entryList.find('StatelessEntry').at(1).prop('port')).to.equal('80');
+        expect(entryList.find('StatelessEntry').at(0).prop('status')).to.equal('{canConnect:false}');
     });
     
 });
