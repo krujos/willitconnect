@@ -1,6 +1,7 @@
 package willitconnect.service;
 
 import org.apache.log4j.Logger;
+import org.apache.tomcat.jni.Time;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpResponse;
@@ -45,6 +46,7 @@ public class EntryChecker {
 
     public CheckedEntry check(CheckedEntry e) {
         log.info("checking " + e.getEntry());
+        long startTime = Instant.now().toEpochMilli();
         if (e.isValidUrl()) {
             checkUrl(e);
         } else if (e.isValidHostname()) {
@@ -52,6 +54,7 @@ public class EntryChecker {
         } else {
             log.error(e.getEntry() + " is not a valid hostname");
         }
+        e.setResponseTime(Instant.now().toEpochMilli() - startTime);
         return e;
     }
 

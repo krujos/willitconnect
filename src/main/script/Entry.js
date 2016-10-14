@@ -67,9 +67,10 @@ const Entry = ({
   success,
   httpStatus,
   time,
+  responseTime,
 }) =>
   <ul>
-    <li>  On {time}, I {success ? 'could' : 'could not'} connect.
+    <li>  On {time}, I {success ? 'could' : 'could not'} connect. It took {responseTime} ms.
       {httpStatus !== 0 && <span>Http Status: {httpStatus}</span>}
     </li>
   </ul>;
@@ -97,6 +98,7 @@ const StatelessEntry = (props) => {
           success={attempt.canConnect}
           httpStatus={attempt.httpStatus}
           time={(new Date(attempt.time)).toLocaleString()}
+          responseTime={attempt.responseTime}
         />
       );
     }).reverse()}

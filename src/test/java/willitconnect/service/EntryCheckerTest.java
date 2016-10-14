@@ -16,6 +16,7 @@ import java.sql.Date;
 import java.time.Instant;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
 import static org.testng.AssertJUnit.assertEquals;
+import static willitconnect.model.CheckedEntry.DEFAULT_RESPONSE_TIME;
 
 public class EntryCheckerTest {
 
@@ -83,8 +85,14 @@ public class EntryCheckerTest {
         entry.setHttpProxy("proxy.example.com:8080");
         CheckedEntry returnedEntry = checker.check(entry);
 
-
         assertThat(returnedEntry.getHttpProxy(),
                 is(equalTo("proxy.example.com:8080")));
+    }
+
+    @Test
+    public void itShouldSayHowLongItTookToConnect() {
+        CheckedEntry returnedEntry = checker.check(entry);
+
+        assertThat(returnedEntry.getResponseTime(), is(not(equalTo(DEFAULT_RESPONSE_TIME))));
     }
 }

@@ -11,11 +11,13 @@ import java.util.Objects;
  * Holds a hostname or url that is checked to see if we can connect to it.
  */
 public class CheckedEntry {
+    public static long DEFAULT_RESPONSE_TIME = -1L;
     private Date lastChecked;
     private String entry;
     private boolean canConnect;
     private int httpStatus;
     private String httpProxy;
+    private long responseTime = DEFAULT_RESPONSE_TIME;
 
     public boolean isCanConnect() {
         return canConnect();
@@ -87,5 +89,14 @@ public class CheckedEntry {
 
     public String getHttpProxy() {
         return httpProxy;
+    }
+
+
+    public long getResponseTime() {
+        return responseTime;
+    }
+
+    public void setResponseTime(long responseTime) {
+        this.responseTime = responseTime;
     }
 }
