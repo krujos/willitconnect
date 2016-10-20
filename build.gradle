@@ -35,7 +35,7 @@ apply plugin: 'com.homedepot.gitprops'
 
 jar {
     baseName = 'willitconnect'
-    version = '1.0.7'
+    version = '1.0.9'
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
