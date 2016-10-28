@@ -14,6 +14,7 @@ build:
         name: install node
         code: |
           npm cache clean -f
+          npm -g install npm@next
           npm install -g n
           n latest
           node -v
