@@ -52,7 +52,6 @@ dependencies {
     compile("org.json:json:20160810")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.powermock:powermock-mockito-release-full:1.6.4")
-    testCompile("com.jayway.jsonpath:json-path:2.1.0")
 }
 
 task webpack(type: NodeTask) {
