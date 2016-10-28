@@ -16,6 +16,7 @@ build:
           npm cache clean -f
           npm install -g n
           n latest
+          npm -g install npm@next
           node -v
     - script:
             name: run tests
