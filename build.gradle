@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.4.1.RELEASE'
+        springBootVersion = '1.4.2.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -29,13 +29,13 @@ buildScan {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 apply plugin: 'com.moowork.node'
 apply plugin: 'com.homedepot.gitprops'
 
 jar {
     baseName = 'willitconnect'
-    version = '1.0.9'
+    version = '1.0.10'
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
