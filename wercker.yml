@@ -1,23 +1,18 @@
-box: rowanto/docker-java8-mvn-nodejs-npm
+box: java
 # Build definition
 build:
   # The steps that will be executed on build
   steps:
+    - bigtruedata/install-node:
+      version: 7.6.0
     - script:
         name: show base information
         code: |
           ./gradlew -v
+          node -v
           javac -version
-          node -v
           export
-    - script:
-        name: install node
-        code: |
-          npm cache clean -f
-          npm -g install npm@next
-          npm install -g n
-          n latest
-          node -v
+    - npm-install
     - script:
             name: run tests
             code: |
@@ -25,8 +20,8 @@ build:
     - script:
             name: run build
             code: |
+              export NODE_ENV=production
               ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build
-
 
 deploy:
   steps:
