@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.4.4.RELEASE'
+        springBootVersion = '1.5.1.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -71,7 +71,7 @@ eclipse {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.3'
+    gradleVersion = '3.4'
 }
 
 project.tasks.processResources.dependsOn('npmInstall')
