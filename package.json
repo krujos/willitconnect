@@ -92,7 +92,7 @@
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.13.2",
-    "testdouble": "^1.11.1",
+    "testdouble": "^2.0.1",
     "url-loader": "^0.5.8",
     "webpack": "^2.2.1"
   }
