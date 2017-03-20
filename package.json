@@ -89,7 +89,7 @@
     "react-test-utils": "0.0.1",
     "react-testutils-additions": "^15.1.0",
     "redux-devtools": "^3.3.2",
-    "sinon": "^2.0.0",
+    "sinon": "^2.1.0",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.13.2",
     "testdouble": "^1.11.1",
