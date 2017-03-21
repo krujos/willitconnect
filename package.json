@@ -91,7 +91,7 @@
     "redux-devtools": "^3.3.2",
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0",
-    "style-loader": "^0.14.1",
+    "style-loader": "^0.15.0",
     "testdouble": "^1.11.1",
     "url-loader": "^0.5.8",
     "webpack": "^2.2.1"
