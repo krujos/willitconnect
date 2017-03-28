@@ -9,7 +9,7 @@ module.exports = {
         "./src/main/script/Index.js"
       ],
     output: {
-        path: "./build/resources/main/static/script/",
+        path: __dirname + "./build/resources/main/static/script/",
         filename: "bundle.js"
     },
     module: {
