@@ -18,9 +18,10 @@ Will It Connect?
  URL we make a GET request, including SSL handshake if required.
 
 
-#For Example:
+# For Example:
 
-V2 API
+## V2 API
+### Mac/Linux/BSD/etc
 ```
 ➜ curl willitconnect.cfapps.io/v2/willitconnect -d '{"target":"http://amazon.com"}' -H "Content-Type: application/json" | jq '.'
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
@@ -97,9 +98,79 @@ V2 API
 }
 ```
 
-#Get Some
+### Windows Powershell
+```
+PS C:\>Invoke-RestMethod willitconnect.cfapps.io/v2/willitconnect -Body '{"target":"http://amazon.com"}' -Headers @{"Content-Type"="application/json"} -Method POST
+
+lastChecked   : 1493667208210
+entry         : http://amazon.com
+canConnect    : True
+httpStatus    : 301
+httpProxy     :
+responseTime  : 79
+validUrl      : True
+validHostname : False
+
+PS C:\>Invoke-RestMethod willitconnect.cfapps.io/v2/willitconnect -Body '{"target":"google.com:443"}' -Headers @{"Content-Type"="application/json"} -Method POST
+
+lastChecked   : 1493667208210
+entry         : google.com:443
+canConnect    : True
+httpStatus    : 0
+httpProxy     :
+responseTime  : 3018
+validUrl      : False
+validHostname : True
+
+PS C:\>Invoke-RestMethod willitconnect.cfapps.io/v2/willitconnect -Body '{"target":"https://twitter.com"}' -Headers @{"Content-Type"="application/json"} -Method POST
+
+lastChecked   : 1493667672286
+entry         : https://twitter.com
+canConnect    : True
+httpStatus    : 200
+httpProxy     :
+responseTime  : 742
+validUrl      : True
+validHostname : False
+
+PS C:\>Invoke-RestMethod willitconnect.cfapps.io/v2/willitconnect -Body '{"target":"http://does-not-exist.com"}' -Headers @{"Content-Type"="application/json"} -Method POST
+
+lastChecked   : 1493667888431
+entry         : http://does-not-exist.com
+canConnect    : False
+httpStatus    : 0
+httpProxy     :
+responseTime  : 127212
+validUrl      : True
+validHostname : False
+
+PS C:\>Invoke-RestMethod willitconnect.cfapps.io/v2/willitconnect -Body '{"target":"does-not-exist.com"}' -Headers @{"Content-Type"="application/json"} -Method POST
+
+lastChecked   : 0
+entry         : does-not-exist.com
+canConnect    : False
+httpStatus    : 0
+httpProxy     :
+responseTime  : 1
+validUrl      : False
+validHostname : False
+
+PS C:\>Invoke-RestMethod willitconnect.cfapps.io/v2/willitconnect -Body '{"target":"google.com:20"}' -Header
+s @{"Content-Type"="application/json"} -Method POST
+
+lastChecked   : 1493668051469
+entry         : google.com:20
+canConnect    : False
+httpStatus    : 0
+httpProxy     :
+responseTime  : 3018
+validUrl      : False
+validHostname : True
+```
+
+# Get Some
 3 steps get you up and running!
-##From the latest release
+## From the latest release
 Download the jar file from the latest [release](https://github.com/krujos/willitconnect/releases)
 and push it
 
@@ -107,7 +178,7 @@ and push it
 ➜ cf push -p willitconnect-0.0.1.jar #Use the right version # from the release
 ```
 
-##From source
+## From source
 
 ```
 ➜ git clone https://github.com/krujos/willitconnect
@@ -116,7 +187,7 @@ and push it
 ➜ cf push
 ```
 
-#Development
+# Development
 The project uses the standard spring boot directory structure, with web content located
 in src/main/resources/static.
 
@@ -125,8 +196,6 @@ You can run it locally by using
 ➜ ./gradlew bootRun
 ```
 
-#ChatOps
+# ChatOps
 
 Willitconnect can also be connected to hubot -- more information at [hubot-will-it-connect](https://www.npmjs.com/package/hubot-will-it-connect)
-
-
