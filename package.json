@@ -64,7 +64,7 @@
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^7.0.0",
+    "eslint-plugin-react": "^7.0.1",
     "expect": "^1.20.2",
     "exports-loader": "^0.6.4",
     "expose-loader": "^0.7.3",
