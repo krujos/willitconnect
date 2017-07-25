@@ -94,6 +94,6 @@
     "style-loader": "^0.18.2",
     "testdouble": "^3.0.0",
     "url-loader": "^0.5.8",
-    "webpack": "^3.3.0"
+    "webpack": "^3.4.0"
   }
 }
