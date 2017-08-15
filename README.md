@@ -175,7 +175,7 @@ Download the jar file from the latest [release](https://github.com/krujos/willit
 and push it
 
 ```
-➜ cf push -p willitconnect-0.0.1.jar #Use the right version # from the release
+➜ cf push -p willitconnect-0.0.1.jar APP_NAME #Use the right version # from the release
 ```
 
 ## From source
