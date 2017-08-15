@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.3.RELEASE'
+        springBootVersion = '1.5.6.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -35,7 +35,7 @@ apply plugin: 'com.homedepot.gitprops'
 
 jar {
     baseName = 'willitconnect'
-    version = '1.0.11'
+    version = '1.0.12'
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -49,7 +49,7 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.json:json:20160810")
+    compile("org.json:json:20170516")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.powermock:powermock-mockito-release-full:1.6.4")
 }
@@ -71,7 +71,7 @@ eclipse {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
+    gradleVersion = '4.1'
 }
 
 project.tasks.processResources.dependsOn('npmInstall')
