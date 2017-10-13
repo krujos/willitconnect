@@ -10,7 +10,7 @@
     "jquery": "^3.2.1",
     "less": "^2.7.2",
     "lodash": "^4.17.4",
-    "octicons": "^6.0.1",
+    "octicons": "^7.0.1",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.2",
     "react-dom": "^15.6.1",
