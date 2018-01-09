@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import StatefulEntry from './Entry';
 
@@ -21,9 +22,9 @@ const EntryList = (props) => {
 export default EntryList;
 
 EntryList.propTypes = {
-  data: React.PropTypes.array.isRequired,
-  onChange: React.PropTypes.func,
-  onSubmit: React.PropTypes.func,
+  data: PropTypes.array.isRequired,
+  onChange: PropTypes.func,
+  onSubmit: PropTypes.func,
 };
 EntryList.defaultProps = {
   data: [],
