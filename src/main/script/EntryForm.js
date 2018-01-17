@@ -1,4 +1,5 @@
 import { Form, FormGroup, ControlLabel, HelpBlock, Col, FormControl, Button, Checkbox, } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const isValid = (host, port) => {
@@ -25,10 +26,10 @@ const InputItem = ({ field, type, onChange, placeholder, value }) =>
   </Col>;
 
 InputItem.propTypes = {
-  field: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  value: React.PropTypes.string,
+  field: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string,
 };
 InputItem.defaultProps = {
   onChange: () => {},
@@ -41,8 +42,8 @@ const ProxyToggle = ({ enabled, onChange }) =>
   </Checkbox>;
 
 ProxyToggle.propTypes = {
-  enabled: React.PropTypes.bool.isRequired,
-  onChange: React.PropTypes.func.isRequired,
+  enabled: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 const toEntry = ({ host, port, proxyHost, proxyPort }) => ({
@@ -119,18 +120,18 @@ const HostPortForm = ( { host, port, hostField = "host", portField = "port", onH
 
 
 EntryForm.propTypes = {
-  host: React.PropTypes.string,
-  port: React.PropTypes.oneOfType([
-    React.PropTypes.number,
-    React.PropTypes.string,
+  host: PropTypes.string,
+  port: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
   ]),
-  proxyHost: React.PropTypes.string,
-  proxyPort: React.PropTypes.oneOfType([
-    React.PropTypes.number,
-    React.PropTypes.string,
+  proxyHost: PropTypes.string,
+  proxyPort: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
   ]),
-  onChange: React.PropTypes.func,
-  onSubmit: React.PropTypes.func,
+  onChange: PropTypes.func,
+  onSubmit: PropTypes.func,
 };
 EntryForm.defaultProps = {
   onChange: entry => entry,

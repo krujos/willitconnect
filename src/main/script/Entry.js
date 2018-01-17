@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ProgressBar from 'react-bootstrap/lib/ProgressBar';
 import Panel from 'react-bootstrap/lib/Panel';
@@ -42,14 +43,14 @@ const resultHeader = (props) => {
 };
 
 resultHeader.propTypes = {
-  port: React.PropTypes.number,
-  key: React.PropTypes.number,
-  host: React.PropTypes.string,
-  recheck: React.PropTypes.func,
-  proxyHost: React.PropTypes.string,
-  proxyPort: React.PropTypes.number,
-  onSubmit: React.PropTypes.func,
-  entry: React.PropTypes.any,
+  port: PropTypes.number,
+  key: PropTypes.number,
+  host: PropTypes.string,
+  recheck: PropTypes.func,
+  proxyHost: PropTypes.string,
+  proxyPort: PropTypes.number,
+  onSubmit: PropTypes.func,
+  entry: PropTypes.any,
 };
 
 const Result = ({ status, children, ...props }) =>
@@ -59,8 +60,8 @@ const Result = ({ status, children, ...props }) =>
   </Panel>;
 
 Result.propTypes = {
-  status: React.PropTypes.string,
-  children: React.PropTypes.any,
+  status: PropTypes.string,
+  children: PropTypes.any,
 };
 
 const Entry = ({
@@ -76,9 +77,9 @@ const Entry = ({
   </ul>;
 
 Entry.propTypes = {
-  success: React.PropTypes.string,
-  httpStatus: React.PropTypes.number,
-  time: React.PropTypes.string,
+  success: PropTypes.any,
+  httpStatus: PropTypes.number,
+  time: PropTypes.string,
 };
 
 const StatelessEntry = (props) => {
@@ -107,18 +108,12 @@ const StatelessEntry = (props) => {
 export default StatelessEntry;
 
 StatelessEntry.propTypes = {
-  port: React.PropTypes.string,
-  host: React.PropTypes.string,
-  key: React.PropTypes.string,
-  id: React.PropTypes.string,
-  proxyHost: React.PropTypes.string,
-  proxyPort: React.PropTypes.string,
-  status: React.PropTypes.string,
-  connections: React.PropTypes.array,
-  onSubmit: React.PropTypes.func,
+  port: PropTypes.string,
+  host: PropTypes.string,
+  id: PropTypes.string,
+  proxyHost: PropTypes.string,
+  proxyPort: PropTypes.string,
+  status: PropTypes.string,
+  connections: PropTypes.array,
+  onSubmit: PropTypes.func,
 };
-// StatelessEntry.defaultProps = {
-//   port: '',
-//   host: '',
-//   connections: [],
-// };

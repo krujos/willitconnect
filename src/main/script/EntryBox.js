@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
@@ -21,8 +22,8 @@ export const EntryBox = ({ entries, currentEntry, ...props }) => {
 };
 
 EntryBox.propTypes = {
-  entries: React.PropTypes.array,
-  currentEntry: React.PropTypes.any,
+  entries: PropTypes.array,
+  currentEntry: PropTypes.any,
 };
 
 const entryHash = ({host, port, proxyHost, proxyPort}) => {

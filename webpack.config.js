@@ -18,7 +18,7 @@ module.exports = {
             { test: /\.(js|jsx|es6)$/, exclude: /node_modules/, loader: 'babel-loader',
                 query: {
                             plugins: ['transform-runtime'],
-                            presets: ['react', 'stage-2', 'es2015']
+                            presets: ['react', 'stage-2', "env"]
                 }
             },
             { test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff'},
