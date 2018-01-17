@@ -77,7 +77,7 @@ const Entry = ({
   </ul>;
 
 Entry.propTypes = {
-  success: PropTypes.string,
+  success: PropTypes.any,
   httpStatus: PropTypes.number,
   time: PropTypes.string,
 };
@@ -110,7 +110,6 @@ export default StatelessEntry;
 StatelessEntry.propTypes = {
   port: PropTypes.string,
   host: PropTypes.string,
-  key: PropTypes.string,
   id: PropTypes.string,
   proxyHost: PropTypes.string,
   proxyPort: PropTypes.string,
@@ -118,8 +117,3 @@ StatelessEntry.propTypes = {
   connections: PropTypes.array,
   onSubmit: PropTypes.func,
 };
-// StatelessEntry.defaultProps = {
-//   port: '',
-//   host: '',
-//   connections: [],
-// };
