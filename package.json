@@ -97,7 +97,7 @@
     "sinon-chai": "^2.14.0",
     "style-loader": "^0.19.1",
     "testdouble": "^3.3.2",
-    "url-loader": "^0.6.2",
+    "url-loader": "^1.0.0",
     "webpack": "^3.10.0"
   }
 }
