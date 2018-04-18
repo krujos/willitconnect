@@ -87,7 +87,7 @@
     "karma-webpack": "^2.0.9",
     "less-loader": "^4.0.5",
     "lolex": "^2.3.1",
-    "mocha": "^5.1.0",
+    "mocha": "^5.1.1",
     "phantomjs-prebuilt": "^2.1.16",
     "react-addons-test-utils": "^15.6.2",
     "react-test-utils": "0.0.1",
