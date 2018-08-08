@@ -8,7 +8,7 @@
     "bootstrap-webpack": "0.0.6",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.2.1",
-    "less": "^3.8.0",
+    "less": "^3.8.1",
     "lodash": "^4.17.4",
     "npm-check-updates": "^2.14.0",
     "octicons": "^7.1.0",
