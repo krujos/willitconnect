@@ -15,8 +15,8 @@
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.0",
     "react-dom": "^16.2.0",
+    "react-redux": "^7.0.3",
     "react-model": "2.7.2",
-    "react-redux": "^5.0.6",
     "redux": "^4.0.1",
     "redux-thunk": "^2.2.0",
     "superagent": "^5.0.6"
