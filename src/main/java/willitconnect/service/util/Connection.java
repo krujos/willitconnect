@@ -32,7 +32,8 @@ public class Connection {
             String host, int port, String proxyHost, int proxyPort,
             String proxyType) {
         logHost(host, port);
-        if ("http" != proxyType ) {
+        String sanitizedProxyType = proxyType == null ? null : proxyType.trim();
+        if (!"http".equalsIgnoreCase(sanitizedProxyType)) {
             throw new IllegalArgumentException("Proxy type must be http");
         }
         try {
