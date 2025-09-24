@@ -1,10 +1,12 @@
+import org.gradle.api.tasks.wrapper.Wrapper
+
 buildscript {
     ext {
         springBootVersion = '1.5.9.RELEASE'
     }
     repositories {
         mavenCentral()
-        maven { url "http://jcenter.bintray.com" }
+        maven { url "https://jcenter.bintray.com" }
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
         maven { url "https://plugins.gradle.org/m2/" }
@@ -15,15 +17,6 @@ buildscript {
         classpath("com.homedepot.gitprops:GitPropsPlugin:1.0.8")
     }
 
-}
-
-plugins {
-    id 'com.gradle.build-scan' version '1.0'
-}
-
-buildScan {
-    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
-    licenseAgree = 'yes'
 }
 
 apply plugin: 'java'
@@ -37,8 +30,11 @@ jar {
     baseName = 'willitconnect'
     version = '1.0.13'
 }
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
 
 repositories {
     mavenCentral()
@@ -47,11 +43,11 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.json:json:20170516")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile("org.powermock:powermock-mockito-release-full:1.6.4")
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.json:json:20170516"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.powermock:powermock-mockito-release-full:1.6.4"
 }
 
 task webpack(type: NodeTask) {
@@ -66,12 +62,13 @@ task karma(type: NpmTask) {
 eclipse {
     classpath {
          containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-21'
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.4.1'
+tasks.named('wrapper') {
+    gradleVersion = '8.14.3'
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 project.tasks.processResources.dependsOn('npmInstall')

@@ -6,14 +6,20 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Holds a hostname or url that is checked to see if we can connect to it.
  */
 public class CheckedEntry {
     public static long DEFAULT_RESPONSE_TIME = -1L;
+    private static final Pattern HOST_WITH_OPTIONAL_PORT =
+            Pattern.compile("^([\\w\\.-]+)(?::(\\d+))?$");
     private Date lastChecked;
     private String entry;
+    private String hostname;
+    private Integer explicitPort;
     private boolean canConnect;
     private int httpStatus;
     private String httpProxy;
@@ -37,6 +43,8 @@ public class CheckedEntry {
 
     public void setEntry(String entry) {
         this.entry = entry;
+        // Strings are immutable, so parsing cannot mutate the stored value.
+        parseEntry(this.entry);
     }
 
     public boolean canConnect() {
@@ -51,11 +59,12 @@ public class CheckedEntry {
         Objects.requireNonNull(entry);
         this.lastChecked = Date.from(Instant.EPOCH);
         this.entry = entry;
+        parseEntry(entry);
         this.canConnect = false;
     }
 
     public boolean isValidHostname() {
-        return entry.matches("[\\w\\.-]+:\\d+");
+        return hostname != null;
     }
 
     public boolean isValidUrl() {
@@ -98,5 +107,36 @@ public class CheckedEntry {
 
     public void setResponseTime(long responseTime) {
         this.responseTime = responseTime;
+    }
+
+    private void parseEntry(String entry) {
+        Matcher matcher = HOST_WITH_OPTIONAL_PORT.matcher(entry);
+        if (matcher.matches()) {
+            hostname = matcher.group(1);
+            String portGroup = matcher.group(2);
+            if (portGroup == null) {
+                explicitPort = null;
+            } else {
+                explicitPort = Integer.parseInt(portGroup);
+            }
+        } else {
+            hostname = null;
+            explicitPort = null;
+        }
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public boolean hasExplicitPort() {
+        return explicitPort != null;
+    }
+
+    public int getResolvedPort() {
+        if (hasExplicitPort()) {
+            return explicitPort;
+        }
+        return 80;
     }
 }

@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class WillItConnectV2ControllerHostnameTest {
 
     private MockMvc mockMvc;
-    static JSONObject REQUEST = new JSONObject().put("target", "example.com:80");
+    static JSONObject REQUEST = new JSONObject().put("target", "example.com");
 
     @PrepareForTest(Connection.class)
 
