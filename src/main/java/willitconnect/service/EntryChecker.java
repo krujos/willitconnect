@@ -7,6 +7,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.ResponseErrorHandler;
@@ -17,6 +18,7 @@ import willitconnect.service.util.Connection;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.lang.reflect.Field;
 import java.sql.Date;
 import java.time.Instant;
 
@@ -75,8 +77,8 @@ public class EntryChecker {
     }
 
     private void checkUrl(CheckedEntry e) {
+        ClientHttpRequestFactory oldFactory = null;
         try {
-            ClientHttpRequestFactory oldFactory = null;
             if ( null != e.getHttpProxy() ) {
                 oldFactory = swapProxy(e);
             }
@@ -84,23 +86,36 @@ public class EntryChecker {
             ResponseEntity<String> resp =
                     restTemplate.getForEntity(e.getEntry(), String.class);
 
-            if ( null != oldFactory ) {
-                restTemplate.setRequestFactory(oldFactory);
-            }
-
             log.info("Status = " + resp.getStatusCode());
             e.setCanConnect(true);
             e.setHttpStatus(resp.getStatusCode());
         } catch (ResourceAccessException ex) {
             e.setCanConnect(false);
+        } finally {
+            if ( null != oldFactory ) {
+                restTemplate.setRequestFactory(oldFactory);
+            }
+            e.setLastChecked(Date.from(Instant.now()));
         }
-        e.setLastChecked(Date.from(Instant.now()));
     }
 
     private ClientHttpRequestFactory swapProxy(CheckedEntry e) {
         ClientHttpRequestFactory oldFactory = restTemplate.getRequestFactory();
 
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+
+        if (oldFactory instanceof SimpleClientHttpRequestFactory) {
+            SimpleClientHttpRequestFactory oldSimple = (SimpleClientHttpRequestFactory) oldFactory;
+            Integer connectTimeout = extractTimeout(oldSimple, "connectTimeout");
+            Integer readTimeout = extractTimeout(oldSimple, "readTimeout");
+
+            if (connectTimeout != null) {
+                requestFactory.setConnectTimeout(connectTimeout);
+            }
+            if (readTimeout != null) {
+                requestFactory.setReadTimeout(readTimeout);
+            }
+        }
 
         Proxy proxy= new Proxy(Proxy.Type.HTTP,
                 new InetSocketAddress(
@@ -110,7 +125,21 @@ public class EntryChecker {
         log.info("Using proxy " + proxy + " for " + e.getEntry());
         requestFactory.setProxy(proxy);
 
+        restTemplate.setRequestFactory(requestFactory);
+
         return oldFactory;
+    }
+
+    private Integer extractTimeout(SimpleClientHttpRequestFactory factory, String fieldName) {
+        Field field = ReflectionUtils.findField(SimpleClientHttpRequestFactory.class, fieldName);
+        if (field != null) {
+            ReflectionUtils.makeAccessible(field);
+            Object value = ReflectionUtils.getField(field, factory);
+            if (value instanceof Integer) {
+                return (Integer) value;
+            }
+        }
+        return null;
     }
 
 }
