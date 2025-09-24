@@ -40,6 +40,32 @@ describe('EntryForm', () => {
     });
   });
 
+  describe('when the port is omitted', () => {
+    it('defaults the submission port to 80', () => {
+      const onSubmit = td.function('.onSubmit');
+      const entryForm = mount(<EntryForm host="script.com" port="" onSubmit={onSubmit} />);
+      entryForm.simulate('submit');
+      td.verify(onSubmit({
+        host: 'script.com',
+        port: '80',
+        proxyHost: null,
+        proxyPort: null,
+      }));
+    });
+
+    it('splits host values that include a port', () => {
+      const onSubmit = td.function('.onSubmit');
+      const entryForm = mount(<EntryForm host="script.com:9000" port="" onSubmit={onSubmit} />);
+      entryForm.simulate('submit');
+      td.verify(onSubmit({
+        host: 'script.com',
+        port: '9000',
+        proxyHost: null,
+        proxyPort: null,
+      }));
+    });
+  });
+
   context('when a proxy is provided', () => {
     xit('should submit the host and port and proxy', () => {
       const onSubmit = td.function('.onSubmit');

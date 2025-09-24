@@ -59,8 +59,8 @@ public class EntryChecker {
     }
 
     private void checkHostname(CheckedEntry e) {
-        String hostname = getHostname(e);
-        int port = getPort(e, hostname);
+        String hostname = e.getHostname();
+        int port = e.getResolvedPort();
         if (null != e.getHttpProxy()) {
             String proxy = e.getHttpProxy().split(":")[0];
             int proxyPort = Integer.parseInt(e.getHttpProxy().split(":")[1]);
@@ -111,16 +111,6 @@ public class EntryChecker {
         requestFactory.setProxy(proxy);
 
         return oldFactory;
-    }
-
-    private int getPort(CheckedEntry e, String hostname) {
-        return Integer.parseInt(e.getEntry().substring(
-                hostname.length() + 1,
-                e.getEntry().length()));
-    }
-
-    private String getHostname(CheckedEntry e) {
-        return e.getEntry().split(":")[0];
     }
 
 }

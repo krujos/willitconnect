@@ -2,11 +2,23 @@ import { Form, FormGroup, ControlLabel, HelpBlock, Col, FormControl, Button, Che
 import PropTypes from 'prop-types';
 import React from 'react';
 
+const URL_WITH_SCHEME = /^http[s]?:[/][/]/i;
+const HOST_WITH_OPTIONAL_PORT = /^([\w.-]+)(?::(\d+))?$/;
+
+const hasPortValue = port => port !== undefined && port !== null && `${port}` !== '';
+
 const isValid = (host, port) => {
-  if (host) {
-    if ((/^http[s]?:[/][/].+/).test(host) || port) {
-      return true;
-    }
+  if (!host) {
+    return false;
+  }
+  if (URL_WITH_SCHEME.test(host)) {
+    return true;
+  }
+  if (HOST_WITH_OPTIONAL_PORT.test(host)) {
+    return true;
+  }
+  if (hasPortValue(port) && HOST_WITH_OPTIONAL_PORT.test(`${host}:${port}`)) {
+    return true;
   }
   return false;
 };
@@ -78,8 +90,25 @@ export default class EntryForm extends React.Component {
     const { isChecked } = this.state;
 
     const useProxy = isChecked && proxyHost && proxyPort;
+    const hasScheme = URL_WITH_SCHEME.test(host);
+    const hostMatch = hasScheme ? null : HOST_WITH_OPTIONAL_PORT.exec(host || '');
+    let normalizedHost = host;
+    let normalizedPort = hasPortValue(port) ? `${port}` : null;
+
+    if (!hasScheme && hostMatch) {
+      normalizedHost = hostMatch[1];
+      if (hostMatch[2]) {
+        normalizedPort = hostMatch[2];
+      } else if (!normalizedPort) {
+        normalizedPort = '80';
+      }
+    } else if (!hasScheme && !normalizedPort) {
+      normalizedPort = '80';
+    }
 
     this.props.onSubmit(toEntry({ ...this.props,
+      host: normalizedHost,
+      port: normalizedPort,
       proxyHost: useProxy ? proxyHost : null,
       proxyPort: useProxy ? proxyPort : null,
     }));
