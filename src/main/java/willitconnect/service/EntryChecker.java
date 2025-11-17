@@ -64,12 +64,15 @@ public class EntryChecker {
         String hostname = e.getHostname();
         int port = e.getResolvedPort();
         if (null != e.getHttpProxy()) {
-            String proxy = e.getHttpProxy().split(":")[0];
-            int proxyPort = Integer.parseInt(e.getHttpProxy().split(":")[1]);
-
-            e.setCanConnect(
-                    Connection.checkProxyConnection(
-                            hostname, port, proxy, proxyPort, "http"));
+            ProxyParts proxyParts = parseProxyString(e.getHttpProxy());
+            if (proxyParts == null) {
+                log.error("Invalid proxy format: " + e.getHttpProxy() + ". Expected format: host:port");
+                e.setCanConnect(false);
+            } else {
+                e.setCanConnect(
+                        Connection.checkProxyConnection(
+                                hostname, port, proxyParts.host, proxyParts.port, "http"));
+            }
         } else {
             e.setCanConnect(Connection.checkConnection(hostname, port));
         }
@@ -117,11 +120,13 @@ public class EntryChecker {
             }
         }
 
-        Proxy proxy= new Proxy(Proxy.Type.HTTP,
-                new InetSocketAddress(
-                    e.getHttpProxy().split(":")[0],
-                    Integer.parseInt(e.getHttpProxy().split(":")[1]
-                    )));
+        ProxyParts proxyParts = parseProxyString(e.getHttpProxy());
+        if (proxyParts == null) {
+            log.error("Invalid proxy format: " + e.getHttpProxy() + ". Expected format: host:port");
+            throw new IllegalArgumentException("Invalid proxy format: " + e.getHttpProxy());
+        }
+        Proxy proxy = new Proxy(Proxy.Type.HTTP,
+                new InetSocketAddress(proxyParts.host, proxyParts.port));
         log.info("Using proxy " + proxy + " for " + e.getEntry());
         requestFactory.setProxy(proxy);
 
@@ -140,6 +145,55 @@ public class EntryChecker {
             }
         }
         return null;
+    }
+
+    /**
+     * Safely parses a proxy string in the format "host:port".
+     * 
+     * @param proxyString the proxy string to parse
+     * @return ProxyParts containing host and port, or null if the format is invalid
+     */
+    private ProxyParts parseProxyString(String proxyString) {
+        if (proxyString == null || proxyString.trim().isEmpty()) {
+            return null;
+        }
+        
+        String[] parts = proxyString.split(":");
+        if (parts.length != 2) {
+            return null;
+        }
+        
+        String host = parts[0].trim();
+        String portStr = parts[1].trim();
+        
+        if (host.isEmpty() || portStr.isEmpty()) {
+            return null;
+        }
+        
+        try {
+            int port = Integer.parseInt(portStr);
+            if (port < 1 || port > 65535) {
+                log.warn("Proxy port out of valid range (1-65535): " + port);
+                return null;
+            }
+            return new ProxyParts(host, port);
+        } catch (NumberFormatException e) {
+            log.warn("Invalid proxy port format: " + portStr);
+            return null;
+        }
+    }
+
+    /**
+     * Helper class to hold parsed proxy host and port.
+     */
+    private static class ProxyParts {
+        final String host;
+        final int port;
+        
+        ProxyParts(String host, int port) {
+            this.host = host;
+            this.port = port;
+        }
     }
 
 }
