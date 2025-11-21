@@ -2,7 +2,9 @@ package willitconnect.model;
 
 import org.springframework.http.HttpStatusCode;
 
-import java.net.URL;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
@@ -69,10 +71,11 @@ public class CheckedEntry {
 
     public boolean isValidUrl() {
         try {
-            new URL(entry);
+            new URI(entry).toURL();
             return true;
-        } catch (Exception e) {}
-        return false;
+        } catch (URISyntaxException | IllegalArgumentException | MalformedURLException e) {
+            return false;
+        }
     }
 
     /**
