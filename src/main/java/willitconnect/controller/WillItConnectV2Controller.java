@@ -1,6 +1,7 @@
 package willitconnect.controller;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import willitconnect.model.CheckedEntry;
 import willitconnect.service.EntryChecker;
-
-import static org.apache.log4j.Logger.getLogger;
 
 /**
  * The goal is to have an intuitive api that just does the right thing.
@@ -45,7 +44,7 @@ import static org.apache.log4j.Logger.getLogger;
 @RestController()
 @RequestMapping(value="/v2")
 public class WillItConnectV2Controller {
-    private Logger log = getLogger(WillItConnectV2Controller.class);
+    private static final Logger log = LoggerFactory.getLogger(WillItConnectV2Controller.class);
 
     private EntryChecker entryChecker;
 

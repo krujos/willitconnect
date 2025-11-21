@@ -1,6 +1,6 @@
 package willitconnect.model;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 import java.net.URL;
 import java.time.Instant;
@@ -86,9 +86,9 @@ public class CheckedEntry {
 
     /**
      * Set the status of the request
-     * @param statusCode in an HttpStatus to save ourselves validation headache
+     * @param statusCode in an HttpStatusCode to save ourselves validation headache
      */
-    public void setHttpStatus(HttpStatus statusCode) {
+    public void setHttpStatus(HttpStatusCode statusCode) {
         httpStatus = statusCode.value();
     }
 

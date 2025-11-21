@@ -1,35 +1,14 @@
-import org.gradle.api.tasks.wrapper.Wrapper
-
-buildscript {
-    ext {
-        springBootVersion = '1.5.9.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-        maven { url "https://jcenter.bintray.com" }
-        maven { url "https://repo.spring.io/snapshot" }
-        maven { url "https://repo.spring.io/milestone" }
-        maven { url "https://plugins.gradle.org/m2/" }
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("com.moowork.gradle:gradle-node-plugin:1.2.0")
-        classpath("com.homedepot.gitprops:GitPropsPlugin:1.0.8")
-    }
-
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'idea'
+    id 'org.springframework.boot' version '3.3.5'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.github.node-gradle.node' version '7.0.2'
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'com.moowork.node'
-apply plugin: 'com.homedepot.gitprops'
-
-jar {
-    baseName = 'willitconnect'
-    version = '1.0.13'
-}
+group = 'willitconnect'
+version = '1.0.13'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -43,20 +22,21 @@ repositories {
 }
 
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
-    implementation "org.springframework.boot:spring-boot-starter-web"
-    implementation "org.json:json:20170516"
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
-    testImplementation "org.powermock:powermock-mockito-release-full:1.6.4"
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.json:json:20240303'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mockito:mockito-core'
 }
 
-task webpack(type: NodeTask) {
-  script = file('node_modules/webpack/bin/webpack')
+jar {
+    archiveBaseName = 'willitconnect'
+    archiveVersion = '1.0.13'
 }
 
-task karma(type: NpmTask) {
-    dependsOn 'npmInstall'
-    args = ['test']
+tasks.named('wrapper') {
+    gradleVersion = '9.1.0'
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 eclipse {
@@ -66,9 +46,20 @@ eclipse {
     }
 }
 
-tasks.named('wrapper') {
-    gradleVersion = '8.14.3'
-    distributionType = Wrapper.DistributionType.ALL
+// Node.js tasks
+node {
+    version = '18.0.0'
+    download = true
+}
+
+task webpack(type: NodeTask) {
+    script = file('node_modules/webpack/bin/webpack')
+    dependsOn npmInstall
+}
+
+task karma(type: NpmTask) {
+    dependsOn npmInstall
+    args = ['test']
 }
 
 project.tasks.processResources.dependsOn('npmInstall')

@@ -1,7 +1,7 @@
 package willitconnect.service;
 
-import org.apache.log4j.Logger;
-import org.apache.tomcat.jni.Time;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpResponse;
@@ -22,8 +22,6 @@ import java.lang.reflect.Field;
 import java.sql.Date;
 import java.time.Instant;
 
-import static org.apache.log4j.Logger.getLogger;
-
 class CustomResponseErrorHandler implements ResponseErrorHandler {
 
     private ResponseErrorHandler errorHandler = new DefaultResponseErrorHandler();
@@ -39,7 +37,7 @@ class CustomResponseErrorHandler implements ResponseErrorHandler {
 @Service
 public class EntryChecker {
     private final RestTemplate restTemplate;
-    private Logger log = getLogger(EntryChecker.class);
+    private static final Logger log = LoggerFactory.getLogger(EntryChecker.class);
 
     public EntryChecker(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
