@@ -24,7 +24,8 @@ import java.time.Instant;
 
 class CustomResponseErrorHandler implements ResponseErrorHandler {
 
-    private ResponseErrorHandler errorHandler = new DefaultResponseErrorHandler();
+    private ResponseErrorHandler errorHandler = new DefaultRes
+    ponseErrorHandler();
 
     public boolean hasError(ClientHttpResponse response) throws IOException {
         return errorHandler.hasError(response);

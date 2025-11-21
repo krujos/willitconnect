@@ -1,57 +1,125 @@
 const path = require('path');
 const debug = process.env.NODE_ENV !== "production";
 const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
+
+// Add core-js polyfills
+require('core-js/stable');
 
 module.exports = {
-      context: __dirname,
+    context: __dirname,
+    mode: debug ? 'development' : 'production',
     entry: [
-        'babel-polyfill',
         "./src/main/script/Index.js"
-      ],
+    ],
     output: {
-        path: __dirname + "/build/resources/main/static/script/",
-        filename: "bundle.js"
+        path: path.resolve(__dirname, "build/resources/main/static/script/"),
+        filename: "bundle.js",
+        clean: true
     },
     module: {
-        loaders: [
-            { test: /\.css$/, exclude: '/node_modules/', loader: 'style-loader!css-loader' },
-            { test: /\.(js|jsx|es6)$/, exclude: /node_modules/, loader: 'babel-loader',
-                query: {
-                            plugins: ['transform-runtime'],
-                            presets: ['react', 'stage-2', "env"]
+        rules: [
+            {
+                test: /\.css$/,
+                exclude: /node_modules/,
+                use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.less$/,
+                exclude: /node_modules/,
+                use: ['style-loader', 'css-loader', 'less-loader']
+            },
+            {
+                test: /\.(js|jsx|es6)$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            ['@babel/preset-env', {
+                                useBuiltIns: 'entry',
+                                corejs: 3
+                            }],
+                            ['@babel/preset-react', {
+                                runtime: 'automatic'
+                            }]
+                        ],
+                        plugins: ['@babel/plugin-transform-runtime']
+                    }
                 }
             },
-            { test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff'},
-            { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=application/octet-stream'},
-            { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader'},
-            { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=image/svg+xml'}
-
+            {
+                test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+                type: 'asset',
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 10000
+                    }
+                },
+                generator: {
+                    filename: 'fonts/[name][ext]'
+                }
+            },
+            {
+                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+                type: 'asset',
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 10000
+                    }
+                },
+                generator: {
+                    filename: 'fonts/[name][ext]'
+                }
+            },
+            {
+                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'fonts/[name][ext]'
+                }
+            },
+            {
+                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+                type: 'asset',
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 10000
+                    }
+                },
+                generator: {
+                    filename: 'images/[name][ext]'
+                }
+            }
         ]
     },
     resolve: {
         modules: [
-            path.join(__dirname, `node_modules`),
-            path.join("./src/main/script/Index.js")
+            path.join(__dirname, 'node_modules'),
+            'node_modules'
         ],
-        extensions: [`.js`, `.jsx`]
+        extensions: ['.js', '.jsx', '.es6']
     },
-  plugins: debug ? [] : [
-      new webpack.optimize.UglifyJsPlugin({
-        mangle: false,
-        sourcemap: false,
-        compress: {
-          warnings: false,
-          screw_ie8: true,
-          conditionals: true,
-          unused: true,
-          comparisons: true,
-          sequences: true,
-          dead_code: true,
-          evaluate: true,
-          if_return: true,
-          join_vars: true,
-        }
-      })
-    ],
+    optimization: {
+        minimize: !debug,
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: {
+                    mangle: false,
+                    compress: {
+                        warnings: false,
+                        conditionals: true,
+                        unused: true,
+                        comparisons: true,
+                        sequences: true,
+                        dead_code: true,
+                        evaluate: true,
+                        if_return: true,
+                        join_vars: true
+                    }
+                }
+            })
+        ]
+    },
+    devtool: debug ? 'source-map' : false
 };
-

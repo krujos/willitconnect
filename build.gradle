@@ -48,20 +48,30 @@ eclipse {
 
 // Node.js tasks
 node {
-    version = '18.0.0'
+    version = '20.11.0'
     download = true
+    npmInstallCommand = 'install'
 }
 
-task webpack(type: NodeTask) {
-    script = file('node_modules/webpack/bin/webpack')
-    dependsOn npmInstall
+task npmInstallLegacy(type: NpmTask) {
+    description = 'Install npm dependencies with legacy peer deps to resolve conflicts'
+    args = ['install', '--legacy-peer-deps', '--strict-ssl=false']
+    environment = [
+        'NODE_TLS_REJECT_UNAUTHORIZED': '0',
+        'GIT_TERMINAL_PROMPT': '0'
+    ]
+}
+
+task webpack(type: NpmTask) {
+    args = ['run', 'packit']
+    dependsOn npmInstallLegacy
 }
 
 task karma(type: NpmTask) {
-    dependsOn npmInstall
+    dependsOn npmInstallLegacy
     args = ['test']
 }
 
-project.tasks.processResources.dependsOn('npmInstall')
+project.tasks.processResources.dependsOn('npmInstallLegacy')
 project.tasks.processResources.dependsOn('webpack')
 project.tasks.test.dependsOn('karma')
