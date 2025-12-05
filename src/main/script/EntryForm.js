@@ -1,4 +1,4 @@
-import { Form, FormGroup, ControlLabel, HelpBlock, Col, FormControl, Button, Checkbox, } from 'react-bootstrap';
+import { Form, FormGroup, FormLabel, Col, Button, FormCheck } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -25,8 +25,8 @@ const isValid = (host, port) => {
 
 //    <HelpBlock> Scheme is optional </HelpBlock>
 const InputItem = ({ field, type, onChange, placeholder, value }) =>
-  <Col xs={5} xsOffset={1} bsSize="large">
-    <ControlLabel> {placeholder} </ControlLabel>
+  <Col xs={5} className="offset-1">
+    <FormLabel> {placeholder} </FormLabel>
     <input
       className="form-control"
       type={type}
@@ -49,9 +49,12 @@ InputItem.defaultProps = {
 };
 
 const ProxyToggle = ({ enabled, onChange }) =>
-  <Checkbox type="checkbox" checked={enabled} onChange={() => onChange(!enabled)} >
-    use proxy
-  </Checkbox>;
+  <FormCheck 
+    type="checkbox" 
+    checked={enabled} 
+    onChange={() => onChange(!enabled)}
+    label="use proxy"
+  />;
 
 ProxyToggle.propTypes = {
   enabled: PropTypes.bool.isRequired,
@@ -116,10 +119,10 @@ export default class EntryForm extends React.Component {
 
   render() {
     return (
-      <Form horizontal className="entryForm" onSubmit={this.handleSubmit}>
-            <HostPortForm host={this.props.host} port={this.props.port} onHostChange={this.onChangeOf('host')} onPortChange={this.onChangeOf('port')} />
+      <Form className="entryForm" onSubmit={this.handleSubmit}>
+        <HostPortForm host={this.props.host} port={this.props.port} onHostChange={this.onChangeOf('host')} onPortChange={this.onChangeOf('port')} />
         <FormGroup>
-          <Col xs={3} xsOffset={1}>
+          <Col xs={3} className="offset-1">
             <ProxyToggle
               enabled={this.state.isChecked}
               onChange={() => this.setState({ isChecked: !this.state.isChecked })}
@@ -131,7 +134,7 @@ export default class EntryForm extends React.Component {
                       onHostChange={this.onChangeOf('proxyHost')} onPortChange={this.onChangeOf('proxyPort')} />
         }
         <FormGroup>
-          <Col xs={1} xsOffset={11}>
+          <Col xs={1} className="offset-11">
             <Button type="submit"> Check </Button>
           </Col>
         </FormGroup>

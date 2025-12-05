@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Row } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import HeaderBar from './HeaderBar';
 import EntryForm from './EntryForm';
 import EntryList from './EntryList';
@@ -11,13 +11,13 @@ import { update } from './actions/currentEntry-actions';
 export const EntryBox = ({ entries, currentEntry, ...props }) => {
   const bodyStyle = { padding: 75 };
   return (
-    <Grid>
+    <Container fluid>
       <HeaderBar />
       <Row style={bodyStyle}>
         <EntryForm {...currentEntry} {...props} />
         <EntryList data={entries} {...props} />
       </Row>
-    </Grid>
+    </Container>
   );
 };
 

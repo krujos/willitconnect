@@ -3,9 +3,6 @@ const debug = process.env.NODE_ENV !== "production";
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
-// Add core-js polyfills
-require('core-js/stable');
-
 module.exports = {
     context: __dirname,
     mode: debug ? 'development' : 'production',

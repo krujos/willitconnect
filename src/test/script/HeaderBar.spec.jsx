@@ -4,10 +4,10 @@ import { render, screen } from '@testing-library/react';
 
 describe('HeaderBar', () => {
     it("has a link to the github repo", function() {
-        render(<HeaderBar />);
+        const { container } = render(<HeaderBar />);
         
-        // Check for the GitHub link
-        const githubLink = screen.getByRole('link', { href: /github/i });
+        // Check for the GitHub link by href attribute
+        const githubLink = container.querySelector('a[href*="github.com/krujos/willitconnect"]');
         expect(githubLink).to.exist;
         
         // Check that the link contains the GitHub icon span
