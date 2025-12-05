@@ -134,6 +134,9 @@ public class EntryChecker {
     }
 
     private Integer extractTimeout(SimpleClientHttpRequestFactory factory, String fieldName) {
+        if (fieldName == null) {
+            return null;
+        }
         Field field = ReflectionUtils.findField(SimpleClientHttpRequestFactory.class, fieldName);
         if (field != null) {
             ReflectionUtils.makeAccessible(field);

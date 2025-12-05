@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import ProgressBar from 'react-bootstrap/lib/ProgressBar';
-import Panel from 'react-bootstrap/lib/Panel';
+import ProgressBar from 'react-bootstrap/ProgressBar';
+import Card from 'react-bootstrap/Card';
 import { PASSED, FAILED, SUBMIT } from './actions/entry-actions';
 
 
-const getPanelStyle = (status) => {
+const getCardVariant = (status) => {
   switch (status) {
     case PASSED:
       return 'success';
@@ -53,14 +53,24 @@ resultHeader.propTypes = {
   entry: PropTypes.any,
 };
 
-const Result = ({ status, children, ...props }) =>
-  <Panel bsStyle={getPanelStyle(status)} {...props}>
-    {status === SUBMIT && <ProgressBar active now={100} />}
-    {children}
-  </Panel>;
+const Result = ({ status, header, children, ...props }) => (
+  <Card
+    bg={getCardVariant(status)}
+    text={status === FAILED ? 'light' : undefined}
+    className="mb-3"
+    {...props}
+  >
+    {header && <Card.Header>{header}</Card.Header>}
+    <Card.Body>
+      {status === SUBMIT && <ProgressBar animated now={100} />}
+      {children}
+    </Card.Body>
+  </Card>
+);
 
 Result.propTypes = {
   status: PropTypes.string,
+  header: PropTypes.node,
   children: PropTypes.any,
 };
 

@@ -1,7 +1,12 @@
 {
   "presets": [
-    "react",
-    "es2015",
-    "stage-2"
-  ]
+    ["@babel/preset-env", {
+      "useBuiltIns": "entry",
+      "corejs": 3
+    }],
+    ["@babel/preset-react", {
+      "runtime": "automatic"
+    }]
+  ],
+  "plugins": ["@babel/plugin-transform-runtime"]
 }
