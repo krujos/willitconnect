@@ -20,4 +20,4 @@ const HeaderBar = function header() {
   );
 };
 
-module.exports = HeaderBar;
+export default HeaderBar;
