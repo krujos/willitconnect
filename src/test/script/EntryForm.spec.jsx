@@ -1,8 +1,8 @@
 /* eslint-env node, mocha, browser */
 
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import td from 'testdouble';
+import { render, screen, fireEvent } from '@testing-library/react';
+import sinon from 'sinon';
 import EntryForm from '../../main/script/EntryForm';
 
 describe('EntryForm', () => {
@@ -13,84 +13,102 @@ describe('EntryForm', () => {
   });
 
   it('displays the form', () => {
-    const entryForm = shallow(<EntryForm />);
-    // console.log(entryForm.debug());
-    expect(entryForm.is('Form')).to.equal(true);
+    const { container } = render(<EntryForm />);
+    expect(container.querySelector('form')).to.exist;
   });
 
   describe('a valid host and port are provided', () => {
     it('should submit the host and port', () => {
-      const onSubmit = td.function('.onSubmit');
-      const entryForm = mount(<EntryForm host="http://script.com" port="80" onSubmit={onSubmit} />);
-      entryForm.simulate('submit');
-      td.verify(onSubmit({
+      const onSubmit = sinon.spy();
+      render(<EntryForm host="http://script.com" port="80" onSubmit={onSubmit} />);
+      
+      const submitButton = screen.getByRole('button', { name: /Check/i });
+      fireEvent.click(submitButton);
+      
+      expect(onSubmit.calledOnce).to.equal(true);
+      expect(onSubmit.calledWith({
         host: 'http://script.com',
         port: '80',
         proxyHost: null,
         proxyPort: null
-      }));
+      })).to.equal(true);
     });
 
     it('should populate the entry from props', () => {
-      const entryForm = mount(<EntryForm host="script.com" port="80" />);
-      const hostField = entryForm.find('input[name="host"]');
-      const portField = entryForm.find('input[name="port"]');
-      expect(hostField.prop('value')).to.eq('script.com');
-      expect(portField.prop('value')).to.eq('80');
+      render(<EntryForm host="script.com" port="80" />);
+      const hostField = screen.getByDisplayValue('script.com');
+      const portField = screen.getByDisplayValue('80');
+      expect(hostField).to.exist;
+      expect(portField).to.exist;
     });
   });
 
   describe('when the port is omitted', () => {
     it('defaults the submission port to 80', () => {
-      const onSubmit = td.function('.onSubmit');
-      const entryForm = mount(<EntryForm host="script.com" port="" onSubmit={onSubmit} />);
-      entryForm.simulate('submit');
-      td.verify(onSubmit({
+      const onSubmit = sinon.spy();
+      render(<EntryForm host="script.com" port="" onSubmit={onSubmit} />);
+      
+      const submitButton = screen.getByRole('button', { name: /Check/i });
+      fireEvent.click(submitButton);
+      
+      expect(onSubmit.calledOnce).to.equal(true);
+      expect(onSubmit.calledWith({
         host: 'script.com',
         port: '80',
         proxyHost: null,
         proxyPort: null,
-      }));
+      })).to.equal(true);
     });
 
     it('splits host values that include a port', () => {
-      const onSubmit = td.function('.onSubmit');
-      const entryForm = mount(<EntryForm host="script.com:9000" port="" onSubmit={onSubmit} />);
-      entryForm.simulate('submit');
-      td.verify(onSubmit({
+      const onSubmit = sinon.spy();
+      render(<EntryForm host="script.com:9000" port="" onSubmit={onSubmit} />);
+      
+      const submitButton = screen.getByRole('button', { name: /Check/i });
+      fireEvent.click(submitButton);
+      
+      expect(onSubmit.calledOnce).to.equal(true);
+      expect(onSubmit.calledWith({
         host: 'script.com',
         port: '9000',
         proxyHost: null,
         proxyPort: null,
-      }));
+      })).to.equal(true);
     });
   });
 
   context('when a proxy is provided', () => {
     xit('should submit the host and port and proxy', () => {
-      const onSubmit = td.function('.onSubmit');
-      const entryForm = mount(<EntryForm host="http://script.com" port="80" proxyHost="www.com" proxyPort="8080" onSubmit={onSubmit} />);
-      const toggle = entryForm.find('input[type="checkbox"]');
-      toggle.simulate('change');
-      entryForm.simulate('submit');
+      const onSubmit = sinon.spy();
+      render(<EntryForm host="http://script.com" port="80" proxyHost="www.com" proxyPort="8080" onSubmit={onSubmit} />);
+      
+      const toggle = screen.getByLabelText(/use proxy/i);
+      fireEvent.click(toggle);
+      
+      const submitButton = screen.getByRole('button', { name: /Check/i });
+      fireEvent.click(submitButton);
 
-      expect(toggle.prop('checked')).to.eq(true);
+      expect(toggle.checked).to.eq(true);
 
-      td.verify(onSubmit({
+      expect(onSubmit.calledOnce).to.equal(true);
+      expect(onSubmit.calledWith({
         host: 'http://script.com',
         port: '80',
         proxyHost: 'www.com',
         proxyPort: '8080',
-      }));
+      })).to.equal(true);
     });
 
     it('should populate the entry from props', () => {
-      const entryForm = mount(<EntryForm host="http://script.com" port="80" proxyHost="www.com" proxyPort="8080" />);
-      entryForm.find('input[type="checkbox"]').simulate('change');
-      const hostField = entryForm.find('input[name="proxyHost"]');
-      const portField = entryForm.find('input[name="proxyPort"]');
-      expect(hostField.prop('value')).to.eq('www.com');
-      expect(portField.prop('value')).to.eq('8080');
+      render(<EntryForm host="http://script.com" port="80" proxyHost="www.com" proxyPort="8080" />);
+      
+      const toggle = screen.getByLabelText(/use proxy/i);
+      fireEvent.click(toggle);
+      
+      const proxyHostField = screen.getByDisplayValue('www.com');
+      const proxyPortField = screen.getByDisplayValue('8080');
+      expect(proxyHostField).to.exist;
+      expect(proxyPortField).to.exist;
     });
 
   });

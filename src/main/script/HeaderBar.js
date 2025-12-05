@@ -1,23 +1,22 @@
 import React from 'react';
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 
 const HeaderBar = function header() {
   return (
-    <Navbar inverse fixedTop fluid>
-      <Navbar.Header>
-        <Navbar.Brand>
-          <a href="#">willitconnect</a>
-        </Navbar.Brand>
-        <Navbar.Toggle />
-      </Navbar.Header>
-      <Navbar.Collapse>
-        <Nav pullRight>
-          <NavItem className="link" eventKey={1} href="https://github.com/krujos/willitconnect">
-            <span className="mega-octicon octicon-mark-github"> </span></NavItem>
-        </Nav>
-      </Navbar.Collapse>
+    <Navbar bg="dark" variant="dark" fixed="top" expand="lg">
+      <Container fluid>
+        <Navbar.Brand href="#">willitconnect</Navbar.Brand>
+        <Navbar.Toggle aria-controls="navbar-nav" />
+        <Navbar.Collapse id="navbar-nav">
+          <Nav className="ms-auto">
+            <Nav.Link className="link" href="https://github.com/krujos/willitconnect">
+              <span className="mega-octicon octicon-mark-github"> </span>
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
     </Navbar>
   );
 };
 
-module.exports = HeaderBar;
+export default HeaderBar;

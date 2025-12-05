@@ -1,43 +1,43 @@
 const webpackConfig = require('./webpack.config');
 delete webpackConfig.entry;
 delete webpackConfig.output;
-delete webpackConfig.plugins;
+delete webpackConfig.optimization;
 
 webpackConfig.externals = Object.assign({}, webpackConfig.externals, {
     'jsdom': 'window',
     'cheerio': 'window',
-    'react/lib/ExecutionEnvironment': true,
-    'react/lib/ReactContext': true,
-    'react/addons': true,
     'text-encoding': 'window'
 });
 
 module.exports = karma => {
     const config = {
         basePath: ``,
-        frameworks: [ 'mocha', 'chai' ], 
+        frameworks: [ 'mocha', 'chai', 'sinon-chai' ], 
         files: ['tests.webpack.js'],
         plugins: [
-            'karma-phantomjs-launcher',
+            'karma-chrome-launcher',
             'karma-chai',
             'karma-mocha',
+            'karma-sinon',
+            'karma-sinon-chai',
             'karma-sourcemap-loader',
             'karma-webpack',
             'karma-mocha-reporter'
         ],
         preprocessors: {
-            'tests.webpack.js': [ 'webpack' ]
+            'tests.webpack.js': [ 'webpack', 'sourcemap' ]
         },
         reporters: [ 'mocha' ],
         webpack: webpackConfig,
-        webpackServer: {
+        webpackMiddleware: {
             noInfo: true
         },
         autoWatch: true, 
-        colors: true
+        colors: true,
+        browsers: [ 'ChromeHeadless' ],
+        singleRun: false,
+        logLevel: karma.LOG_INFO
     };
 
-    config.logLevel = config.LOG_INFO;
-    config.browsers = [ 'PhantomJS' ];
-    karma.set(config)
+    karma.set(config);
 };

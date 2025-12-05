@@ -1,12 +1,13 @@
 package willitconnect.service.util;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.*;
 
 public class Connection {
-    private static Logger log = Logger.getLogger(Connection.class);
+    private static final Logger log = LoggerFactory.getLogger(Connection.class);
 
     public static boolean checkConnection(String host, int port) {
         logHost(host, port);

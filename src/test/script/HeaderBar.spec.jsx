@@ -1,12 +1,17 @@
 import React from 'react';
-const HeaderBar = require('../../main/script/HeaderBar');
-import { shallow } from 'enzyme';
+import HeaderBar from '../../main/script/HeaderBar';
+import { render, screen } from '@testing-library/react';
 
 describe('HeaderBar', () => {
     it("has a link to the github repo", function() {
-        const bar = shallow(<HeaderBar />);
-        expect(bar.contains('NavItem'));
-        expect(bar.find('NavItem').contains('span'));
+        const { container } = render(<HeaderBar />);
+        
+        // Check for the GitHub link by href attribute
+        const githubLink = container.querySelector('a[href*="github.com/krujos/willitconnect"]');
+        expect(githubLink).to.exist;
+        
+        // Check that the link contains the GitHub icon span
+        expect(githubLink.querySelector('span')).to.exist;
     });
 });
 
