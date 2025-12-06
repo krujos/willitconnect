@@ -11,8 +11,8 @@ group = 'willitconnect'
 version = '1.0.13'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 repositories {
@@ -26,7 +26,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.json:json:20240303'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.testng:testng:7.10.0'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
 }
 
 jar {
@@ -42,7 +44,7 @@ tasks.named('wrapper') {
 eclipse {
     classpath {
          containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-21'
+         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-25'
     }
 }
 
@@ -75,3 +77,10 @@ task karma(type: NpmTask) {
 project.tasks.processResources.dependsOn('npmInstallLegacy')
 project.tasks.processResources.dependsOn('webpack')
 project.tasks.test.dependsOn('karma')
+
+test {
+    jvmArgs = [
+        '--add-opens=java.base/java.lang=ALL-UNNAMED',
+        '--add-opens=java.base/java.util=ALL-UNNAMED'
+    ]
+}
