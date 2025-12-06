@@ -17,6 +17,9 @@ const store = createStore(
 );
 
 const container = document.getElementById('content');
+if (!container) {
+  throw new Error('Target container element with id "content" not found');
+}
 const root = createRoot(container);
 root.render(
   <Provider store={store}>

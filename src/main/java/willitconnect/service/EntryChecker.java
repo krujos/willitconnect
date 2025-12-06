@@ -82,6 +82,13 @@ public class EntryChecker {
         ClientHttpRequestFactory oldFactory = null;
         try {
             if ( null != e.getHttpProxy() ) {
+                ProxyParts proxyParts = parseProxyString(e.getHttpProxy());
+                if (proxyParts == null) {
+                    log.error("Invalid proxy format: " + e.getHttpProxy() + ". Expected format: host:port");
+                    e.setCanConnect(false);
+                    e.setLastChecked(Date.from(Instant.now()));
+                    return;
+                }
                 oldFactory = swapProxy(e);
             }
 
