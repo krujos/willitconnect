@@ -191,10 +191,43 @@ and push it
 The project uses the standard spring boot directory structure, with web content located
 in src/main/resources/static.
 
-You can run it locally by using
+## Prerequisites
+- Java 21 (required for Spring Boot backend)
+- Node.js 14+ (for frontend build and optional Node.js backend)
+- npm 6+
+
+## Running Locally
+
+### Option 1: Java Backend (Spring Boot)
+```bash
+➜ npm install --legacy-peer-deps  # Install frontend dependencies
+➜ ./gradlew bootRun                # Run Spring Boot backend with webpack build
 ```
-➜ ./gradlew bootRun
+
+The application will be available at `http://localhost:8080`
+
+For faster development (skip webpack):
+```bash
+➜ ./gradlew bootRun -x webpack -x npmInstallLegacy
 ```
+
+### Option 2: Node.js Backend (Lightweight)
+For environments where Java dependencies are unavailable, a Node.js implementation is provided:
+```bash
+➜ npm install --legacy-peer-deps
+➜ node server.js
+```
+
+The Node.js backend provides the same v2 API functionality with zero Java dependencies.
+
+## Recent Improvements
+This project has recently undergone significant bug fixes and improvements:
+
+- **Resource Management**: Fixed resource leaks in socket connections using try-with-resources pattern
+- **Error Handling**: Added comprehensive validation and error handling to the REST API
+- **Code Quality**: Removed unsafe reflection usage in favor of explicit configuration
+- **Proxy Support**: Enhanced proxy string parsing with proper validation
+- **Documentation**: Integrated Tessl library documentation for AI-assisted development
 
 # ChatOps
 
