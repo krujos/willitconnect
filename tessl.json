@@ -99,6 +99,15 @@
     },
     "tessl/npm-webpack": {
       "version": "5.101.0"
+    },
+    "tessl/maven-org-springframework-boot--spring-boot-starter-web": {
+      "version": "3.5.0"
+    },
+    "tessl/maven-org-springframework-boot--spring-boot-starter-test": {
+      "version": "3.5.0"
+    },
+    "tessl/maven-org-springframework-boot--spring-boot-actuator": {
+      "version": "3.5.0"
     }
   }
 }

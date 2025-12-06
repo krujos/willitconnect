@@ -1,9 +1,12 @@
 package willitconnect.controller;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -54,17 +57,58 @@ public class WillItConnectV2Controller {
     }
 
     @RequestMapping(value="willitconnect")
-    public @ResponseBody CheckedEntry willItConnect(
+    public @ResponseBody ResponseEntity<?> willItConnect(
             @RequestBody String request) {
 
         log.info(request.toString());
 
-        JSONObject r = new JSONObject(request);
-        CheckedEntry entry = new CheckedEntry(r.getString("target"));
-        if ( r.has("http_proxy")) {
-            entry.setHttpProxy(r.getString("http_proxy"));
+        try {
+            // Parse and validate JSON request
+            JSONObject r = new JSONObject(request);
+
+            // Check for required 'target' field
+            if (!r.has("target")) {
+                log.warn("Missing required 'target' field in request");
+                return ResponseEntity
+                        .badRequest()
+                        .body("{\"error\": \"Missing required field 'target'\"}");
+            }
+
+            String target = r.getString("target");
+            if (target == null || target.trim().isEmpty()) {
+                log.warn("Empty 'target' field in request");
+                return ResponseEntity
+                        .badRequest()
+                        .body("{\"error\": \"Field 'target' cannot be empty'\"}");
+            }
+
+            // Create and configure the entry to check
+            CheckedEntry entry = new CheckedEntry(target);
+
+            // Add optional proxy configuration if provided
+            if (r.has("http_proxy")) {
+                entry.setHttpProxy(r.getString("http_proxy"));
+            }
+
+            // Check the connection and return result
+            return ResponseEntity.ok(entryChecker.check(entry));
+
+        } catch (JSONException e) {
+            log.error("Invalid JSON in request: " + e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("{\"error\": \"Invalid JSON format: " + e.getMessage() + "\"}");
+        } catch (NullPointerException e) {
+            log.error("Null pointer exception: " + e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("{\"error\": \"Invalid request: " + e.getMessage() + "\"}");
+        } catch (Exception e) {
+            log.error("Unexpected error processing request", e);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("{\"error\": \"Internal server error\"}");
         }
-        return entryChecker.check(entry);
     }
 
 }
