@@ -2,41 +2,47 @@ package willitconnect.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.web.client.ResourceAccessException;
+import org.springframework.http.HttpMethod;
+import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import willitconnect.model.CheckedEntry;
+
+import java.io.IOException;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withException;
 
 public class EntryCheckerUnknownHostTests {
 
-    @Mock
-    RestTemplate template;
+    private RestTemplate restTemplate;
+    private MockRestServiceServer mockServer;
+    private EntryChecker checker;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        restTemplate = new RestTemplate();
+        mockServer = MockRestServiceServer.createServer(restTemplate);
+        checker = new EntryChecker(restTemplate);
     }
 
     @Test
     public void itCannotConnectToUnknownHost() {
-        when(template.getForEntity(any(String.class), any())).thenThrow(new
-                ResourceAccessException("unknown host exception"));
-        EntryChecker checker = new EntryChecker(template);
         CheckedEntry entry = new CheckedEntry("http://does_not_exist.com");
+
+        mockServer.expect(requestTo("http://does_not_exist.com"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withException(new IOException("unknown host exception")));
 
         CheckedEntry returnedEntry = checker.check(entry);
 
-        System.out.println("status = " + entry.getHttpStatus());
         assertFalse(returnedEntry.canConnect());
         assertThat(returnedEntry.getHttpStatus(), is(equalTo(0)));
+        mockServer.verify();
     }
 
 }

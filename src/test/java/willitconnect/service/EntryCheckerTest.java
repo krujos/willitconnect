@@ -3,9 +3,10 @@ package willitconnect.service;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -29,8 +30,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.reset;
@@ -39,9 +40,10 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static willitconnect.model.CheckedEntry.DEFAULT_RESPONSE_TIME;
 
+@RunWith(MockitoJUnitRunner.class)
 public class EntryCheckerTest {
 
     private MockRestServiceServer mockServer;
@@ -49,15 +51,13 @@ public class EntryCheckerTest {
     private EntryChecker checker;
     private RestTemplate restTemplate;
     private CheckedEntry returnedEntry;
-
-    @Mock
-    SimpleClientHttpRequestFactory requestFactory;
+    private SimpleClientHttpRequestFactory requestFactory;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         entry = new CheckedEntry("http://example.com");
         restTemplate = new RestTemplate();
+        requestFactory = new SimpleClientHttpRequestFactory();
         restTemplate.setRequestFactory(requestFactory);
         mockServer = MockRestServiceServer.createServer(restTemplate);
         mockServer.expect(requestTo("http://example.com"))
