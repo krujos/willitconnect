@@ -7,6 +7,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.lang.NonNull;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.ResourceAccessException;
@@ -26,11 +27,11 @@ class CustomResponseErrorHandler implements ResponseErrorHandler {
 
     private ResponseErrorHandler errorHandler = new DefaultResponseErrorHandler();
 
-    public boolean hasError(ClientHttpResponse response) throws IOException {
+    public boolean hasError(@NonNull ClientHttpResponse response) throws IOException {
         return errorHandler.hasError(response);
     }
 
-    public void handleError(ClientHttpResponse response) throws IOException {
+    public void handleError(@NonNull ClientHttpResponse response) throws IOException {
     }
 }
 
@@ -84,8 +85,15 @@ public class EntryChecker {
                 oldFactory = swapProxy(e);
             }
 
+            String entry = e.getEntry();
+            if (entry == null) {
+                log.error("Entry is null, cannot check URL");
+                e.setCanConnect(false);
+                return;
+            }
+
             ResponseEntity<String> resp =
-                    restTemplate.getForEntity(e.getEntry(), String.class);
+                    restTemplate.getForEntity(entry, String.class);
 
             log.info("Status = " + resp.getStatusCode());
             e.setCanConnect(true);
