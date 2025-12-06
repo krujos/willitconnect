@@ -89,6 +89,10 @@ public class EntryChecker {
             log.info("Status = " + resp.getStatusCode());
             e.setCanConnect(true);
             e.setHttpStatus(resp.getStatusCode());
+        } catch (IllegalArgumentException ex) {
+            // Invalid proxy configuration
+            log.error("Invalid proxy configuration: " + ex.getMessage());
+            e.setCanConnect(false);
         } catch (ResourceAccessException ex) {
             e.setCanConnect(false);
         } finally {
