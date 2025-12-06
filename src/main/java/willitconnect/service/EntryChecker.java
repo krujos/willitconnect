@@ -7,7 +7,6 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.ResponseErrorHandler;
@@ -18,8 +17,8 @@ import willitconnect.service.util.Connection;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.lang.reflect.Field;
 import java.sql.Date;
+import java.time.Duration;
 import java.time.Instant;
 
 class CustomResponseErrorHandler implements ResponseErrorHandler {
@@ -103,26 +102,18 @@ public class EntryChecker {
     private ClientHttpRequestFactory swapProxy(CheckedEntry e) {
         ClientHttpRequestFactory oldFactory = restTemplate.getRequestFactory();
 
+        // Create a new factory with reasonable default timeouts
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(Duration.ofSeconds(5));
+        requestFactory.setReadTimeout(Duration.ofSeconds(10));
 
-        if (oldFactory instanceof SimpleClientHttpRequestFactory) {
-            SimpleClientHttpRequestFactory oldSimple = (SimpleClientHttpRequestFactory) oldFactory;
-            Integer connectTimeout = extractTimeout(oldSimple, "connectTimeout");
-            Integer readTimeout = extractTimeout(oldSimple, "readTimeout");
-
-            if (connectTimeout != null) {
-                requestFactory.setConnectTimeout(connectTimeout);
-            }
-            if (readTimeout != null) {
-                requestFactory.setReadTimeout(readTimeout);
-            }
-        }
-
+        // Parse and validate proxy configuration
         ProxyParts proxyParts = parseProxyString(e.getHttpProxy());
         if (proxyParts == null) {
             log.error("Invalid proxy format: " + e.getHttpProxy() + ". Expected format: host:port");
             throw new IllegalArgumentException("Invalid proxy format: " + e.getHttpProxy());
         }
+
         Proxy proxy = new Proxy(Proxy.Type.HTTP,
                 new InetSocketAddress(proxyParts.host, proxyParts.port));
         log.info("Using proxy " + proxy + " for " + e.getEntry());
@@ -131,21 +122,6 @@ public class EntryChecker {
         restTemplate.setRequestFactory(requestFactory);
 
         return oldFactory;
-    }
-
-    private Integer extractTimeout(SimpleClientHttpRequestFactory factory, String fieldName) {
-        if (fieldName == null) {
-            return null;
-        }
-        Field field = ReflectionUtils.findField(SimpleClientHttpRequestFactory.class, fieldName);
-        if (field != null) {
-            ReflectionUtils.makeAccessible(field);
-            Object value = ReflectionUtils.getField(field, factory);
-            if (value instanceof Integer) {
-                return (Integer) value;
-            }
-        }
-        return null;
     }
 
     /**
